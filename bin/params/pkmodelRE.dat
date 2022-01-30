@@ -1,0 +1,23 @@
+# Pseudoknot Energy Model - Rivas & Eddy (all parameters are in kcal/mol except g_interiorPseudo):
+# float g_interiorPseudo = 0.83; // penalty for bulges, stems, and internal loops in a gap matrix (span-band loops)
+# float P_tilda = 0.1; 		// pair in a pseudoknot
+# float P_i = 0.1; 		// for E&R energy model  // CHECK: ??? (pair in a non-nested multiloop?)
+# float Q_tilda = 0.2; 		// unpaired bases in a pseudoknot
+# float M_tilda = 843;  	// non-nested multiloop (M_tilda)
+# float Gw = 7;  		// starting a pseudoknot loop
+# float Gwh = 6;  		// (overlapping pseudoknots) each more band region
+#
+# float Gwi;  // NOT CONSIDERED in this code! generating a pseudoknot in a multiloop (Gwi)
+#
+# int q_unpairedMultiPseudo = 0;  // NEVER USED! - should be rather 
+# int p_pairedMultiPseudo = 100;  // CHECK: where is this used, and convert it to pkmodel parameter
+0.83
+0.1
+0.1
+0.2
+8.43
+7
+6
+0
+0
+0.1

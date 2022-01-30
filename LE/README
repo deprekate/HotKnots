@@ -1,0 +1,45 @@
+README file for the SimFold package, to compute the MFE
+energy and secondary structure of folding, according to
+Zuker and Stiegler's dynamic programming algorithm (1981).
+
+Implemented by Mirela Andronescu (andrones@cs.ubc.ca).
+
+Contents:
+
+Makefile  - type make to compile exsimfold.cpp
+
+exsimfold - The program compiled on Linux 2.4.20-30.9smp,
+using g++, version  3.2.2.	
+
+exsimfold.cpp 	- the C++ program that uses the simfold 
+function. Use this program as an example.
+The main steps are:
+- include the simfold library
+#include "simfold.h"
+- initialize the thermodynamic parameters
+init_data (config_file, dna_or_rna, temperature);
+where config_file is "params/pairfold.conf", dna_or_rna is
+RNA, and temperature is between 0 and 100, usually 37.
+- call the simfold function:
+energy = simfold (sequence, structure);
+This returns the predicted minimum free energy for the given
+sequence. structure is the predicted mfe structure. The 
+structure must have enough space allocated (at least 
+length(sequence)+1).
+Currently, only constraints for "base must not be paired" 
+can be set. This can be done by setting "x" to the structure
+in the appropriate positions.
+
+libsimfold.a  	- the simfold library, compiled on Linux 
+2.4.20-30.9smp, using g++, version  3.2.2.   
+
+params/  	- a directory with the thermodynamic 
+parameters for RNA.
+
+simfold.h	- a header file, with the function prototypes 
+for RNA folding. 
+
+
+
+Please let me know if you have any suggestions/comments/
+questions.

@@ -1,0 +1,176 @@
+README file for the HotKnots package. Last updated on Jan. 24th, 2010.
+
+Initially implemented by Jihong Ren (jihong@cs.ubc.ca)
+               Baharak Rastegari (baharak@cs.ubc.ca).
+Also modified by Cristina Pop and Mirela Andronescu.
+
+**********************************************************************
+Programs: HotKnots, computeEnergy
+
+File formats (see examples in TestSeq):
+          *.seq:   sequence file, contains RNA primary structure.
+          *.bpseq: base pair file, contains RNA secondary structure
+	  *.ps:    postscript file, the arc diagram of the
+	           secondary structure. Bases are color-coded, A:red,
+		   U: Green, G:Blue, C:Yellow
+          *.ct:    RNA secondary structures in ct format.  
+Usage:
+ To compile, type make in the HotKnots_v2.0 directory.
+ To run, change directories to the HotKnots_v2.0/bin directory to run one of the programs.
+ 
+ HotKnots
+    Given a sequence, find its minimum free energy and corresponding structure.
+
+    Two options for specifying the sequence to fold:
+	   -s sequence		[sequence to fold - command line]
+	   -I seqName		[sequence to fold - filename with sequence inside it]
+    Other options:  
+ 	   -noGU   [do not allow GU pair]
+           -b      [only generate output files for the best structure]
+           -noPS   [don't output arc diagrams ]
+	   -c      [the seq file includes structural constraints]
+           -t      [trace]
+           -m model         [name of model to use: RE for Rivas&Eddy, DP for Dirks&Pierce (default), CC for Cao&Chen]
+           -p paramFile     [parameter file to use for the model]
+
+    Right now HotKnot only handles structural constraints that force single stranded bases.
+    Letter '.' means the base is unconstrained.
+    Letter 'x' means the base is forced to be single stranded.
+    Other letters are treated as '.'.	
+    TestSeq/BWYV_constrained.seq is an example with structural constraints.
+
+    HotKnots outputs the results in the TestSeq/Model folder, where Model is the model specified
+    by the -m flag or the default model if no -m flag is given.
+
+    For example:
+          "HotKnots -b -I T4-gene32" 
+           will output the following files in the "output" directory: 
+               T4-gene32_0.bpseq - secondary structure given as base
+				  pair information 
+               T4-gene32_0.ps    - secondary structure plotted as arc 
+				  diagram
+
+	  "HotKnots -b -s AAACCCUUUGGG"
+	   will output the bpseq and ps files corresponding to the sequence
+	   AAACCCUUUGGG in the TestSeq/Model directory under the name
+	   commandline_0.bpseq and commandline_0.ps
+
+    As another example,
+          "./HotKnots -m DP -p params/parameters_DP09.txt -I sequence.seq"
+          will use the Dirks&Pierce energy model, with the parameters specified
+          in parametersDP09.txt
+
+    NOTE: The directory where you run HotKnots has to have a params subdirectory
+	  with all the energy parameter files. The ones used in Andronescu et al. 2009
+          are located in bin/params/ under the names:
+          parameters_CC06.txt, parameters_CC09.txt, parameters_DP03.txt, parameters_DP09.txt
+
+
+ computeEnergy
+    Given a seq and bpseq file, compute its free energy value
+    and plot the arc diagram for its structure in file ArcDiagram.ps.
+
+    Two options for specifying the sequence and structure:
+       -b/c seqname	[assumes seqname.seq and seqname.bpseq or seqname.ct exist;
+			 b = specified file is in bpseq format; c = file is in stem format]
+       -s sequence structure
+    Other options:
+       -m model         [name of model to use: RE for Rivas&Eddy, DP for Dirks&Pierce (default), CC for Cao&Chen]
+       -p paramFile     [parameter file to use for the model]
+       -t		[trace]
+       -PS		[output the arc diagram PS files]
+
+    For example: 
+	computeEnergy -b T4-gene32
+	computeEnergy -m "DP" -p params/parameters_DP09.txt -s AAACCCUUUGGG "(((...)))..."
+       
+
+**************************************************************************
+
+**************************************************************************
+Contents:
+  bin directory:
+     contains HotKnots and computeEnergy executable files.
+     TestSeq subdirectory: 
+	     a set of test sequences and their reported true structures.
+
+  LE directory:
+     contains simfold library 
+		      - MFE structure prediction without pseudoknots.
+              LEModel library 
+		      - energy calculation for a given RNA secondary 
+                      structure (pseudoknots allowed).
+              Makefile  
+		      - type make to compile LEModel library (done
+			automatically from main directory)
+              H directory  
+		      - contains all header files needed for LEModel library
+	      simfoldREADME  
+		      - a README file for simfold library
+     Files:
+     	  Input.cpp -   Given an RNA primary and secondary structure,
+			it construcut structures which will be used by
+			the rest of the program.	           	  
+     	  Loop.cpp  -   Contains functions for constructing the tree
+			of closed regions. Also contains functions for 
+			calculating the free energy of the secondary 
+			structure.
+     	  LoopList.cpp - Contains functions for calculating the free 
+			 energy of interior-pseudoknotted and multi-
+			 pseudoknotted loops, besides a function for 
+			 identifying the tuples regarding a multi-
+			 pseudoknotted loop.
+     	  Stack.cpp -   Main part of parsing algorithm. Contains
+			functions for identifying closed regions in 
+			the secondary structure.	
+     	  Bands.cpp -   Contains functions for identifying and storing 
+			band regions.
+	      
+
+  hotspot directory:
+     contains files for HotKnot heuristic algorithm.
+     Files: 
+          HotKnot.c  - Main program that handles user commands and 
+		       initialization
+          goodStem.c - Given an RNA sequence, generating a list of low 
+		       energy stems by local sequence alignment
+		       between the original sequence and the reverse 
+		       complement of the sequence.
+          hotspot.c  - Based on the initial set of hotspots generated 
+		       by goodStem.c, create a tree of partial
+		       secondary structures. (see HotKnot 
+                       paper for detailed description of the algorithm)
+          score.cpp, sc.cpp  - interface between the folding algorithm 
+			       (implemented in c) 
+                               and the energy calculation library 
+			       (implemented in c++).
+
+          Makefile  - type make to compile HotKnots (done automatically
+			from the main directory)
+
+
+    
+  graphics directory:
+      contains files for ploting arc diagrams of RNA secondary structures.
+      bases are color coded:  A:red, U: Green, G:Blue, C:Yellow
+      Files:
+           PlotRna.c
+           graphics.c
+           graphics.h
+           makefile
+
+  HotKnots_v2.0:
+      Type make to compile all of HotKnots.
+
+**************************************************************************
+
+**************************************************************************
+Installation step:
+
+This package doesn't really need installation. 
+The files are compiled on Linux 2.4.20-30.9smp, using g++, version  3.2.2. 
+
+In case you need to recompile the files, type make in HotKnots_v2.0
+***************************************************************************
+
+If you have any comments and suggestions, please contact us.

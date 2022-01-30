@@ -1,0 +1,7 @@
+// Prototype: double hotknots_DP (char *sequence, char *structure)
+//      - sequence is the given RNA sequence to be folded (input parameter)
+//      - structure is the predicted secondary structure (output parameter)
+//      - the function may return the energy
+// Uses the Dirks&Pierce model
+// Defaults: no PS is output, GU is included (if want to change this, set it manually in ? TODO )
+double hotknots_DP(char *sequence, char *structure)

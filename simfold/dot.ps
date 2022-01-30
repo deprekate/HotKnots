@@ -1,0 +1,189 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Title: RNA DotPlot
+%%Creator: PS_dot.c, ViennaRNA Package
+%%BoundingBox: 66 211 518 662
+%%DocumentFonts: Helvetica
+%%Pages: 1
+%%EndComments
+
+%This file contains the square roots of the base pair probabilities in the form
+% i  j  sqrt(p(i,j)) ubox
+100 dict begin
+
+/logscale false def
+
+%delete next line to get rid of title
+270 665 moveto /Helvetica findfont 14 scalefont setfont (dot.ps) show
+
+/lpmin {
+   1e-05 log  % log(pmin) only probs>pmin will be shown
+} bind def
+
+/sequence { (\
+GCAACGAUGACAUACAUCGCUAGUCGACGC\
+) } def
+/len { sequence length } def
+
+/ubox {
+   logscale {
+      log dup add lpmin div 1 exch sub dup 0 lt { pop 0 } if
+   } if
+   3 1 roll
+   exch len exch sub 1 add box
+} bind def
+
+/lbox {
+   3 1 roll
+   len exch sub 1 add box
+} bind def
+
+/box { %size x y box - draws box centered on x,y
+   2 index 0.5 mul add            % x += 0.5
+   exch 2 index 0.5 mul add exch  % x += 0.5
+   newpath
+   moveto
+   dup neg   0 rlineto
+   dup neg   0 exch rlineto
+             0 rlineto
+   closepath
+   fill
+} def
+
+72 216 translate
+72 6 mul len 1 add div dup scale
+/Helvetica findfont 0.95 scalefont setfont
+
+% print sequence along all 4 sides
+0 1 len 1 sub {
+    dup
+    0.7 add -0.3 moveto
+    sequence exch 1 getinterval
+    show
+} for
+
+0 1 len 1 sub {
+    dup
+    0.7 add 0.7 len add moveto
+    sequence exch 1 getinterval
+    show
+} for
+
+90  rotate
+0 1 len 1 sub {
+    dup
+    0.7 add -0.2 moveto
+    len 1 sub exch sub
+    sequence exch 1 getinterval
+    show
+} for
+270 rotate
+
+270 rotate
+0 1 len 1 sub {
+    dup
+    -0.3 add len sub  0.7 len add  moveto
+    sequence exch 1 getinterval
+    show
+} for
+90 rotate
+
+0.5 dup translate
+% draw diagonal
+0.04 setlinewidth
+0 len moveto len 0 lineto stroke 
+
+%draw grid
+0.01 setlinewidth
+len log 0.9 sub cvi 10 exch exp  % grid spacing
+dup 1 gt {
+   dup dup 20 div dup 2 array astore exch 40 div setdash
+} { [0.3 0.7] 0.1 setdash } ifelse
+0 exch len {
+   dup dup
+   0 moveto
+   len lineto 
+   dup
+   len exch sub 0 exch moveto
+   len exch len exch sub lineto
+   stroke
+} for
+0.5 neg dup translate
+
+1 20 0.10700 ubox
+1 21 0.02566 ubox
+1 24 0.64713 ubox
+1 25 0.10295 ubox
+1 28 0.02432 ubox
+1 30 0.26820 ubox
+2 9 0.00513 ubox
+2 19 0.09795 ubox
+2 23 0.66520 ubox
+2 26 0.03349 ubox
+2 29 0.26759 ubox
+3 8 0.00419 ubox
+3 21 0.36814 ubox
+3 24 0.02490 ubox
+4 21 0.36586 ubox
+4 24 0.04093 ubox
+5 19 0.91321 ubox
+5 23 0.03514 ubox
+5 26 0.23722 ubox
+5 29 0.27173 ubox
+6 15 0.00410 ubox
+6 18 0.92538 ubox
+6 20 0.00672 ubox
+6 21 0.00457 ubox
+6 25 0.23857 ubox
+6 28 0.27762 ubox
+6 30 0.00846 ubox
+7 17 0.92517 ubox
+7 21 0.00557 ubox
+7 24 0.23768 ubox
+8 16 0.92489 ubox
+8 19 0.05843 ubox
+8 22 0.02872 ubox
+8 23 0.22374 ubox
+8 26 0.27664 ubox
+8 27 0.01485 ubox
+9 13 0.00322 ubox
+9 15 0.91452 ubox
+9 18 0.10171 ubox
+9 20 0.03760 ubox
+9 21 0.02524 ubox
+9 25 0.28936 ubox
+10 17 0.08675 ubox
+10 21 0.05646 ubox
+10 24 0.28932 ubox
+11 19 0.14174 ubox
+11 23 0.28750 ubox
+12 17 0.02466 ubox
+12 21 0.05087 ubox
+13 19 0.03111 ubox
+13 22 0.16726 ubox
+14 21 0.15690 ubox
+14 24 0.00542 ubox
+15 19 0.04148 ubox
+15 23 0.00676 ubox
+15 29 0.01200 ubox
+16 21 0.00840 ubox
+17 22 0.00456 ubox
+17 27 0.02256 ubox
+18 23 0.00627 ubox
+18 26 0.02295 ubox
+18 29 0.00877 ubox
+19 25 0.02151 ubox
+19 28 0.00937 ubox
+19 30 0.04755 ubox
+20 26 0.02151 ubox
+20 29 0.05135 ubox
+21 26 0.00607 ubox
+21 27 0.00991 ubox
+21 29 0.00505 ubox
+23 28 0.03403 ubox
+23 30 0.07176 ubox
+24 29 0.05478 ubox
+25 29 0.00994 ubox
+26 30 0.00896 ubox
+showpage
+end
+%%EOF

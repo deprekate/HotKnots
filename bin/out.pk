@@ -1,0 +1,744 @@
+PKNOTS 1.08 (2012) using easel
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+----------------------------------------------------------------------
+Parameters (energy units, kcal/mol)
+ wkn  parameter:          0.83 (pseudoknots weight)
+ P1   parameter:         -0.00 
+ P2   parameter:         -0.00 
+ P3   parameter:          3.00 
+ P4   parameter:         -0.00 
+ P5   parameter:          4.60 
+ P5P  parameter:          8.43 
+ P6   parameter:          0.40 
+ P6P  parameter:          0.24 
+ P10  parameter:          0.10 
+ P10P parameter:          0.10 
+ P11  parameter:          7.00 
+ P12  parameter:          6.00 
+ P13  parameter:         16.00 
+ full pseudoknot model.
+----------------------------------------------------------------------
+NAM  test1
+SEQ
+       1 U   U   U   U   G   C   C   C   U   G   A   A   A   C   U   G   G   C   G   C
+         1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  
+         .   .   .   .   32  31  30  29  28  27  .   .   .   .   50  49  48  47  46  45  
+
+      21 G   U   G   A   G   A   U   G   G   G   G   C   G   A   C   C   C   G   A   C
+         21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  
+         44  .   .   .   .   .   10  9   8   7   6   5   .   .   .   43  42  .   .   .   
+
+      41 U   G   G   C   G   U   G   C   C   A   U   G   C
+         41  42  43  44  45  46  47  48  49  50  51  52  53  
+         .   37  36  21  20  19  18  17  16  15  .   .   .   
+
+----------------------------------------------------------------------
+   Log odds score:       17192 
+energy (kcal/mol):      -17.19 
+number of pairs found:      30.00 
+----------------------------------------------------------------------
+Allow pseudoknots? YES
+---------------------------
