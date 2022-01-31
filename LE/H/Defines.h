@@ -62,8 +62,8 @@ struct T_stackelem {
 //elements of the stack -- Hosna, March 8th, 2007
 *******************************************/
 
+/*
 typedef struct region
-{
 	int begin;
 	int end;
 	region()
@@ -71,6 +71,16 @@ typedef struct region
 		begin = -1;
 		end = -1;
 	}
+} ;
+*/
+
+typedef struct {
+	int begin;
+	int end;
+} region;
+region reg = {
+	.begin = -1,
+	.end = -1
 };
 /******************************************
 //possible types of the loops

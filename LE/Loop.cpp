@@ -47,7 +47,7 @@
 #include "constants.h"
 #include "string.h"
 
-#define NULL 0
+#define NNULL 0
 
 /******************************************************************
 Takes as input the right and left border of an identified closedRegion-loop (b, e),
@@ -56,12 +56,12 @@ region finding program).
 It then creates a node corresponding to this closedRegion-loop!
 *******************************************************************/
 Loop::Loop(int b, int e,  ReadInput * R, Bands * B, Stack * S){
-  ILoops = NULL;
-  MLoops = NULL;
+  ILoops = NNULL;
+  MLoops = NNULL;
   St = S;
-  LeftSibling   = NULL;
-  RightChild    = NULL;
-  Parent		= NULL;
+  LeftSibling   = NNULL;
+  RightChild    = NNULL;
+  Parent		= NNULL;
   begin         = b;
   end           = e;
   Input			= R;
@@ -96,7 +96,7 @@ void Loop::clearLoop(){
 /*********************************************************************************
 *********************************************************************************/
 Loop::~Loop(){
-   if (RightChild != NULL)
+   if (RightChild != NNULL)
      delete RightChild;
 }
 
@@ -190,7 +190,7 @@ if (DEBUG2)
 
 							T_IntList * IntList = new T_IntList;
 							IntList->Num = y;
-							IntList->Next = NULL;
+							IntList->Next = NNULL;
 							IntList->tuning_flag = 0;  // PARAMETER TUNING
 							Input->looplists[y] = new LoopList(Input, y, x);
 							if (DEBUG)
@@ -208,7 +208,7 @@ if (DEBUG2)
 						//MultiLoops->Add(y, x);
 						T_IntList * IntList = new T_IntList;
 						IntList->Num = y;
-						IntList->Next = NULL;
+						IntList->Next = NNULL;
 						IntList->tuning_flag = 0;  // PARAMETER TUNING
 						Input->looplists[y] = new LoopList(Input, y, x);
 						Input->looplists[y]->FindChildren();
@@ -250,7 +250,7 @@ void Loop::PseudoNestedCheck(){
 
 
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 		L->WhereLocated();	 // sets L->nested to inBand or unBand
 		
 		if (L->nested == inBand){
@@ -344,7 +344,7 @@ void Loop::countNumberOfChildren()
 {
 	int numChildren = 0;
 	Loop * L1 = RightChild;
-	while (L1 != NULL)
+	while (L1 != NNULL)
 	{
 		L1 = L1->LeftSibling;
 		numChildren++;
@@ -452,12 +452,12 @@ void Loop::addLoop(int begin, int end){
     if (L)
         L1->LeftSibling = L;
         
-	// for the last valid L that was moved to become a child of L1, make L's left sibling NULL,
+	// for the last valid L that was moved to become a child of L1, make L's left sibling NNULL,
 	// since there were no more L's moved beside it (note that the rest of the L's valid during
 	// an iteration of the while loop above keep the same left siblings since they were all moved
 	// to become children of L1 until this last L)
     if (L2 && HaveChild)
-        L2->LeftSibling = NULL;  
+        L2->LeftSibling = NNULL;  
         
     RightChild = L1;  // add L1 as rightmost child of T
 
@@ -487,7 +487,7 @@ void Loop::Print(int i){
     do {
         L->Print(i+1);
         L = L->LeftSibling;
-    } while (L != NULL);
+    } while (L != NNULL);
     
     };
 }
@@ -565,7 +565,7 @@ char c(int i){
 		case 3:
 			return 'T';
 	};
-
+	return 0;
 };
 
 void Loop::printEnergyTrace(){
@@ -574,7 +574,7 @@ void Loop::printEnergyTrace(){
 	// (that is, sum energies across the first row starting with the rightmost child and going left;
 	// (then the energy of each child is the sum of energies of each of its children, starting from the rightmost one)
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 			L->printEnergyTrace();
 			L = L->LeftSibling;
 	};
@@ -599,7 +599,7 @@ void Loop::printEnergyTrace(){
 			break;
 	};
 	
-	if (RightChild != NULL && RightChild->finalCoaxEnergy != 0)
+	if (RightChild != NNULL && RightChild->finalCoaxEnergy != 0)
 	{
 		if (type == external)
 			printf("***[1, %d] coaxial energy term added for all its children = %f cal/mol\n", Input->Size, RightChild->finalCoaxEnergy);
@@ -624,11 +624,11 @@ PARAMTYPE	Loop::stackEnergy(){
 	if (DEBUG)            
 	{
 		if (PRINT_CHAR == 0)
-			printf ("%d,%d stack \t- add energy %6f 10cal/mol\n", i, f[i].pair, en);
+			printf ("%i,%d stack \t- add energy %6f 10cal/mol\n", i, f[i].pair, (double) en);
 		if (PRINT_CHAR == 1)
-			printf ("%d,%d stack \t- add energy %6f 10cal/mol\n", i, f[i].pair, en);
+			printf ("%i,%d stack \t- add energy %6f 10cal/mol\n", i, f[i].pair, (double) en);
 		if (PRINT_CHAR == 2)
-			printf ("%d,%d stack \t- add energy %6d 10cal/mol\n", i, f[i].pair, en);
+			printf ("%i,%d stack \t- add energy %6d 10cal/mol\n", i, f[i].pair, en);
 	}
 	return en;
 }
@@ -648,9 +648,9 @@ PARAMTYPE	Loop::hairpinEnergy(){
 	if (DEBUG)
 	{
 		if (PRINT_CHAR == 0)
-			printf ("%d,%d hairpin \t- add energy %6f 10cal/mol\n", i, f[i].pair, en);        
+			printf ("%d,%d hairpin \t- add energy %6f 10cal/mol\n", i, f[i].pair, (double) en);
 		if (PRINT_CHAR == 1)
-			printf ("%d,%d hairpin \t- add energy %6f 10cal/mol\n", i, f[i].pair, en);        
+			printf ("%d,%d hairpin \t- add energy %6f 10cal/mol\n", i, f[i].pair, (double) en);        
 		if (PRINT_CHAR == 2)
 			printf ("%d,%d hairpin \t- add energy %6d 10cal/mol\n", i, f[i].pair, en);        
 	}
@@ -677,9 +677,9 @@ PARAMTYPE	Loop::interiorEnergy(){
 	if (DEBUG)
 	{
 		if (PRINT_CHAR == 0)
-			printf ("%d,%d (%d,%d) interior \t- add energy %6f 10cal/mol ip.jp = %d,%d (%d,%d) \n", i, f[i].pair, sequence[i], sequence[f[i].pair], en, ip, jp, sequence[i], sequence[jp]);       
+			printf ("%d,%d (%d,%d) interior \t- add energy %6f 10cal/mol ip.jp = %d,%d (%d,%d) \n", i, f[i].pair, sequence[i], sequence[f[i].pair], (double) en, ip, jp, sequence[i], sequence[jp]);       
 		if (PRINT_CHAR == 1)
-			printf ("%d,%d (%d,%d) interior \t- add energy %6f 10cal/mol ip.jp = %d,%d (%d,%d) \n", i, f[i].pair, sequence[i], sequence[f[i].pair], en, ip, jp, sequence[i], sequence[jp]);        
+			printf ("%d,%d (%d,%d) interior \t- add energy %6f 10cal/mol ip.jp = %d,%d (%d,%d) \n", i, f[i].pair, sequence[i], sequence[f[i].pair], (double) en, ip, jp, sequence[i], sequence[jp]);        
 		if (PRINT_CHAR == 2)
 			printf ("%d,%d (%d,%d) interior \t- add energy %6d 10cal/mol ip.jp = %d,%d (%d,%d) \n", i, f[i].pair, sequence[i], sequence[f[i].pair], en, ip, jp, sequence[i], sequence[jp]);        
 	}
@@ -731,7 +731,7 @@ float Loop::EnergyViaSimfold(int model){
 
 	double* counter = new double[num_params];
 	double** quadratic_matrix = new double*[num_params];
-	if (quadratic_matrix == NULL)
+	if (quadratic_matrix == NNULL)
 	{
 		printf ("ERROR! Space could not be allocated for quadratic_matrix_known, ABORT!\n");
 		exit(1);
@@ -740,7 +740,7 @@ float Loop::EnergyViaSimfold(int model){
 	{
 		counter[i] = 0;
 		quadratic_matrix[i] = new double[num_params];
-		if (quadratic_matrix[i] == NULL)
+		if (quadratic_matrix[i] == NNULL)
 		{
 			printf ("ERROR! Space could not be allocated for quadratic_matrix_known[%d], ABORT!\n", i);
 			exit(1);
@@ -765,7 +765,7 @@ float Loop::EnergyViaSimfold(int model){
 /*
                 retval = 1000*Energy(model, quadratic_matrix, counter, free_value, reset_c, ignore_dangles);  // returns energy in 1000 x kcal/mol = cal/mol
 */
-		retval = 1000*Energy(model, NULL, NULL, free_value, reset_c, ignore_dangles);
+		retval = 1000*Energy(model, NNULL, NNULL, free_value, reset_c, ignore_dangles);
 //		printf("Done call to getEnergyDP\n");
 //              cout << "COUT: dangle_top[2][1][0] " << dangle_top[2][1][0] << endl;
 
@@ -785,7 +785,7 @@ float Loop::EnergyViaSimfold(int model){
         if (model == CC2006b)
 //                return -10*getPartialCoaxialEnergy(CC2006b) - 10*getEnergyCC2006b();  // returns energy in 10 x 10*cal/mol = ca$
 //                return -10*getEnergyCC2006b();
-              return 1000*Energy(model, NULL, NULL, free_value, reset_c, ignore_dangles);
+              return 1000*Energy(model, NNULL, NNULL, free_value, reset_c, ignore_dangles);
         if (model == CC2006c) 
                 return -10*getPartialCoaxialEnergyAll(CC2006b) - 10*getEnergyCC2006b();  // returns energy in 10 x 10*cal/mol =$
         // *** Add new energy model code here *** //
@@ -816,7 +816,7 @@ float Loop::Energy(int model, double** P_matrix, double *c, double &f, int reset
 		if (num_params == 0)
 			printf("WARNING: Loop.cpp::Energy(int model, double P_matrix, ...) - num_params not initialized\n");
 
-		if (reset_c == 1 && c != NULL)
+		if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -1146,18 +1146,21 @@ float Loop::getPartialCoaxialEnergy(int flag) {
 	// use energy minimization for children/branches in a multiloop
 
 	Loop * L = RightChild;
-	while (L != NULL){
-		if (DEBUG2)
+	while (L != NNULL){
+		if (DEBUG2){
 			printf("Current Loop: [%d, %d]\n", L->begin, L->end);
+		}
 
 		sum += L->getPartialCoaxialEnergy(flag);
 		L = L->LeftSibling;  // go to the child of this parent
 		
-		if (DEBUG2)
-			if(L != NULL)
+		if (DEBUG2){
+			if(L != NNULL){
 				printf("Next Loop: [%d, %d]\n", L->begin, L->end);
-			else
+			}else{
 				printf("L is Null\n");
+			}
+		}
 	}
 
 //    float sum = 0;
@@ -1181,7 +1184,7 @@ float Loop::getPartialCoaxialEnergy(int flag) {
 //printf("Current Loop (Rightmost child): %d to %d\n", begin, end);
 
 	// only perform this calculation for right children (since the left siblings are included in this calculation)
-	if (Parent != NULL && this == Parent->RightChild)  
+	if (Parent != NNULL && this == Parent->RightChild)  
 	{
 		switch (Parent->type){
 			case multi :
@@ -1274,7 +1277,7 @@ DONE in removeDangling()
 				L1 = this;
 				L2 = LeftSibling;
 
-				while (L2 != NULL)
+				while (L2 != NNULL)
 				{
 					allCoaxStacks[i].index0 = i;
 					allCoaxStacks[i].index1 = i+1;
@@ -1554,7 +1557,7 @@ DONE in removeDangling()
 				L1 = this;
 				L2 = LeftSibling;
 
-				while (L2 != NULL)
+				while (L2 != NNULL)
 				{
 					allCoaxStacks[i].index0 = i;
 					allCoaxStacks[i].index1 = i+1;
@@ -1655,7 +1658,7 @@ DONE in removeDangling()
 				if (DEBUG2)
 					printf("external: starting combinations of basic pairings with NumberOfChildren = %d\n", Parent->NumberOfChildren);
 
-//if (Parent->type == external && LeftSibling != NULL)
+//if (Parent->type == external && LeftSibling != NNULL)
 //	printf("Parent is external %d to %d, sibling exists %d to %d!\n", Parent->begin, Parent->end, LeftSibling->begin, LeftSibling->end);
 
 //printf("FLOOR_OVER2(Parent->NumberOfChildren+1) = %d\n", FLOOR_OVER2(Parent->NumberOfChildren+1));
@@ -1812,18 +1815,20 @@ float Loop::getPartialCoaxialEnergyAll(int flag) {
 	// use energy minimization for children/branches in a multiloop
 
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 		if (DEBUG2)
 			printf("Current Loop: [%d, %d]\n", L->begin, L->end);
 
 		sum += L->getPartialCoaxialEnergyAll(flag);
 		L = L->LeftSibling;  // go to the child of this parent
 		
-		if (DEBUG2)
-			if(L != NULL)
+		if (DEBUG2){
+			if(L != NNULL){
 				printf("Next Loop: [%d, %d]\n", L->begin, L->end);
-			else
+			}else{
 				printf("L is Null\n");
+			}
+		}
 	}
 
 //    float sum = 0;
@@ -1847,7 +1852,7 @@ float Loop::getPartialCoaxialEnergyAll(int flag) {
 //printf("Current Loop (Rightmost child): %d to %d\n", begin, end);
 
 	// only perform this calculation for right children (since the left siblings are included in this calculation)
-	if (Parent != NULL && this == Parent->RightChild)  
+	if (Parent != NNULL && this == Parent->RightChild)  
 	{
 		switch (Parent->type){
 			case multi :
@@ -1940,7 +1945,7 @@ DONE in removeDangling()
 				L1 = this;
 				L2 = LeftSibling;
 
-				while (L2 != NULL)
+				while (L2 != NNULL)
 				{
 					allCoaxStacks[i].index0 = i;
 					allCoaxStacks[i].index1 = i+1;
@@ -2136,7 +2141,7 @@ DONE in removeDangling()
 				L1 = this;
 				L2 = LeftSibling;
 
-				while (L2 != NULL)
+				while (L2 != NNULL)
 				{
 					allCoaxStacks[i].index0 = i;
 					allCoaxStacks[i].index1 = i+1;
@@ -2272,7 +2277,7 @@ float Loop::EnergyDanglingViaSimfold(int model) {
 
         double* counter = new double[num_params];
         double** quadratic_matrix = new double*[num_params];
-        if (quadratic_matrix == NULL)
+        if (quadratic_matrix == NNULL)
         {
                 printf ("ERROR! Space could not be allocated for quadratic_matrix_known, ABORT!\n");
                 exit(1);
@@ -2281,7 +2286,7 @@ float Loop::EnergyDanglingViaSimfold(int model) {
         {
                 counter[i] = 0;
                 quadratic_matrix[i] = new double[num_params];
-                if (quadratic_matrix[i] == NULL)
+                if (quadratic_matrix[i] == NNULL)
                 {
                         printf ("ERROR! Space could not be allocated for quadratic_matrix_known[%d], ABORT!\n", i);
                         exit(1);
@@ -2300,7 +2305,7 @@ float Loop::EnergyDanglingViaSimfold(int model) {
 /*
 	retval = 1000*EnergyDangling(quadratic_matrix, counter, free_value, reset_c, ignore_dangles, ignore_AU);
 */
-	retval = 1000*EnergyDangling(model, NULL, NULL, free_value, reset_c, ignore_dangles, ignore_AU);
+	retval = 1000*EnergyDangling(model, NNULL, NNULL, free_value, reset_c, ignore_dangles, ignore_AU);
 
 /*
 	delete [] counter;
@@ -2350,8 +2355,8 @@ float Loop::EnergyDangling() {
 
 		// add some AU_penalties
 		// condition on if is necessary because multiloop AU penalty has already been applied
-		if (i==1 && f[i].pair > i) // && Input->ClosedRegions[i] != NULL && Input->ClosedRegions[i]->type != multi)
-//		if (i==1 && f[i].pair > i && Input->ClosedRegions[i] != NULL && Input->ClosedRegions[i]->type != multi)
+		if (i==1 && f[i].pair > i) // && Input->ClosedRegions[i] != NNULL && Input->ClosedRegions[i]->type != multi)
+//		if (i==1 && f[i].pair > i && Input->ClosedRegions[i] != NNULL && Input->ClosedRegions[i]->type != multi)
 		{
 			AUpen = AU_penalty (sequence[i], sequence[f[i].pair]);
 			if (DEBUG)
@@ -2445,7 +2450,7 @@ float Loop::EnergyDangling() {
 int Loop::isAdjacentToPK(int pos, int a)
 {
 	// if pos not the last base, and pos+1 starts a closed region, which is a pseudoknot
-	if (pos < Input->Size && Input->ClosedRegions[pos+1] != NULL && Input->ClosedRegions[pos+1]->type == pseudo)
+	if (pos < Input->Size && Input->ClosedRegions[pos+1] != NNULL && Input->ClosedRegions[pos+1]->type == pseudo)
 	{
 		if (DEBUG)
 			printf("isAdjacentToPK = 1 for pos=%d, pos+1 starts a PK\n", pos);
@@ -2455,7 +2460,7 @@ int Loop::isAdjacentToPK(int pos, int a)
 	// if pos not the first base, and pos-1 is paired, and does not form an arc across pos, and its pair
 	//  does not start a closed region, then it must be a pk; in addition the base pair must fall inside [a,ap]
 	if (pos > 1 && Input->BasePair(pos-1) > 0 && Input->BasePair(pos-1) < pos-1  && 
-		Input->ClosedRegions[Input->BasePair(pos-1)] == NULL && Input->BasePair(pos-1) > a)
+		Input->ClosedRegions[Input->BasePair(pos-1)] == NNULL && Input->BasePair(pos-1) > a)
 	{
 		if (DEBUG)
 			printf("isAdjacentToPK = 1 for pos=%d, pos-1 is part of a PK \n", pos);
@@ -2477,8 +2482,8 @@ int Loop::findClosedRegionNestedIn(int pos)
 		// if i is the beginning of an arc, and the arc spans across pos, and the arc starts a closed region
 		// (because could be the second band of a PK based on only the first 3 conditions)
 
-//Doesn't for for nested in PK: //if (Input->BasePair(i) > 0 && Input->BasePair(i) > i && Input->BasePair(i) > pos && Input->ClosedRegions[i] != NULL)
-		if (Input->ClosedRegions[i] != NULL and Input->ClosedRegions[i]->end >= pos)
+//Doesn't for for nested in PK: //if (Input->BasePair(i) > 0 && Input->BasePair(i) > i && Input->BasePair(i) > pos && Input->ClosedRegions[i] != NNULL)
+		if (Input->ClosedRegions[i] != NNULL and Input->ClosedRegions[i]->end >= pos)
 			break;  // i represents the beginning of the region in which pos is nested
 	}
 
@@ -2523,6 +2528,7 @@ int Loop::isNestedInBand(int pos, int& a)
 		}
 		i = bandpattern->pattern[i].next;
 	}
+	return 0;
 }
 
 
@@ -2555,7 +2561,7 @@ int Loop::isPKDangleInMultiPseudoLoop(int i)
 		current_border = 0;
 
 		// multiloops that span bands are handled separately (since has parameters not in simfold) so search for them
-		while (L2 != NULL){
+		while (L2 != NNULL){
 			// find the next multiloop that spans a band -- get energy/counts for everything above it
 			// that is also inside the last multiloop  i.e. look through ILoops again for the first
 			// loop that is above this multiloop but below the last one
@@ -2577,11 +2583,11 @@ int Loop::isPKDangleInMultiPseudoLoop(int i)
 				}
 
 				L1 = ILoops;
-				while (L1 != NULL && Input->looplists[L1->Num]->base1 <= current_border)  // ie. L1 outside multi
+				while (L1 != NNULL && Input->looplists[L1->Num]->base1 <= current_border)  // ie. L1 outside multi
 					L1 = L1->Next;
 				// now L1 points to the first L1 inside the multi,
-				// or is NULL (single base pair) (or is not null since there might be other ILoops members but not in this band)
-				if (L1 == NULL || bandpattern->pattern[Input->looplists[L1->Num]->base1].OtherBorder >= bandpattern->pattern[Input->looplists[L2->Num]->base1].OtherBorder)
+				// or is NNULL (single base pair) (or is not null since there might be other ILoops members but not in this band)
+				if (L1 == NNULL || bandpattern->pattern[Input->looplists[L1->Num]->base1].OtherBorder >= bandpattern->pattern[Input->looplists[L2->Num]->base1].OtherBorder)
 				{
 					int single_base = Input->looplists[L2->Num]->base1+1;
 					while (Input->BasePair(single_base) <= bandpattern->pattern[i_pt].next) // doesn't span band
@@ -2646,13 +2652,13 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 		if (num_params == 0)
 			printf("WARNING: Loop.cpp::EnergyDangling(int model, double P_matrix, ...) - num_params not initialized\n");
 
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f_pt = 0;         
                 for (int i=0; i < num_params; i++)
                 {
                         c[i] = 0;
-						if (P_matrix != NULL)
+						if (P_matrix != NNULL)
 	                        for (int j=i; j < num_params; j++) 
                                 P_matrix[i][j] = 0;
                 }
@@ -2696,8 +2702,8 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 		AUpen = 0;
 		// add some AU_penalties
 		// condition on if is necessary because multiloop AU penalty has already been applied in simfold call
-//		if (i==1 && f[i].pair > i && Input->ClosedRegions[i] != NULL && Input->ClosedRegions[i]->type != multi)
-		if (i==1 && f[i].pair > i && Input->ClosedRegions[i] != NULL && Input->ClosedRegions[i]->type != multi &&
+//		if (i==1 && f[i].pair > i && Input->ClosedRegions[i] != NNULL && Input->ClosedRegions[i]->type != multi)
+		if (i==1 && f[i].pair > i && Input->ClosedRegions[i] != NNULL && Input->ClosedRegions[i]->type != multi &&
                                 Input->ClosedRegions[i]->type != hairpin && Input->ClosedRegions[i]->type != stackloop &&
                                 Input->ClosedRegions[i]->type != interior && Input->ClosedRegions[i]->type != external)
 		// Cristina: added last 4 conditions, which apply when we are using the EnergyViaSimfold and the energy with counts
@@ -2706,7 +2712,7 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 			if (ignore_AU == 0)
 			{
 				AUpen = AU_penalty (sequence[i], sequence[f[i].pair]);
-				if (c != NULL)    count_AU_penalty (sequence[i], sequence[f[i].pair], c);
+				if (c != NNULL)    count_AU_penalty (sequence[i], sequence[f[i].pair], c);
 			}
 
 			if (DEBUG)
@@ -2740,7 +2746,7 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 				if (ignore_AU == 0)
 				{
 					AUpen = AU_penalty (sequence[i], sequence[f[i].pair]);
-					if (c != NULL)    count_AU_penalty (sequence[i], sequence[f[i].pair], c);
+					if (c != NNULL)    count_AU_penalty (sequence[i], sequence[f[i].pair], c);
 				}
 
 				if (DEBUG)
@@ -2784,7 +2790,7 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 					  (Input->ClosedRegions[arcIndex_i]->type == pseudo && Input->ClosedRegions[arcIndex_i]->isNestedInBand(i, band_nested) == 1 && isAdjacentToPK(i, band_nested) == 0) ))))
 				{
 					dang = MIN (0, dangle_bot [sequence[f[i+1].pair]] [sequence[i+1]] [sequence[i]]);
-					if (dang != 0 && c != NULL)
+					if (dang != 0 && c != NNULL)
 					{
 						sprintf (paramtype, "dangle_bot[%d][%d][%d]",sequence[f[i+1].pair], sequence[i+1], sequence[i]);
 						index_dang = structure_type_index (paramtype);
@@ -2802,7 +2808,7 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 				  (Input->ClosedRegions[arcIndex_i1]->type == pseudo && Input->ClosedRegions[arcIndex_i1]->isNestedInBand(i+1) == 1) )))
 				{
 					AUpen = AU_penalty (sequence[i+1], sequence[f[i+1].pair]);
-					if (c != NULL)    count_AU_penalty (sequence[i+1], sequence[f[i+1].pair], c);
+					if (c != NNULL)    count_AU_penalty (sequence[i+1], sequence[f[i+1].pair], c);
 				}
 */
 				if (DEBUG)
@@ -2841,7 +2847,7 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 					if (ignore_dangles == 0)
 					{
 						dang = MIN (0, dangle_top [sequence[i-1]] [sequence[f[i-1].pair]] [sequence[i]]);
-						if (dang != 0 && c != NULL)
+						if (dang != 0 && c != NNULL)
 						{
 							sprintf (paramtype, "dangle_top[%d][%d][%d]", sequence[i-1], sequence[f[i-1].pair], sequence[i]);
 							index_dang = structure_type_index (paramtype);
@@ -2884,7 +2890,7 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 					  (Input->ClosedRegions[arcIndex_i]->type == pseudo && Input->ClosedRegions[arcIndex_i]->isNestedInBand(i, band_nested) == 1 && isAdjacentToPK(i, band_nested) == 0) ))))
 				{
 					dang = MIN (0, dangling_energy (sequence, structure, f[i-1].pair, i-1, i+1, f[i+1].pair));
-					if (c != NULL)    count_LEdangling_energy (sequence, structure, -1, f[i-1].pair, i-1, i+1, f[i+1].pair, c);
+					if (c != NNULL)    count_LEdangling_energy (sequence, structure, -1, f[i-1].pair, i-1, i+1, f[i+1].pair, c);
 				}
 
 /*  // not necessary: done in simfold
@@ -2897,7 +2903,7 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 				  (Input->ClosedRegions[arcIndex_i1]->type == pseudo && Input->ClosedRegions[arcIndex_i1]->isNestedInBand(i+1) == 1) )))
 				{
 					AUpen = AU_penalty (sequence[i+1], sequence[f[i+1].pair]);
-					if (c != NULL)    count_AU_penalty (sequence[i+1], sequence[f[i+1].pair], c);
+					if (c != NNULL)    count_AU_penalty (sequence[i+1], sequence[f[i+1].pair], c);
 				}
 */
 				if (DEBUG)
@@ -2933,19 +2939,19 @@ float Loop::EnergyDangling(int model, double** P_matrix, double *c, double &f_pt
 		printf("Free Value: %f\n", f_pt);
 		printf("PK Counter Values:\n");
 		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nNon-Zero Simfold Counter Values:\n");
 		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nAll Non-Zero P_matrix Values:\n");
 		for (int i = 0; i < num_params; i++)
 		{
 			for (int j = i; j < num_params; j++)
-				if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+				if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 		}
 	}
@@ -2971,7 +2977,7 @@ int Loop::isPKFree()
 	}
 
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 		if (L->isPKFree() == 1)  // if still pk-free check siblings
 			L = L->LeftSibling;
 		else
@@ -2995,7 +3001,7 @@ float Loop::getEnergyDP(){
 	// (that is, sum energies across the first row starting with the rightmost child and going left;
 	// (then the energy of each child is the sum of energies of each of its children, starting from the rightmost one)
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 			sum += L->getEnergyDP();
 			L = L->LeftSibling;
 	};
@@ -3043,7 +3049,7 @@ float Loop::getEnergyDP(){
 void Loop::lookForPk(double** P_matrix, double *c, double &f, int reset_c, int ignore_dangles, float& sum)
 {
         int num_params = get_num_params_PK_DP();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -3063,7 +3069,7 @@ void Loop::lookForPk(double** P_matrix, double *c, double &f, int reset_c, int i
 	}
 
 	Loop * L = RightChild;
-	while (L != NULL)
+	while (L != NNULL)
 	{
 		L->lookForPk(P_matrix, c, f, reset_c, ignore_dangles, sum);
 		L = L->LeftSibling;
@@ -3083,7 +3089,7 @@ float Loop::getEnergyDP(double** P_matrix, double *c, double &f, int reset_c, in
 	float tempsum = 0;
 
         int num_params = get_num_params_PK_DP();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -3098,12 +3104,12 @@ float Loop::getEnergyDP(double** P_matrix, double *c, double &f, int reset_c, in
 
 	if (begin == 0)
 	{
-		if (RightChild == NULL)  // no loops in the structure
+		if (RightChild == NNULL)  // no loops in the structure
 			return 0;
 		else
 		{
 			L = RightChild;
-			while (L != NULL) {
+			while (L != NNULL) {
 				sum += L->getEnergyDP(P_matrix,c,f,reset_c,ignore_dangles);
 				L = L->LeftSibling;
 			}
@@ -3157,7 +3163,7 @@ float Loop::getEnergyDP(double** P_matrix, double *c, double &f, int reset_c, in
 			printf("tempsum: %f", tempsum);
 
 		//Loop * L1 = L->RightChild;
-		//while (L1 != NULL){
+		//while (L1 != NNULL){
 
 		//	printf("getEnergyDP: pk inside pk-free region (%d,%d)\n", L1->begin, L1->end);
 		//	sum += L1->getEnergyDP(c, f, reset_c, ignore_dangles);
@@ -3182,7 +3188,7 @@ float Loop::getEnergyDP(double** P_matrix, double *c, double &f, int reset_c, in
 
 		// repeat for anything nested inside
 		Loop * L1 = L->RightChild;
-		while (L1 != NULL){
+		while (L1 != NNULL){
 
 			if (DEBUG)
 				printf("getEnergyDP: child inside pk (%d,%d)\n", L1->begin, L1->end);
@@ -3252,6 +3258,7 @@ float Loop::getEnergyDP(double** P_matrix, double *c, double &f, int reset_c, in
 	finalEnergy = energyToAdd;
 	return sum;
 */
+	return 0;
 }
 
 /*********************************************************************************
@@ -3264,7 +3271,7 @@ double Loop::pkfreeEnergyDP(double** P_matrix, double *c, double &f, int reset_c
 // P_matrix remains unchanged
 {
         int num_params = get_num_params_PK_DP();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -3327,19 +3334,19 @@ double Loop::pkfreeEnergyDP(double** P_matrix, double *c, double &f, int reset_c
 		printf("Free Value: %f\n", f);
 		printf("PK Counter Values:\n");
 		for (int i = get_num_params(); i < num_params; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nNon-Zero Simfold Counter Values:\n");
 		for (int i = 0; i < get_num_params(); i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nAll Non-Zero P_matrix Values:\n");
 		for (int i = 0; i < num_params; i++)
 		{
 			for (int j = i; j < num_params; j++)
-				if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+				if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 		}
 	}
@@ -3510,7 +3517,7 @@ void Loop::fillMultiStructure(char * structure, char * csequence, int numbases, 
 	}
 
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 		if (L->type == pseudo)
 		{
 			if (DEBUG)
@@ -3551,7 +3558,7 @@ double	Loop::nestedPseudoEnergyDP(double** P_matrix, double *c, double &f, int r
 // P_matrix is not modified
 {
         int num_params = get_num_params_PK_DP();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -3655,13 +3662,13 @@ double	Loop::nestedPseudoEnergyDP(double** P_matrix, double *c, double &f, int r
 
 		for (int j = begin; j < end; j++)
 		{
-			if (Input->ClosedRegions[j] != NULL && Input->ClosedRegions[j]->type == multi && Input->ClosedRegions[j]->hasPKBranches() == 1)
+			if (Input->ClosedRegions[j] != NNULL && Input->ClosedRegions[j]->type == multi && Input->ClosedRegions[j]->hasPKBranches() == 1)
 			{
 				// add dangling energies for multi-loop
 				dang += dangling_energy_left (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair);
 				if (DEBUG)
 					printf("MULTI: dang left = %d\n", dangling_energy_left (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair));	// Cristina: July 17, 2007
-				if (c != NULL)    count_LEdangling_energy_left (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair, c);
+				if (c != NNULL)    count_LEdangling_energy_left (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair, c);
 
 				for (int l=0; l < f[i_pt].num_branches - 1; l++){
 					dang += dangling_energy (sequence, pkfree_structure, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair);
@@ -3669,7 +3676,7 @@ double	Loop::nestedPseudoEnergyDP(double** P_matrix, double *c, double &f, int r
 						printf("MULTI: dang %d = %d: %d %d %d %d, %d %d %d %d\n", l, dangling_energy (sequence, pkfree_structure, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair),
 			 				f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair,
 							sequence[f[i_pt].bri[l]], sequence[f[f[i_pt].bri[l]].pair], sequence[f[i_pt].bri[l+1]], sequence[f[f[i_pt].bri[l+1]].pair]);	// Cristina: July 17, 2007
-					if (c != NULL)    count_LEdangling_energy (sequence, pkfree_structure, -1, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair, c);
+					if (c != NNULL)    count_LEdangling_energy (sequence, pkfree_structure, -1, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair, c);
 				}
 /*
 			printf("\nNon-Zero Simfold Counter Values:\n");
@@ -3681,7 +3688,7 @@ double	Loop::nestedPseudoEnergyDP(double** P_matrix, double *c, double &f, int r
 				dang += dangling_energy_right (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair);
 				if (DEBUG)
 					printf("MULTI: dang right = %d\n", dangling_energy_right (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair));	// Cristina: July 17, 2007
-				if (c != NULL)    count_LEdangling_energy_right (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair, c);
+				if (c != NNULL)    count_LEdangling_energy_right (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair, c);
 /*
 			printf("\nNon-Zero Simfold Counter Values:\n");
 			for (int i = 0; i < get_num_params(); i++)
@@ -3779,7 +3786,7 @@ float	Loop::pseudoEnergyDP(){
 
 // Calculating the free energy of internal loops that span a band (interior-pseudoknotted loops)
 
-	while (L1 != NULL){
+	while (L1 != NNULL){
 		float en = Input->looplists[L1->Num]->interiorPseudoEnergyDP();
 		if (DEBUG)
 			printf("[ILoopsDP]: (%d, %d) Energy: %.2f 10cal/mol\n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
@@ -3789,7 +3796,7 @@ float	Loop::pseudoEnergyDP(){
 
 // Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
 
-	while (L2 != NULL){
+	while (L2 != NNULL){
 		float en = Input->looplists[L2->Num]->multiPseudoEnergyDP();
 		if (DEBUG)
 			printf("[MLoopsDP]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
@@ -3812,7 +3819,7 @@ void Loop::fillPseudoStructure(char * structure, char * csequence, int a, int ap
 {
 	// consider only pseudoknots inside [a,ap] |_| [bp,b]
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 		if (L->type == pseudo)
 		{
 			// PK nested in band
@@ -3904,7 +3911,7 @@ int Loop::startsMultiSpanningBand(int i_pt)
 	int startsMulti = 0;
 
 	T_IntList * L2 = MLoops;
-	while (L2 != NULL)
+	while (L2 != NNULL)
 	{
 		if (Input->looplists[L2->Num]->base1 == i_pt)  // if the start of this multi matches i_pt
 		{
@@ -3913,6 +3920,7 @@ int Loop::startsMultiSpanningBand(int i_pt)
 		}
 		L2 = L2->Next;
 	}
+	return 0;
 }
 
 // NOT  USED !!!
@@ -3925,7 +3933,7 @@ void Loop::setMultiPseudoLoopDangles(int a, int ap, int bp, int b)
 	int i = a;
 	for (i = a; i < ap; i++)
 	{
-		if (Input->ClosedRegions[i] != NULL && Input->ClosedRegions[i]->end >= bp)
+		if (Input->ClosedRegions[i] != NNULL && Input->ClosedRegions[i]->end >= bp)
 			break;
 	}
 
@@ -3946,7 +3954,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 // P_matrix is modified to reflect the loops that spans bands
 {
         int num_params = get_num_params_PK_DP();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -4008,7 +4016,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 		current_border = 0;
 
 		// multiloops that span bands are handled separately (since has parameters not in simfold) so search for them
-		while (L2 != NULL){
+		while (L2 != NNULL){
 			// find the next multiloop that spans a band -- get energy/counts for everything above it
 			// that is also inside the last multiloop  i.e. look through ILoops again for the first
 			// loop that is above this multiloop but below the last one
@@ -4032,7 +4040,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				// look through ILoops again for the first loop that is above this multiloop but below the last one
 				L1 = ILoops;
 				// if ILoops is null, no need to do anything since no 
-				while (L1 != NULL)
+				while (L1 != NNULL)
 				{
 					if (DEBUG)
 						printf("Considering internal/stack loop that spans a band [%d,%d] U [%d,%d] ):\n",
@@ -4077,7 +4085,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 							printf("\n");
 						}
 
-						if (c != NULL)
+						if (c != NNULL)
 						{
 						c_temp = new double[num_params];
 						f_temp = 0;
@@ -4086,7 +4094,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 						else
 						{
 						f_temp = 0;
-						pkfree_retval = get_feature_counts_restricted(csequence, structure, NULL, f_temp, 1, ignore_dangles, 1);
+						pkfree_retval = get_feature_counts_restricted(csequence, structure, NNULL, f_temp, 1, ignore_dangles, 1);
 						}
 
 						if (DEBUG)
@@ -4098,19 +4106,19 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 							printf("Free Value: %f\n", f);
 							printf("PK Counter Values:\n");
 							for (int i = num_params_pkfree; i < num_params; i++)
-								if (c != NULL && c[i] != 0.0)
+								if (c != NNULL && c[i] != 0.0)
 									printf("c[%d]=%f  ", i, c[i]);
 
 							printf("\nNon-Zero Simfold Counter Values:\n");
 							for (int i = 0; i < num_params_pkfree; i++)
-								if (c != NULL && c[i] != 0.0)
+								if (c != NNULL && c[i] != 0.0)
 									printf("c[%d]=%f  ", i, c[i]);
 
 							printf("\nAll Non-Zero P_matrix Values:\n");
 							for (int i = 0; i < num_params; i++)
 							{
 								for (int j = i; j < num_params; j++)
-									if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+									if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 										printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 							}
 						}
@@ -4129,7 +4137,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 							//                        reuse the same counter (which has been keeping track of ALL the stacked pairs in
 							//						  the structure)
 							// update the P_matrix (the stP column)
-							if (c != NULL)
+							if (c != NNULL)
 							{
 							for (int i = 0; i < num_params_pkfree; i++)
 							{
@@ -4147,7 +4155,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 							//                        reuse the same counter (which has been keeping track of ALL the stacked pairs in
 							//						  the structure)
 							// update the P_matrix (the intP column)
-							if (c != NULL)
+							if (c != NNULL)
 							{
 							for (int i = 0; i < num_params_pkfree; i++)
 							{
@@ -4162,7 +4170,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 						// clear structure and csequence for the next spanning loop (which possibly needs these to be different length)
 						delete structure;
 						delete csequence;
-						if (c != NULL) { delete c_temp; }
+						if (c != NNULL) { delete c_temp; }
 					}
 
 					// else: the internal/stack loop is not in the current band
@@ -4184,18 +4192,18 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				// this child is either the next ILoop member, or if it is a single pair then the only base
 				// pair that spans the band
 				L1 = ILoops;
-				while (L1 != NULL && Input->looplists[L1->Num]->base1 <= current_border)  // ie. L1 outside multi
+				while (L1 != NNULL && Input->looplists[L1->Num]->base1 <= current_border)  // ie. L1 outside multi
 					L1 = L1->Next;
 				// now L1 points to the first L1 inside the multi,
-				// or is NULL (single base pair) (or is not null since there might be other ILoops members but not in this band)
-				if (L1 == NULL || bandpattern->pattern[Input->looplists[L1->Num]->base1].OtherBorder >= bandpattern->pattern[Input->looplists[L2->Num]->base1].OtherBorder)
+				// or is NNULL (single base pair) (or is not null since there might be other ILoops members but not in this band)
+				if (L1 == NNULL || bandpattern->pattern[Input->looplists[L1->Num]->base1].OtherBorder >= bandpattern->pattern[Input->looplists[L2->Num]->base1].OtherBorder)
 				{
 					int single_base = Input->looplists[L2->Num]->base1+1;
 					while (Input->BasePair(single_base) <= bandpattern->pattern[i_pt].next) // doesn't span band
 						single_base++;
 					// now single_base is the one that spans the band
 					AUpen += AU_penalty (sequence[single_base], sequence[feat[single_base].pair]);
-					if (c != NULL)    count_AU_penalty (sequence[single_base], sequence[feat[single_base].pair], c);
+					if (c != NNULL)    count_AU_penalty (sequence[single_base], sequence[feat[single_base].pair], c);
 
 					// add dangling restriction
 //					Input->must_add_dangling[single_base-1] = 1;  // always add in EnergyDangling()
@@ -4207,7 +4215,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				else
 				{
 					AUpen += AU_penalty (sequence[Input->looplists[L1->Num]->base1], sequence[feat[Input->looplists[L1->Num]->base1].pair]);
-					if (c != NULL)    count_AU_penalty (sequence[Input->looplists[L1->Num]->base1], sequence[feat[Input->looplists[L1->Num]->base1].pair], c);
+					if (c != NNULL)    count_AU_penalty (sequence[Input->looplists[L1->Num]->base1], sequence[feat[Input->looplists[L1->Num]->base1].pair], c);
 
 					if (DEBUG)
 						printf("%d - added AU penalty %d\n", Input->looplists[L1->Num]->base1, AU_penalty (sequence[Input->looplists[L1->Num]->base1], sequence[feat[Input->looplists[L1->Num]->base1].pair]));
@@ -4235,7 +4243,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 
 	// go back through ILoops and get energy of anything we missed
 	L1 = ILoops;
-	while (L1 != NULL)
+	while (L1 != NNULL)
 	{
 		if (L1->tuning_flag != 1)
 		{
@@ -4273,7 +4281,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				printf("\n");
 			}
 
-			if (c != NULL)
+			if (c != NNULL)
 			{
 			c_temp = new double[num_params];
 			f_temp = 0;
@@ -4282,7 +4290,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 			else
 			{
 			f_temp = 0;
-			pkfree_retval = get_feature_counts_restricted(csequence, structure, NULL, f_temp, 1, ignore_dangles, 1);	
+			pkfree_retval = get_feature_counts_restricted(csequence, structure, NNULL, f_temp, 1, ignore_dangles, 1);	
 			}
 
 			if (DEBUG)
@@ -4294,19 +4302,19 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				printf("Free Value: %f\n", f);
 				printf("PK Counter Values:\n");
 				for (int i = num_params_pkfree; i < num_params; i++)
-					if (c != NULL && c[i] != 0.0)
+					if (c != NNULL && c[i] != 0.0)
 						printf("c[%d]=%f  ", i, c[i]);
 
 				printf("\nNon-Zero Simfold Counter Values:\n");
 				for (int i = 0; i < num_params_pkfree; i++)
-					if (c != NULL && c[i] != 0.0)
+					if (c != NNULL && c[i] != 0.0)
 						printf("c[%d]=%f  ", i, c[i]);
 
 				printf("\nAll Non-Zero P_matrix Values:\n");
 				for (int i = 0; i < num_params; i++)
 				{
 					for (int j = i; j < num_params; j++)
-						if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+						if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 							printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 				}
 			}
@@ -4325,7 +4333,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				//                        reuse the same counter (which has been keeping track of ALL the stacked pairs in
 				//						  the structure)
 				// update the P_matrix (the stP column)
-				if (c != NULL)
+				if (c != NNULL)
 				{
 				for (int i = 0; i < num_params_pkfree; i++)
 				{
@@ -4343,7 +4351,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				//                        reuse the same counter (which has been keeping track of ALL the stacked pairs in
 				//						  the structure)
 				// update the P_matrix (the intP column)
-				if (c != NULL)
+				if (c != NNULL)
 				{
 				for (int i = 0; i < num_params_pkfree; i++)
 				{
@@ -4358,7 +4366,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 			// clear structure and csequence for the next spanning loop (which possibly needs these to be different length)
 			delete structure;
 			delete csequence;
-			if (c != NULL)  { delete c_temp; }
+			if (c != NNULL)  { delete c_temp; }
 		}
 		L1 = L1->Next;
 	}
@@ -4379,7 +4387,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 //			{
 
 				AUpen += AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair]);
-				if (c != NULL)    count_AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair], c);
+				if (c != NNULL)    count_AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair], c);
 
 				if (DEBUG)
 					printf("%d - added AU penalty %d\n", i_pt, AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair]));
@@ -4391,7 +4399,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 			if (bandpattern->pattern[i_pt].OtherBorder > i_pt)
 			{
 				AUpen += AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair]);
-				if (c != NULL)    count_AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair], c);
+				if (c != NNULL)    count_AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair], c);
 
 				if (DEBUG)
 					printf("%d - added AU penalty %d\n", bandpattern->pattern[i_pt].OtherBorder, AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair]));
@@ -4438,11 +4446,11 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				+ pkmodelDP.Pup * NumberOfUnpairedInPseudo );
 	
 	g_count_Pb += NumberOfBands;
-	if (c != NULL)    c[num_params_pkfree + structure_type_index_PK("pb") - 1] += float(NumberOfBands);
+	if (c != NNULL)    c[num_params_pkfree + structure_type_index_PK("pb") - 1] += float(NumberOfBands);
 	g_count_Pps += NumberOfUnBandChild;
-	if (c != NULL)    c[num_params_pkfree + structure_type_index_PK("pps") - 1] += float(NumberOfUnBandChild);
+	if (c != NNULL)    c[num_params_pkfree + structure_type_index_PK("pps") - 1] += float(NumberOfUnBandChild);
 	g_count_Pup += NumberOfUnpairedInPseudo;
-	if (c != NULL)    c[num_params_pkfree + structure_type_index_PK("pup") - 1] += float(NumberOfUnpairedInPseudo);
+	if (c != NNULL)    c[num_params_pkfree + structure_type_index_PK("pup") - 1] += float(NumberOfUnpairedInPseudo);
 	
 	if (DEBUG)
 		printf("[Pseudoknot init penalty]:"); 
@@ -4450,7 +4458,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 	if (Parent->type == multi || nested == inBand) {  // inBand children must be in a multiloop since the pseudoknotted base pair is a branch
 		initPenalty = pkmodelDP.Psm;  // for pseudoloop inside a multiloop or multiloop that spans a band
 		g_count_Psm++;
-		if (c != NULL)    c[num_params_pkfree + structure_type_index_PK("psm") - 1] += 1;
+		if (c != NNULL)    c[num_params_pkfree + structure_type_index_PK("psm") - 1] += 1;
 
 		if (DEBUG)
 			printf("Psm\n"); 
@@ -4458,14 +4466,14 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 	else if (nested == unBand) {  // Parent->type == pseudo
 		initPenalty = pkmodelDP.Psp;  // for pseudoloop inside another pseudoloop (not in a band)
 		g_count_Psp++;
-		if (c != NULL)    c[num_params_pkfree + structure_type_index_PK("psp") - 1] += 1;
+		if (c != NNULL)    c[num_params_pkfree + structure_type_index_PK("psp") - 1] += 1;
 		if (DEBUG)
 			printf("Psp\n"); 
 	}
 	else {
 		initPenalty = pkmodelDP.Ps;  // for exterior pseudoloop
 		g_count_Ps++;
-		if (c != NULL)    c[num_params_pkfree + structure_type_index_PK("ps") - 1] += 1;
+		if (c != NNULL)    c[num_params_pkfree + structure_type_index_PK("ps") - 1] += 1;
 		if (DEBUG)
 			printf("Ps\n"); 
 	}
@@ -4487,7 +4495,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 
 // Calculating the free energy of internal loops that span a band (interior-pseudoknotted loops)
 
-	while (L1 != NULL){
+	while (L1 != NNULL){
 		float en = Input->looplists[L1->Num]->interiorPseudoEnergyDP();
 		if (DEBUG)
 			printf("[ILoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
@@ -4497,7 +4505,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 
 // Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
 
-	while (L2 != NULL){
+	while (L2 != NNULL){
 		float en = Input->looplists[L2->Num]->multiPseudoEnergyDP();
 		if (DEBUG)
 			printf("[MLoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
@@ -4517,19 +4525,19 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 		printf("Free Value: %f\n", f);
 		printf("PK Counter Values:\n");
 		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nNon-Zero Simfold Counter Values:\n");
 		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nAll Non-Zero P_matrix Values:\n");
 		for (int i = 0; i < num_params; i++)
 		{
 			for (int j = i; j < num_params; j++)
-				if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+				if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 		}
 	}
@@ -4555,7 +4563,7 @@ float Loop::getEnergyRE(){
 	// (that is, sum energies across the first row starting with the rightmost child and going left;
 	// (then the energy of each child is the sum of energies of each of its children, starting from the rightmost one)
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 			sum += L->getEnergyRE();
 			L = L->LeftSibling;
 	};
@@ -4738,7 +4746,7 @@ float	Loop::pseudoEnergyRE(){
 	T_IntList * L1 = ILoops;
 	T_IntList * L2 = MLoops;
 
-	while (L1 != NULL){
+	while (L1 != NNULL){
 		float en = Input->looplists[L1->Num]->interiorPseudoEnergyRE();
 		if (DEBUG)
 			printf("[ILoops RE]: (%d, %d) Energy: %.2f \n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
@@ -4749,7 +4757,7 @@ float	Loop::pseudoEnergyRE(){
 //Calculating the free energy of multi-pseudoknotted loops
 
 
-	while (L2 != NULL){
+	while (L2 != NNULL){
 		float en = Input->looplists[L2->Num]->multiPseudoEnergyRE();
 		if (DEBUG)
 			printf("[MLoopsRE]: (%d, %d) Energy: %.2f\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
@@ -4784,7 +4792,7 @@ float Loop::getEnergyCC2006a(){
 	// (that is, sum energies across the first row starting with the rightmost child and going left;
 	// (then the energy of each child is the sum of energies of each of its children, starting from the rightmost one)
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 			sum += L->getEnergyCC2006a();
 			L = L->LeftSibling;
 	};
@@ -4842,7 +4850,7 @@ float Loop::getEnergyCC2006b(){
 	// (that is, sum energies across the first row starting with the rightmost child and going left;
 	// (then the energy of each child is the sum of energies of each of its children, starting from the rightmost one)
 	Loop * L = RightChild;
-	while (L != NULL){
+	while (L != NNULL){
 			sum += L->getEnergyCC2006b();
 			L = L->LeftSibling;
 	};
@@ -4898,7 +4906,7 @@ float Loop::getEnergyCC2006b(double** P_matrix, double *c, double &f, int reset_
 	float tempsum = 0;
 
         int num_params = get_num_params_PK_CC2006b();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -4913,12 +4921,12 @@ float Loop::getEnergyCC2006b(double** P_matrix, double *c, double &f, int reset_
 
 	if (begin == 0)
 	{
-		if (RightChild == NULL)  // no loops in the structure
+		if (RightChild == NNULL)  // no loops in the structure
 			return 0;
 		else
 		{
 			L = RightChild;
-			while (L != NULL) {
+			while (L != NNULL) {
 				sum += L->getEnergyCC2006b(P_matrix,c,f,reset_c,ignore_dangles);
 				L = L->LeftSibling;
 			}
@@ -4972,7 +4980,7 @@ float Loop::getEnergyCC2006b(double** P_matrix, double *c, double &f, int reset_
 			printf("tempsum: %f", tempsum);
 
 		//Loop * L1 = L->RightChild;
-		//while (L1 != NULL){
+		//while (L1 != NNULL){
 
 		//	printf("getEnergyCC2006b: pk inside pk-free region (%d,%d)\n", L1->begin, L1->end);
 		//	sum += L1->getEnergyCC2006b(c, f, reset_c, ignore_dangles);
@@ -4997,7 +5005,7 @@ float Loop::getEnergyCC2006b(double** P_matrix, double *c, double &f, int reset_
 
 		// repeat for anything nested inside
 		Loop * L1 = L->RightChild;
-		while (L1 != NULL){
+		while (L1 != NNULL){
 
 			if (DEBUG)
 				printf("getEnergyCC2006b: child inside pk (%d,%d)\n", L1->begin, L1->end);
@@ -5061,13 +5069,14 @@ float Loop::getEnergyCC2006b(double** P_matrix, double *c, double &f, int reset_
 	finalEnergy = energyToAdd;
 	return sum;
 */
+	return 0;
 }
 
 // FOR PARAMETER TUNING - helper function for getEnergyCC2006b
 void Loop::lookForPkCC2006b(double** P_matrix, double *c, double &f, int reset_c, int ignore_dangles, float& sum)
 {
         int num_params = get_num_params_PK_CC2006b();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -5087,7 +5096,7 @@ void Loop::lookForPkCC2006b(double** P_matrix, double *c, double &f, int reset_c
 	}
 
 	Loop * L = RightChild;
-	while (L != NULL)
+	while (L != NNULL)
 	{
 		L->lookForPkCC2006b(P_matrix, c, f, reset_c, ignore_dangles, sum);
 		L = L->LeftSibling;
@@ -5105,7 +5114,7 @@ double Loop::pkfreeEnergyCC2006b(double** P_matrix, double *c, double &f, int re
 // P_matrix remains unchanged
 {
         int num_params = get_num_params_PK_CC2006b();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -5168,19 +5177,19 @@ double Loop::pkfreeEnergyCC2006b(double** P_matrix, double *c, double &f, int re
 		printf("Free Value: %f\n", f);
 		printf("PK Counter Values:\n");
 		for (int i = get_num_params(); i < num_params; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nNon-Zero Simfold Counter Values:\n");
 		for (int i = 0; i < get_num_params(); i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nAll Non-Zero P_matrix Values:\n");
 		for (int i = 0; i < num_params; i++)
 		{
 			for (int j = i; j < num_params; j++)
-				if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+				if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 		}
 	}
@@ -5193,7 +5202,7 @@ int Loop::hasPKBranches()
 // POST: return 1 if it has PK branches as children
 {
 	Loop * L = RightChild;
-	while (L != NULL)
+	while (L != NNULL)
 	{
 		if (L->type == pseudo)
 		{
@@ -5215,7 +5224,7 @@ double	Loop::nestedPseudoEnergyCC2006b(double** P_matrix, double *c, double &f, 
 // P_matrix is not modified
 {
         int num_params = get_num_params_PK_CC2006b();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -5319,13 +5328,13 @@ double	Loop::nestedPseudoEnergyCC2006b(double** P_matrix, double *c, double &f, 
 
 		for (int j = begin; j < end; j++)
 		{
-			if (Input->ClosedRegions[j] != NULL && Input->ClosedRegions[j]->type == multi && Input->ClosedRegions[j]->hasPKBranches() == 1)
+			if (Input->ClosedRegions[j] != NNULL && Input->ClosedRegions[j]->type == multi && Input->ClosedRegions[j]->hasPKBranches() == 1)
 			{
 				// add dangling energies for multi-loop
 				dang += dangling_energy_left (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair);
 				if (DEBUG)
 					printf("MULTI: dang left = %d\n", dangling_energy_left (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair));	// Cristina: July 17, 2007
-				if (c != NULL)    count_LEdangling_energy_left (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair, c);
+				if (c != NNULL)    count_LEdangling_energy_left (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair, c);
 
 				for (int l=0; l < f[i_pt].num_branches - 1; l++){
 					dang += dangling_energy (sequence, pkfree_structure, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair);
@@ -5333,7 +5342,7 @@ double	Loop::nestedPseudoEnergyCC2006b(double** P_matrix, double *c, double &f, 
 						printf("MULTI: dang %d = %d: %d %d %d %d, %d %d %d %d\n", l, dangling_energy (sequence, pkfree_structure, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair),
 			 				f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair,
 							sequence[f[i_pt].bri[l]], sequence[f[f[i_pt].bri[l]].pair], sequence[f[i_pt].bri[l+1]], sequence[f[f[i_pt].bri[l+1]].pair]);	// Cristina: July 17, 2007
-					if (c != NULL)    count_LEdangling_energy (sequence, pkfree_structure, -1, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair, c);
+					if (c != NNULL)    count_LEdangling_energy (sequence, pkfree_structure, -1, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair, c);
 				}
 /*
 			printf("\nNon-Zero Simfold Counter Values:\n");
@@ -5345,7 +5354,7 @@ double	Loop::nestedPseudoEnergyCC2006b(double** P_matrix, double *c, double &f, 
 				dang += dangling_energy_right (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair);
 				if (DEBUG)
 					printf("MULTI: dang right = %d\n", dangling_energy_right (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair));	// Cristina: July 17, 2007
-				if (c != NULL)    count_LEdangling_energy_right (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair, c);
+				if (c != NNULL)    count_LEdangling_energy_right (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair, c);
 /*
 			printf("\nNon-Zero Simfold Counter Values:\n");
 			for (int i = 0; i < get_num_params(); i++)
@@ -5739,7 +5748,7 @@ float	Loop::pseudoEnergyCC2006b(){
 
 // Calculating the free energy of internal loops that span a band (interior-pseudoknotted loops)
 
-	while (L1 != NULL){
+	while (L1 != NNULL){
 		float en = Input->looplists[L1->Num]->interiorPseudoEnergyCC2006a();  // same function for Cao&Chen a and b
 		if (DEBUG)
 			printf("[ILoops CC2006 with DP]: (%d, %d) Energy: %.2f 10cal/mol\n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
@@ -5750,7 +5759,7 @@ float	Loop::pseudoEnergyCC2006b(){
 // Unnecessary:
 // Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
 /*
-	while (L2 != NULL){
+	while (L2 != NNULL){
 		float en = Input->looplists[L2->Num]->multiPseudoEnergyCC2006();
 		if (DEBUG)
 			printf("[MLoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
@@ -5857,7 +5866,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		int num_params_pkfree = get_num_params();
         int num_params = get_num_params_PK_CC2006b();
 		int num_params_DP_and_pkfree = get_num_params_PK_DP();
-        if (reset_c == 1 && c != NULL)
+        if (reset_c == 1 && c != NNULL)
         {
                 f = 0;         
                 for (int i=0; i < num_params; i++)
@@ -6078,11 +6087,11 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		// NOTE: the "-=" comes from below where we do Energy += -TdeltaS
 		// update counter for cc2006_s2_formula[1][stem2-2], cc2006_s2_formula[2][stem2-2], and cc2006_s2_formula[3][stem2-2]
 		sprintf(paramtype, "cc2006_s2_formula[%d][%d]", 1, stem2-2);
-		if (c!= NULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= log(loop1 - cc2006_s2_formula[0][stem2-2] + 1)*KB*pkmodelCC2006.temp;
+		if (c!= NNULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= log(loop1 - cc2006_s2_formula[0][stem2-2] + 1)*KB*pkmodelCC2006.temp;
 		sprintf(paramtype, "cc2006_s2_formula[%d][%d]", 2, stem2-2);
-		if (c!= NULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= (loop1 - cc2006_s2_formula[0][stem2-2] + 1)*KB*pkmodelCC2006.temp;
+		if (c!= NNULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= (loop1 - cc2006_s2_formula[0][stem2-2] + 1)*KB*pkmodelCC2006.temp;
 		sprintf(paramtype, "cc2006_s2_formula[%d][%d]", 3, stem2-2);
-		if (c!= NULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= KB*pkmodelCC2006.temp;
+		if (c!= NNULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= KB*pkmodelCC2006.temp;
 		f -= -KB * ln_omega_coil_L1 * pkmodelCC2006.temp;
 	}
 	else
@@ -6099,7 +6108,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		// NOTE: the "-=" comes from below where we do Energy += -TdeltaS
 		// update counter for cc2006_s2_l1[stem2-2][loop1-1];
 		sprintf(paramtype, "cc2006_s2_l1[%d][%d]", stem2-2, loop1-1);
-		if (c!= NULL && cc2006_s2_l1[stem2-2][loop1-1] < INF)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= -1*KB*temp;
+		if (c!= NNULL && cc2006_s2_l1[stem2-2][loop1-1] < INF)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= -1*KB*temp;
 	}
 
 	if (loop2 > 12)
@@ -6112,11 +6121,11 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		// NOTE: the "-=" comes from below where we do Energy += -TdeltaS
 		// update counter for cc2006_s1_formula[1][stem1-2], cc2006_s1_formula[2][stem1-2], and cc2006_s1_formula[3][stem1-2]
 		sprintf(paramtype, "cc2006_s1_formula[%d][%d]", 1, stem1-2);
-		if (c!= NULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= log(loop2 - cc2006_s1_formula[0][stem1-2] + 1)*KB*pkmodelCC2006.temp;
+		if (c!= NNULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= log(loop2 - cc2006_s1_formula[0][stem1-2] + 1)*KB*pkmodelCC2006.temp;
 		sprintf(paramtype, "cc2006_s1_formula[%d][%d]", 2, stem1-2);
-		if (c!= NULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= (loop2 - cc2006_s1_formula[0][stem1-2] + 1)*KB*pkmodelCC2006.temp;
+		if (c!= NNULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= (loop2 - cc2006_s1_formula[0][stem1-2] + 1)*KB*pkmodelCC2006.temp;
 		sprintf(paramtype, "cc2006_s1_formula[%d][%d]", 3, stem1-2);
-		if (c!= NULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= KB*pkmodelCC2006.temp;
+		if (c!= NNULL)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= KB*pkmodelCC2006.temp;
 		f -= -KB * ln_omega_coil_L2 * pkmodelCC2006.temp;
 	}
 	else
@@ -6134,7 +6143,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		// NOTE: the "-=" comes from below where we do Energy += -TdeltaS
 		// update counter for cc2006_s1_l2[stem1-2][loop2-1];
 		sprintf(paramtype, "cc2006_s1_l2[%d][%d]", stem1-2, loop2-1);
-		if (c!= NULL && cc2006_s1_l2[stem1-2][loop2-1] < INF)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= -1*KB*temp;
+		if (c!= NNULL && cc2006_s1_l2[stem1-2][loop2-1] < INF)   c[num_params_DP_and_pkfree + structure_type_index_PK_CC(paramtype) - 1] -= -1*KB*temp;
 	}
 
 	// energy in 10cal/mol
@@ -6158,7 +6167,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 // Calculating the free energy of internal loops that span a band (interior-pseudoknotted loops)
 // THIS IS DONE BELOW
 /*
-	while (L1 != NULL){
+	while (L1 != NNULL){
 		float en = Input->looplists[L1->Num]->interiorPseudoEnergyCC2006a();  // same function for Cao&Chen a and b
 		if (DEBUG)
 			printf("[ILoops CC2006 with DP]: (%d, %d) Energy: %.2f 10cal/mol\n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
@@ -6190,7 +6199,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 			printf("WARNING: Loop.cpp::pseudoEnergyCC2006b - k_pt is %d >= 2 which shouldn't happen for CC model!\n", k_pt);
 
 		// only find energy if the band has stacked pairs / internal loops - otherwise, no point
-		if (L1 != NULL)
+		if (L1 != NNULL)
 		{
 			a = i_pt;
 			ap = bandpattern->pattern[i_pt].OtherBorder;
@@ -6229,13 +6238,13 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 				printf("\n");
 			}
 
-			if (c != NULL)
+			if (c != NNULL)
 			{
 				pkfree_retval = get_feature_counts_restricted(csequence, structure, c, f, 0, ignore_dangles, 1);
 			}
 			else
 			{
-				pkfree_retval = get_feature_counts_restricted(csequence, structure, NULL, f, 0, ignore_dangles, 1);
+				pkfree_retval = get_feature_counts_restricted(csequence, structure, NNULL, f, 0, ignore_dangles, 1);
 			}
 
 			if (DEBUG)
@@ -6256,19 +6265,19 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		printf("Free Value: %f\n", f);
 		printf("PK Counter Values:\n");
 		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nNon-Zero Simfold Counter Values:\n");
 		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nAll Non-Zero P_matrix Values:\n");
 		for (int i = 0; i < num_params; i++)
 		{
 			for (int j = i; j < num_params; j++)
-				if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+				if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 		}
 	}
@@ -6292,7 +6301,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 //			{
 
 				AUpen += AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair]);
-				if (c != NULL)    count_AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair], c);
+				if (c != NNULL)    count_AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair], c);
 
 				if (DEBUG)
 					printf("%d - added AU penalty %d\n", i_pt, AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair]));
@@ -6304,7 +6313,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 			if (bandpattern->pattern[i_pt].OtherBorder > i_pt)
 			{
 				AUpen += AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair]);
-				if (c != NULL)    count_AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair], c);
+				if (c != NNULL)    count_AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair], c);
 
 				if (DEBUG)
 					printf("%d - added AU penalty %d\n", bandpattern->pattern[i_pt].OtherBorder, AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair]));
@@ -6321,19 +6330,19 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		printf("Free Value: %f\n", f);
 		printf("PK Counter Values:\n");
 		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nNon-Zero Simfold Counter Values:\n");
 		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nAll Non-Zero P_matrix Values:\n");
 		for (int i = 0; i < num_params; i++)
 		{
 			for (int j = i; j < num_params; j++)
-				if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+				if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 		}
 	}
@@ -6341,7 +6350,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 // Unnecessary for CC model:
 // Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
 /*
-	while (L2 != NULL){
+	while (L2 != NNULL){
 		float en = Input->looplists[L2->Num]->multiPseudoEnergyCC2006();
 		if (DEBUG)
 			printf("[MLoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
@@ -6394,7 +6403,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		// NOTE: dangling ends included here will not conflict with those from simfold function
 		// If no coaxial stacking is used, dangling end energies will be added in EnergyDangling()
 		// get the counts for the coaxial stacking parameters
-		if (c!= NULL)   count_LEcoax_stack_energy_flush_b(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, 
+		if (c!= NNULL)   count_LEcoax_stack_energy_flush_b(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, 
 												Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder),
 												Input->BasePair(bandpattern->pattern[i].OtherBorder),
 												bandpattern->pattern[i].OtherBorder, COAX_PSEUDO, dangle0, dangle1, 
@@ -6439,7 +6448,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		// NOTE: dangling ends included here will not conflict with those from simfold function
 		// If no coaxial stacking is used, dangling end energies will be added in EnergyDangling()
 		// get the counts for the coaxial stacking parameters
-		if (c!= NULL)   count_LEcoax_stack_energy_mismatch (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, 
+		if (c!= NNULL)   count_LEcoax_stack_energy_mismatch (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, 
 												Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder),
 												Input->BasePair(bandpattern->pattern[i].OtherBorder),
 												bandpattern->pattern[i].OtherBorder, COAX_PSEUDO, 
@@ -6464,19 +6473,19 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		printf("Free Value: %f\n", f);
 		printf("PK Counter Values:\n");
 		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nNon-Zero Simfold Counter Values:\n");
 		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NULL && c[i] != 0.0)
+			if (c != NNULL && c[i] != 0.0)
 				printf("c[%d]=%f  ", i, c[i]);
 
 		printf("\nAll Non-Zero P_matrix Values:\n");
 		for (int i = 0; i < num_params; i++)
 		{
 			for (int j = i; j < num_params; j++)
-				if (P_matrix != NULL && P_matrix[i][j] != 0.0)
+				if (P_matrix != NNULL && P_matrix[i][j] != 0.0)
 					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
 		}
 	}
@@ -6651,7 +6660,7 @@ float	Loop::pseudoEnergyCC2006a(){
 // Calculating the free energy of internal loops that span a band (interior-pseudoknotted loops)
 
 
-	while (L1 != NULL){
+	while (L1 != NNULL){
 		float en = Input->looplists[L1->Num]->interiorPseudoEnergyCC2006a();  // same function for Cao&Chen a and b
 		if (DEBUG)
 			printf("[ILoops CC2006]: (%d, %d) Energy: %.2f 10cal/mol\n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
@@ -6662,7 +6671,7 @@ float	Loop::pseudoEnergyCC2006a(){
 // Unnecessary:
 // Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
 /*
-	while (L2 != NULL){
+	while (L2 != NNULL){
 		float en = Input->looplists[L2->Num]->multiPseudoEnergyCC2006();
 		if (DEBUG)
 			printf("[MLoops CC2006]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);

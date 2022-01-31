@@ -8,8 +8,8 @@ default:
 	cd hotspot; make
 	
 	# copy them into the bin directory
-	cp hotspot/HotKnots bin
-	cp hotspot/computeEnergy bin
+	cp src/HotKnots bin
+	cp src/computeEnergy bin
 
 clean:
 	cd simfold; make clean

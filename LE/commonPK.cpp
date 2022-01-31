@@ -423,12 +423,12 @@ int LEcoax_stack_energy_mismatch(int i, int j, int ip, int jp, int flag, int dan
 		printf("  coaxial_i = ");
 		if (dangle_i > 0)
 			printf("%d + %d = ", coaxstack_m1 [sequence[i]] [sequence[j]][sequence[i+1]] [sequence[dangle_i]],
-			                        coaxstack_m2 [sequence[i+1]] [sequence[dangle_i]] [sequence[ip]] [sequence[jp]], coaxial_i);
+			                     coaxstack_m2 [sequence[i+1]] [sequence[dangle_i]] [sequence[ip]] [sequence[jp]]);
 		printf("%d; ", coaxial_i);
 		printf("coaxial_ip = ");
 		if (dangle_ip > 0)
 			printf("%d + %d = ", coaxstack_m1 [sequence[jp]] [sequence[ip]] [sequence[dangle_ip]] [sequence[i+1]],
-			                        coaxstack_m2 [sequence[i]] [sequence[j]] [sequence[i+1]] [sequence[dangle_ip]]);
+			                     coaxstack_m2 [sequence[i]] [sequence[j]] [sequence[i+1]] [sequence[dangle_ip]]);
 		printf("%d \n", coaxial_ip);					
 	}
 	
@@ -906,7 +906,7 @@ void count_LEcoax_stack_energy_mismatch(int i, int j, int ip, int jp, int flag, 
 		printf("  coaxial_i = ");
 		if (dangle_i > 0)
 			printf("%d + %d = ", coaxstack_m1 [sequence[i]] [sequence[j]][sequence[i+1]] [sequence[dangle_i]],
-			                        coaxstack_m2 [sequence[i+1]] [sequence[dangle_i]] [sequence[ip]] [sequence[jp]], coaxial_i);
+			                     coaxstack_m2 [sequence[i+1]] [sequence[dangle_i]] [sequence[ip]] [sequence[jp]]);
 		printf("%d; ", coaxial_i);
 		printf("coaxial_ip = ");
 		if (dangle_ip > 0)
@@ -1789,6 +1789,7 @@ int structure_type_index_PK(char type[])
 	}
 	
 	printf("ERROR: invalid input to structure_type_index_PK: %s\n", type);
+	return 0;
 }
 
 // fills an array string_params_PK_CC with readable form of the parameters

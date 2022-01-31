@@ -759,7 +759,7 @@ float	LoopList::multiPseudoEnergyDP(double *c, double &fr, int reset_c, int igno
 	// COMMENT OUT
 	if (DEBUG)
 	{
-		printf("Free Value: %f\n", f);
+		//printf("Free Value: %f\n",  f);
 		printf("PK Counter Values:\n");
 		for (int i = num_params_pkfree; i < num_params; i++)
 			if (c != NULL && c[i] != 0.0)
