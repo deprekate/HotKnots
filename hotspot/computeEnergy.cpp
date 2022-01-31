@@ -39,7 +39,7 @@
 using namespace std;
 
 
-extern void PlotRna(char* seqName, char *sequence, short *structure, char *filename,float score);
+//extern void PlotRna(char* seqName, char *sequence, short *structure, char *filename,float score);
 void usage(void);
 
 
@@ -52,8 +52,8 @@ void parameter_init(char* argv0)
     // *** configuration file
 
 //    char config_file[200] = "/cs/beta/People/Cpop/2007/PKEnergy/Version1.0/params/pairfold.conf";
-    char config_file[200] = "../bin/params/multirnafold.conf";
-    char config_filePK[200] = "../bin/params/pkenergy.conf";
+    char config_file[200] = "./params/multirnafold.conf";
+    char config_filePK[200] = "./params/pkenergy.conf";
 
     // what to fold: RNA or DNA
     int dna_or_rna = RNA;
@@ -66,7 +66,7 @@ void parameter_init(char* argv0)
     // call init_data only once for the same dna_or_rna and same temperature
     // if one of them changes, call init_data again (see below)
     init_data(argv0, config_file, dna_or_rna, temperature);
-    fill_data_structures_with_new_parameters ("../bin/params/turner_parameters_fm363_constrdangles.txt");
+    fill_data_structures_with_new_parameters ("./params/turner_parameters_fm363_constrdangles.txt");
 
     init_dataPK(argv0, config_filePK, dna_or_rna, temperature);
 
@@ -347,22 +347,6 @@ int main(int argc, char ** argv){
 			if (secstructure[i] == -1) secstructure[i] = 0;
 		  	sequence[i] = R->CSequence[i];
 	     	printf("%d %c %d \n", i, sequence[i], secstructure[i]);
-		}
-
-		if (printDiagram == 1)
-		{
-			// ADDED: called L->Energy() with RE and DP as parameters
-			if (strcmp(currentModel,"RE")==0)
-//			if (RE_FLAG)
-				PlotRna(prefix, &sequence[1], &secstructure[1], outPSFile, L->EnergyViaSimfold(RE));
-			if (strcmp(currentModel,"DP")==0)
-				PlotRna(prefix, &sequence[1], &secstructure[1], outPSFileDP, L->EnergyViaSimfold(DP) + L->EnergyDanglingViaSimfold(DP));
-//			if (CC2006a_FLAG)
-//				PlotRna(prefix, &sequence[1], &secstructure[1], outPSFileCC2006, L->EnergyViaSimfold(CC2006a));
-			if (strcmp(currentModel,"CC")==0)
-				PlotRna(prefix, &sequence[1], &secstructure[1], outPSFileCC2006withDP, L->EnergyViaSimfold(CC2006b) + L->EnergyDanglingViaSimfold(CC2006b));
-
-			printf("Arc Diagrams printed");
 		}
 
 

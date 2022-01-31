@@ -69,7 +69,7 @@ extern int count;//number of nodes
 extern int numRnaStruct;  //total number of different Rna structures
 */
 
-extern void PlotRna(char* seqName, char *sequence, short *structure, char *filename, float score);
+//extern void PlotRna(char* seqName, char *sequence, short *structure, char *filename, float score);
 
 
 #define PRIVATE static
@@ -144,7 +144,6 @@ int main(int argc, char *argv[])
 			switch ( argv[i][1] )
 			{
 				case 'n':
-					if ( strcmp(argv[i], "-noPS")==0) noPS = 1;
 					if ( strcmp(argv[i], "-noGU")==0) noGU = 1;
 					break;
 				case 'I':
@@ -181,15 +180,15 @@ int main(int argc, char *argv[])
 	}
 
 	//    char config_file[200] = "params/pairfold.conf";  // CHANGED to lines below
-	char config_file[200] = "../bin/params/multirnafold.conf";
-	char config_filePK[200] = "../bin/params/pkenergy.conf";
+	char config_file[200] = "./params/multirnafold.conf";
+	char config_filePK[200] = "./params/pkenergy.conf";
 
 	int dna_or_rna = RNA;
 	double temperature = 37;
 
 	//   init_data (config_file, dna_or_rna, temperature);  // CHANGED to lines below
 	init_data(argv[0], config_file, dna_or_rna, temperature);
-	fill_data_structures_with_new_parameters ("../bin/params/turner_parameters_fm363_constrdangles.txt");
+	fill_data_structures_with_new_parameters ("./params/turner_parameters_fm363_constrdangles.txt");
 	init_dataPK(argv[0], config_filePK, dna_or_rna, temperature);
 
 	// added for easy command line usage
@@ -214,25 +213,15 @@ int main(int argc, char *argv[])
 
 		strcpy (fileName, "");
 
-		for (i = len; i >=0; i--)
-		{
+		for (i = len; i >=0; i--){
 			// make it work on Linux 
-			if (seqName[i] == '/')
-			{
+			if (seqName[i] == '/'){
 				separator = '/';
 				index = i;
 				break;
 			}
-			// make it work on Windows  
-			//        	else if (seqName[i] == '\\')
-			//        	{
-			//            		separator = '\\';
-			//            		index = i;
-			//            		break;
-			//        	}
 		}
-		for (i=index+1; i < len; i++)
-		{
+		for (i=index+1; i < len; i++){
 			fileName[i-(index+1)] = seqName[i];
 		}
 		fileName[i-(index+1)] = '\0';
@@ -251,8 +240,6 @@ int main(int argc, char *argv[])
 		string = (char *) malloc((strlen(line)+1)*sizeof(char));
 		strcpy(string, line);
 	}   // end if sequenceDirect
-
-
 
 	length = (int) strlen(string);
 	structure = (char *) malloc((length+1)*sizeof(char));
@@ -301,10 +288,9 @@ int main(int argc, char *argv[])
 	}
 
 
-	/////////////////////////// RIVAS and EDDY ENERGY MODEL /////////////////////////
 
 	if (strcmp(currentModel,"RE")==0) {
-
+		/////////////////////////// RIVAS and EDDY ENERGY MODEL /////////////////////////
 		//-----initialization of rootNode
 		rootNode=(struct Node *)malloc(sizeof(struct Node));
 		rootNode->secStructure=(short *)malloc((length)*sizeof(short));
@@ -314,8 +300,7 @@ int main(int argc, char *argv[])
 		rootNode->numChild = 0;
 		rootNode->length = length;
 		rootNode->score = 0;
-		for(i=0;i<length;i++)
-		{
+		for(i=0;i<length;i++){
 			rootNode->secStructure[i]=0;
 			rootNode->fixedPairs[i]=0;
 			//rootNode->constraint[i]='.';
@@ -335,43 +320,18 @@ int main(int argc, char *argv[])
 		min_en=endFlag;
 		//printf("In total, %d nodes created. \n", count);
 		printf("Total number of RNA structures: %d \n", numRnaStruct);
-		sprintf(ctFile, "%s%s%s%s", outpath, outpath1, fileName, "_RE.ct");  // ADDED: for RE energy model
-		FILE *cfile = fopen(ctFile, "w");
-		if (cfile == NULL) {
-			printf("can't open %s \n", ctFile);
-			exit(1);
-		}
 		printf ("Seq: %s\n", string);
 
 		for (i=0; i < numRnaStruct; i++) {
-			sprintf(outPSFile, "%s%s%s%d%s", outpath, outpath1, fileName, i, "_RE.ps");  // ADDED: for RE energy model
-			sprintf(bpseqFile, "%s%s%s%d%s", outpath, outpath1, fileName, i, "_RE.bpseq");  // ADDED: for RE energy model
 			//printf(" sub optimal energy  %f kal/mol\n", -listOfNodes[i]->score /1000.0);
 			bpseq2dp (length, listOfNodes[i]->secStructure, outputStructure);
 			printf ("S%d:  %s\t%.2lf\n", i, outputStructure, -listOfNodes[i]->score /1000.0);
 			//printRnaStruct(listOfNodes[i]->secStructure,length);
 			//printf("\n");
-			if ((first == 1 && i==0) || (first == 0)) {
-				if (noPS == 0) PlotRna(seqName, string, listOfNodes[i]->secStructure, outPSFile, listOfNodes[i]->score);
-				FILE *bfile = fopen(bpseqFile, "w");
-				if (bfile == NULL) {
-					printf("can't open %s \n", bpseqFile);
-					exit(1);
-				}
-				for (int b = 0; b < length; b++) {
-					fprintf(bfile, "%d %c %d\n", b+1, string[b], listOfNodes[i]->secStructure[b]);            
-				}          
-			}
-			fprintf(cfile, "%5d   ENERGY = %.2f %s suboptimal structure %d\n", length, -listOfNodes[i]->score/1000.0, seqName, i);
-			for (int b = 0; b < length; b++) {
-				fprintf(cfile, "%5d %c    %4d %4d %4d %4d\n", b+1, string[b], b, b+2, listOfNodes[i]->secStructure[b], b+1);
-			}
 		}
 
 	} else if (strcmp(currentModel,"DP")==0) {
-
 		/////////////////////////// DIRKS and PIERCE ENERGY MODEL /////////////////////////
-
 		//-----initialization of rootNode
 		rootNode2=(struct Node *)malloc(sizeof(struct Node));
 		rootNode2->secStructure=(short *)malloc((length)*sizeof(short));
@@ -381,8 +341,7 @@ int main(int argc, char *argv[])
 		rootNode2->numChild = 0;
 		rootNode2->length = length;
 		rootNode2->score = 0;
-		for(i=0;i<length;i++)
-		{
+		for(i=0;i<length;i++){
 			rootNode2->secStructure[i]=0;
 			rootNode2->fixedPairs[i]=0;
 			//rootNode2->constraint[i]='.';
@@ -399,103 +358,17 @@ int main(int argc, char *argv[])
 		min_en=endFlag;
 		//printf("In total, %d nodes created. \n", count);  // 'count' is set in function: secondaryStruct()
 		printf("Total number of RNA structures: %d \n", numRnaStruct);
-		sprintf(ctFile2, "%s%s%s%s", outpath, outpath2, fileName, "_DP.ct");
-		FILE *cfile2 = fopen(ctFile2, "w");
-		if (cfile2 == NULL) {
-			printf("can't open %s \n", ctFile2);
-			exit(1);
-		}
 
 		printf ("Seq: %s\n", string);
 		for (i=0; i < numRnaStruct; i++) {
-			sprintf(outPSFile2, "%s%s%s%d%s", outpath, outpath2, fileName, i,"_DP.ps");  // ADDED: for DP energy model
-			sprintf(bpseqFile2, "%s%s%s%d%s", outpath, outpath2, fileName, i, "_DP.bpseq");  // ADDED: for DP energy model
 			//printf(" sub optimal energy  %f kal/mol\n", -listOfNodes[i]->score /1000.0);
 			bpseq2dp (length, listOfNodes[i]->secStructure, outputStructure);
 			printf ("S%d:  %s\t%.2lf\n", i, outputStructure, -listOfNodes[i]->score /1000.0);
 			//printRnaStruct(listOfNodes[i]->secStructure,length);
 			//printf("\n");
-			if ((first == 1 && i==0) || (first == 0)) {
-				if (noPS == 0) PlotRna(seqName, string, listOfNodes[i]->secStructure, outPSFile2, listOfNodes[i]->score);
-				FILE *bfile2 = fopen(bpseqFile2, "w");
-				if (bfile2 == NULL) {
-					printf("can't open %s \n", bpseqFile2);
-					exit(1);
-				}
-				for (int b = 0; b < length; b++) {
-					fprintf(bfile2, "%d %c %d\n", b+1, string[b], listOfNodes[i]->secStructure[b]);
-				}          
-			}
-			fprintf(cfile2, "%5d   ENERGY = %.2f %s suboptimal structure %d\n", length, -listOfNodes[i]->score/1000.0, seqName, i);
-			for (int b = 0; b < length; b++) {
-				fprintf(cfile2, "%5d %c    %4d %4d %4d %4d\n", b+1, string[b], b, b+2, listOfNodes[i]->secStructure[b], b+1);
-			}
 		}
-
-		/*    
-		/////////////////////////// CAO and CHEN (a) ENERGY MODEL /////////////////////////
-
-		//-----initialization of rootNode
-		rootNode3=(struct Node *)malloc(sizeof(struct Node));
-		rootNode3->secStructure=(short *)malloc((length)*sizeof(short));
-		rootNode3->fixedPairs=(short *)malloc((length)*sizeof(short));
-		rootNode3->constraint=(char *)malloc((length+1)*sizeof(char));
-		rootNode3->constraint[length] = 0;
-		rootNode3->numChild = 0;
-		rootNode3->length = length;
-		rootNode3->score = 0;
-		for(i=0;i<length;i++)
-		{
-		rootNode3->secStructure[i]=0;
-		rootNode3->fixedPairs[i]=0;
-		//rootNode3->constraint[i]='.';
-		}
-		strcpy(rootNode3->constraint, structure);
-		//===end of initialization    
-
-		numRnaStruct = 0;
-		InitHotspots(MaxHotspots,length);  // it was cleared in the previous section
-		GenerateStemList(length, string, structure);  // depends only on hairpin, stacked, internal loop parameters
-
-		endFlag=secondaryStruct(string,length,rootNode3,rootNode3, MaxHotspots, CC2006a);  // ADDED: for CC2006 energy model
-		ClearHotspots(MaxHotspots);
-		min_en=endFlag;
-		printf("In total, %d nodes created. \n", count);  // 'count' is set in function: secondaryStruct()
-		printf(" total number of Rna structures: %d \n", numRnaStruct);
-		sprintf(ctFile3, "%s%s%s%s", outpath, outpath3, fileName, "_CCa.ct");  // ADDED: for CCa energy model (filename)
-		FILE *cfile3 = fopen(ctFile3, "w");
-		if (cfile3 == NULL) {
-		printf("can't open %s \n", ctFile3);
-		exit(1);
-		}
-
-		for (i=0; i < numRnaStruct; i++) {
-		sprintf(outPSFile3, "%s%s%s%d%s", outpath, outpath3, fileName, i,"_CCa.ps");  // ADDED: for CCa energy model (filename)
-		sprintf(bpseqFile3, "%s%s%s%d%s", outpath, outpath3, fileName, i, "_CCa.bpseq");  // ADDED: for CCa energy model (filename)
-		printf(" sub optimal energy  %f kal/mol\n", -listOfNodes[i]->score /1000.0);
-		printRnaStruct(listOfNodes[i]->secStructure,length);
-		printf("\n");
-		if ((first == 1 && i==0) || (first == 0)) {
-		if (noPS == 0) PlotRna(seqName, string, listOfNodes[i]->secStructure, outPSFile3, listOfNodes[i]->score);
-		FILE *bfile3 = fopen(bpseqFile3, "w");
-		if (bfile3 == NULL) {
-		printf("can't open %s \n", bpseqFile3);
-		exit(1);
-		}
-		for (int b = 0; b < length; b++) {
-		fprintf(bfile3, "%d %c %d\n", b+1, string[b], listOfNodes[i]->secStructure[b]);
-		}
-		}
-		fprintf(cfile3, "%5d   ENERGY = %.2f %s suboptimal structure %d\n", length, -listOfNodes[i]->score/1000.0, seqName, i);
-		for (int b = 0; b < length; b++) {
-		fprintf(cfile3, "%5d %c    %4d %4d %4d %4d\n", b+1, string[b], b, b+2, listOfNodes[i]->secStructure[b], b+1);
-		}
-		}
-		*/
 	} else if (strcmp(currentModel,"CC")==0) {
-
 		/////////////////////////// CAO and CHEN (b) ENERGY MODEL /////////////////////////
-
 		//-----initialization of rootNode
 		rootNode4=(struct Node *)malloc(sizeof(struct Node));
 		rootNode4->secStructure=(short *)malloc((length)*sizeof(short));
@@ -522,104 +395,18 @@ int main(int argc, char *argv[])
 		min_en=endFlag;
 		//printf("In total, %d nodes created. \n", count);  // 'count' is set in function: secondaryStruct()
 		printf("Total number of RNA structures: %d \n", numRnaStruct);
-		sprintf(ctFile4, "%s%s%s%s", outpath, outpath4, fileName, "_CCb.ct");  // ADDED: for CCb energy model (filename)
-		FILE *cfile4 = fopen(ctFile4, "w");
-		if (cfile4 == NULL) {
-			printf("can't open %s \n", ctFile4);
-			exit(1);
-		}
 		printf ("Seq: %s\n", string);
 		for (i=0; i < numRnaStruct; i++) {
-			sprintf(outPSFile4, "%s%s%s%d%s", outpath, outpath4, fileName, i,"_CCb.ps");  // ADDED: for CC2006b energy model (filename)
-			sprintf(bpseqFile4, "%s%s%s%d%s", outpath, outpath4, fileName, i, "_CCb.bpseq");  // ADDED: for CCb energy model (filename)
 			//printf(" sub optimal energy  %f kal/mol\n", -listOfNodes[i]->score /1000.0);
 			bpseq2dp (length, listOfNodes[i]->secStructure, outputStructure);
 			printf ("S%d:  %s\t%.2lf\n", i, outputStructure, -listOfNodes[i]->score /1000.0);
 			//printRnaStruct(listOfNodes[i]->secStructure,length);
 			//printf("\n");
-			if ((first == 1 && i==0) || (first == 0)) {
-				if (noPS == 0)
-					PlotRna(seqName, string, listOfNodes[i]->secStructure, outPSFile4, listOfNodes[i]->score);
-				FILE *bfile4 = fopen(bpseqFile4, "w");
-				if (bfile4 == NULL) {
-					printf("can't open %s \n", bpseqFile4);
-					exit(1);
-				}
-				for (int b = 0; b < length; b++) {
-					fprintf(bfile4, "%d %c %d\n", b+1, string[b], listOfNodes[i]->secStructure[b]);
-				}
-			}
-			fprintf(cfile4, "%5d   ENERGY = %.2f %s suboptimal structure %d\n", length, -listOfNodes[i]->score/1000.0, seqName, i);
-			for (int b = 0; b < length; b++) {
-				fprintf(cfile4, "%5d %c    %4d %4d %4d %4d\n", b+1, string[b], b, b+2, listOfNodes[i]->secStructure[b], b+1);
-			}
 		}
 	} else {
 		usage();
 		exit(0);
 	}
-	/*
-	/////////////////////////// CAO and CHEN (c) ENERGY MODEL /////////////////////////
-
-	//-----initialization of rootNode
-	rootNode5=(struct Node *)malloc(sizeof(struct Node));
-	rootNode5->secStructure=(short *)malloc((length)*sizeof(short));
-	rootNode5->fixedPairs=(short *)malloc((length)*sizeof(short));
-	rootNode5->constraint=(char *)malloc((length+1)*sizeof(char));
-	rootNode5->constraint[length] = 0;
-	rootNode5->numChild = 0;
-	rootNode5->length = length;
-	rootNode5->score = 0;
-	for(i=0;i<length;i++)
-	{
-	rootNode5->secStructure[i]=0;
-	rootNode5->fixedPairs[i]=0;
-	//rootNode4->constraint[i]='.';
-	}
-	strcpy(rootNode5->constraint, structure);
-	//===end of initialization    
-
-	numRnaStruct = 0;
-	InitHotspots(MaxHotspots,length);  // it was cleared in the previous section
-	GenerateStemList(length, string, structure);  // depends only on hairpin, stacked, internal loop parameters
-
-	endFlag=secondaryStruct(string,length,rootNode5,rootNode5, MaxHotspots, CC2006c);  // ADDED: for CC2006withDP energy model
-	ClearHotspots(MaxHotspots);
-	min_en=endFlag;
-	printf("In total, %d nodes created. \n", count);  // 'count' is set in function: secondaryStruct()
-	printf(" total number of Rna structures: %d \n", numRnaStruct);
-	sprintf(ctFile5, "%s%s%s%s", outpath, outpath5, fileName, "_CCc.ct");  // ADDED: for CCb energy model (filename)
-	FILE *cfile5 = fopen(ctFile5, "w");
-	if (cfile5 == NULL) {
-	printf("can't open %s \n", ctFile5);
-	exit(1);
-	}
-
-	for (i=0; i < numRnaStruct; i++) {
-	sprintf(outPSFile5, "%s%s%s%d%s", outpath, outpath5, fileName, i,"_CCc.ps");  // ADDED: for CC2006b energy model (filename)
-	sprintf(bpseqFile5, "%s%s%s%d%s", outpath, outpath5, fileName, i, "_CCc.bpseq");  // ADDED: for CCb energy model (filename)
-	printf(" sub optimal energy  %f kal/mol\n", -listOfNodes[i]->score /1000.0);
-	printRnaStruct(listOfNodes[i]->secStructure,length);
-	printf("\n");
-	if ((first == 1 && i==0) || (first == 0)) {
-	if (noPS == 0) PlotRna(seqName, string, listOfNodes[i]->secStructure, outPSFile5, listOfNodes[i]->score);
-	FILE *bfile5 = fopen(bpseqFile5, "w");
-	if (bfile5 == NULL) {
-	printf("can't open %s \n", bpseqFile5);
-	exit(1);
-	}
-	for (int b = 0; b < length; b++) {
-	fprintf(bfile5, "%d %c %d\n", b+1, string[b], listOfNodes[i]->secStructure[b]);
-	}
-	}
-	fprintf(cfile5, "%5d   ENERGY = %.2f %s suboptimal structure %d\n", length, -listOfNodes[i]->score/1000.0, seqName, i);
-	for (int b = 0; b < length; b++) {
-	fprintf(cfile5, "%5d %c    %4d %4d %4d %4d\n", b+1, string[b], b, b+2, listOfNodes[i]->secStructure[b], b+1);
-	}
-	}
-	*/
-	/////////////// *** Add new energy model code here (similar to above section) /////////////
-
 
 	(void) fflush(stdout);
 	free(string);
@@ -642,11 +429,10 @@ PRIVATE void usage(void)
 			"   -p parameterFilename (filename of parameters corresponding to the energy model)\n"
 			"\tIf no file is given, the Dirks&Pierce parameters 2003 are used, like in HotKnots 1.0\n"
 			"   -noGU (do not allow GU pair)\n"
-			"   -noPS (no ps, bpseq file output). By default, an arc diagram in ps format is writen in the \"output\" directory. A graphical display has to be activated for this to work.\n"
 			"   -t (trace)\n"
 			"   -b (output only the ps, bpseq file for the best structure)\n"
 			"\nExamples:\n"
-			"   ./HotKnots -s GGCGCGGCACCGUCCGCGGAACAAACGG -m DP -p params/parameters_DP09.txt -noPS\n"
+			"   ./HotKnots -s GGCGCGGCACCGUCCGCGGAACAAACGG -m DP -p params/parameters_DP09.txt\n"
 			"   ./HotKnots -I myseq -m CC -p params/parameters_CC09.txt\n" 
 
 		   );
