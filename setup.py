@@ -25,6 +25,19 @@ compile_args = ["-g"] # -Wall -O2"]
 link_args	= ["-lsimfold", "-lLEModel"]
 #deps = "src/LinearFoldEval.cpp src/LinearFold.h src/Utils/energy_parameter.h src/Utils/feature_weight.h src/Utils/intl11.h src/Utils/intl21.h src/Utils/intl22.h src/Utils/utility_v.h src/Utils/utility.h".split(' ') 
 
+sources = "HotKnot.cpp HotKnotEnergy.cpp common.cpp computeEnergy.cpp goodStem.cpp hotspot.cpp init.cpp params.cpp python.cpp s_energy_matrix.cpp s_hairpin_loop.cpp s_internal_loop.cpp s_min_folding.cpp s_multi_loop.cpp s_multi_loop_sub.cpp s_partition_function.cpp s_specific_functions.cpp s_stacked_pair.cpp s_sub_folding.cpp sc.cpp score.cpp timer.cpp utils.cpp"
+
+mod= Extension('simfold',
+			language='c++',
+			extra_compile_args=['-g', '-Wunused-variable'],
+			extra_link_args=['-lm'],
+			include_dirs=[
+						 '.',
+						 '...',
+						 os.path.join(os.getcwd(), 'include'),
+			],
+			sources = ["./src/"+item for item in sources.split()]
+			)
 module = Extension('HotKnots',
 			language='c++',
 			extra_compile_args=compile_args,
@@ -99,7 +112,7 @@ def main():
 		python_requires='>3.5.2',
 		packages=find_packages(),
 		#install_requires=[''],
-		ext_modules = [mod_le, module],
+		ext_modules = [mod],
 		#cmdclass={"build_ext":custom_build_ext}
 		#cmdclass={"build_ext":build_ext}
 	)

@@ -37,7 +37,7 @@ OBJ     = HotKnot.o\
           score.o
           
 
-default: $(PROG) computeEnergy
+default: $(PROG) # computeEnergy
 
 $(PROG): $(OBJ)
 	g++ -o $@ $(OBJ) $(LDFLAGS)

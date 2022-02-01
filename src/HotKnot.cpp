@@ -86,35 +86,23 @@ int main(int argc, char *argv[])
 
 	char *string; 
 	char line[5000];
-	char *structure=NULL, *cstruc=NULL;
+	char *structure=NULL;
 	char outputStructure[5000]; 
-	char  fname[13], ffname[20], gfname[20];
 
-	char  *ns_bases=NULL, *c;
-	int   i, length, l, sym, r;
-	double energy, min_en;
-	double kT, sfact=1.07;
-	int   pf=0, istty;
-	int noconv=0;
-	int InputFile = 1;
+	int   i, length, l;
+	double min_en;
 	int StrCon = 0;    
 	int endFlag;
 	int useParamsFlag = 0;  // added for easy command line usage
 	int sequenceDirect = 0;  // Mirela: added for easy command line usage
-	char outPSFile[100], bpseqFile[100], seqName[1000], inFile[100], ctFile[100];
-	char ctFile2[100], outPSFile2[100], bpseqFile2[100];
-	char ctFile3[100], outPSFile3[100], bpseqFile3[100];
-	char ctFile4[100], outPSFile4[100], bpseqFile4[100];
-	char ctFile5[100], outPSFile5[100], bpseqFile5[100];
+	char seqName[1000], inFile[100];
 	char paramsFile[1000];  // added for easy command line usage
 	char currentModel[5];   // added for easy command line usage
 	// *** Add new energy model code here
 
 	struct Node *rootNode;
 	struct Node *rootNode2;
-	struct Node *rootNode3;
 	struct Node *rootNode4;
-	struct Node *rootNode5;
 	// *** Add new energy model code here
 
 	int len = 0;
@@ -122,16 +110,6 @@ int main(int argc, char *argv[])
 	char separator;
 	char fileName[200];  // filename of input file sequence, without the path
 
-	// *** Add new energy model code here (also change output path as desired)
-	char outpath[30] = "output/";	//"TestSeq/";  // starting part of path for output files assuming directory of HotKnot executable is HotKnots/bin/
-	char outpath1[20] = "";	//"RivasEddy/";  // directory to put files generated using Rivas&Eddy (preceeded by outpath)
-	char outpath2[20] = "";	//"DirksPierce/";  // see above
-	char outpath3[20] = "";	//"CaoChen_a/";  // see above
-	char outpath4[20] = "";	//"CaoChen_b/";  // see above
-	char outpath5[20] = "";	//"CaoChen_c/";  // see above
-
-
-	char tempFile[10]="hello";
 	FILE* input_file;
 	int MaxHotspots = 200;
 	int first = 0;

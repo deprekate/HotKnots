@@ -9,12 +9,11 @@ default:
 	
 	# copy them into the bin directory
 	mv src/HotKnots .
-	mv src/computeEnergy .
 
 clean:
 	cd simfold; make clean
 	cd LE; make clean
 	cd src; make clean
-	rm -rf HotKnots computeEnergy 
+	rm -rf HotKnots
 	rm -fr build
 	rm -fr dist
