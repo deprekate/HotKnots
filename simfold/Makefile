@@ -36,7 +36,8 @@ RM = rm -f
 
 ###################################
 
-default: $(LIB) $(SIMFOLD) $(SIMFOLD_PF) $(TEST_COUNTS)
+#default: $(LIB) $(SIMFOLD) $(SIMFOLD_PF) $(TEST_COUNTS)
+default: $(LIB) $(SIMFOLD)
 
 $(LIB): $(L_C_OBJS) $(L_S_OBJS) 
 	$(RM) $@

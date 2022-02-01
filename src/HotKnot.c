@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 			usage();
 			return 0;
 		}
-		fscanf(input_file,"%s",&line);
+		fscanf(input_file,"%s", line);
 		string = (char *) malloc((strlen(line)+1)*sizeof(char));
 		strcpy(string, line);
 	}   // end if sequenceDirect
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
 	structure[length] = 0;
 
 	if (StrCon == 1) {
-		fscanf(input_file, "%s", &line);
+		fscanf(input_file, "%s", line);
 
 		int sclen; 
 		sclen = strlen(line);
@@ -386,6 +386,10 @@ int main(int argc, char *argv[])
 		strcpy(rootNode4->constraint, structure);
 		//===end of initialization    
 
+		int ii;
+		printf("string: %s\n", string);
+		for (ii=0 ; ii < 2; ii++){
+		string[ii+2] = 'C';
 		numRnaStruct = 0;
 		InitHotspots(MaxHotspots,length);  // it was cleared in the previous section
 		GenerateStemList(length, string, structure);  // depends only on hairpin, stacked, internal loop parameters
@@ -403,6 +407,7 @@ int main(int argc, char *argv[])
 			//printRnaStruct(listOfNodes[i]->secStructure,length);
 			//printf("\n");
 		}
+		}
 	} else {
 		usage();
 		exit(0);
@@ -417,7 +422,7 @@ int main(int argc, char *argv[])
 
 PRIVATE void usage(void)
 {
-	nrerror("Usage:\n"
+	nrerror((char *) "Usage:\n"
 			"HotKnots { -s sequence | -I filename } <options>\n"
 			"   where the input sequence can be given as a string, or in a file called filename.seq\n"
 			"   Output:\n"

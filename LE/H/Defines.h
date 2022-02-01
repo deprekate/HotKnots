@@ -44,8 +44,9 @@
 
 // Structs
 
-struct T_IntList{	int Num;	T_IntList * Next;
-			int tuning_flag;  //dirty bit flag - used in Loop.cpp parameter tuning code 
+struct T_IntList{
+	int Num;	T_IntList * Next;
+	int tuning_flag;  //dirty bit flag - used in Loop.cpp parameter tuning code 
 					  //(set to 1 if this loop's energy was already counted) 
 };
 /******************************************
@@ -62,8 +63,7 @@ struct T_stackelem {
 //elements of the stack -- Hosna, March 8th, 2007
 *******************************************/
 
-/*
-typedef struct region
+typedef struct region {
 	int begin;
 	int end;
 	region()
@@ -71,9 +71,9 @@ typedef struct region
 		begin = -1;
 		end = -1;
 	}
-} ;
-*/
+} reg;
 
+/*
 typedef struct {
 	int begin;
 	int end;
@@ -82,6 +82,7 @@ region reg = {
 	.begin = -1,
 	.end = -1
 };
+*/
 /******************************************
 //possible types of the loops
 *******************************************/

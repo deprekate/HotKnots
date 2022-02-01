@@ -7,9 +7,9 @@ CC	= gcc #-mpentiumpro -Wall  # insert your favorite C compiler
 CFLAGS  = -g
 
 LE_LIB =  -lsimfold -lLEModel 
-#LE_LIB = -lLEModel
-LE_INCLUDE = -I../LE  -I../LE/H   -I./
-LE_PATH = -L../LE
+#LE_INCLUDE = -I../LE  -I../LE/H   -I./
+LE_INCLUDE = -I../LE  -I../LE/H   -I../simfold/include -I../simfold/src/simfold  -I../simfold/src/common  -I./
+LE_PATH = -L../LE -L../simfold
 
 X11_LIB = -lX11
 X11_PATH = -L/usr/lib -L/usr/X11R6/lib 
@@ -17,40 +17,41 @@ X11_INCLUDE = -I/usr/X11R6/include
  
 
 LDFLAGS = $(CFLAGS)  $(X11_PATH) $(LE_PATH) $(LE_LIB) $(X11_LIB)  -lm 
-PROG = HotKnot
-GRAPHICS = ../graphics/graphics.o ../graphics/PlotRna.o
+PROG = HotKnots
 
 FILES   = HotKnot.c\
-	  hotspot.c\
-	  goodStem.c\
-	  utils.c\
-	  sc.cpp\
+          HotKnotEnergy.c\
+          hotspot.c\
+          goodStem.c\
+          utils.c\
+          sc.cpp\
           score.cpp
           
 
 OBJ     = HotKnot.o\
-	  hotspot.o\
-	  goodStem.o\
+          HotKnotEnergy.o\
+          hotspot.o\
+          goodStem.o\
           sc.o\
-	  utils.o\
-	  score.o\
+          utils.o\
+          score.o
           
 
-default: HotKnot computeEnergy
+default: $(PROG) computeEnergy
 
-$(PROG): $(OBJ) $(GRAPHICS)
-	g++ -o $@ $(OBJ) $(GRAPHICS) $(LDFLAGS)
+$(PROG): $(OBJ)
+	g++ -o $@ $(OBJ) $(LDFLAGS)
 .SUFFIXES: .cpp .c
 .cpp.o:
 	g++ -c $(X11_INCLUDE) $(LE_INCLUDE) $*.cpp $(CFLAGS)
 .c.o:
 	g++ -c $(X11_INCLUDE) $(LE_INCLUDE) $*.c $(CFLAGS)
 
-computeEnergy: computeEnergy.o $(GRAPHICS)
-	g++ -o computeEnergy computeEnergy.o $(GRAPHICS) $(LDFLAGS)
+computeEnergy: computeEnergy.o
+	g++ -o computeEnergy computeEnergy.o $(LDFLAGS)
 
 clean:
-	rm -f *.o HotKnot computeEnergy
+	rm -f *.o $(PROG) computeEnergy
 
 
 

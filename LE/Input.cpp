@@ -163,7 +163,6 @@ ReadInput::ReadInput(char * fseq, char * fbpseq){
 	int  m, n;
 	
 	char c[MaxN+1];
-	int size = 0;
 	while(!feof(fileSeq)) {
 		fscanf(fileSeq, "%s", c);
 	}

@@ -565,6 +565,7 @@ PARAMTYPE IL_penalty_by_size_2D (int size1, int size2)
     logval = log (1.0*(i+j)/(x+y));
     return internal_penalty_by_size_2D[x][y] + (PARAMTYPE)(100.0*misc.param_greater30 * logval);
     #endif
+	return 0;
 }
 
 

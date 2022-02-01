@@ -104,7 +104,7 @@ Loop::~Loop(){
 setDotParanthStruct:  sets the DotParanthStructure
 ********************************************************************************/
 void Loop::setDotParanthStruct(char * structure) {
-	for (int i = 0; i < strlen(structure); i++)
+	for (int i = 0; i < (int) strlen(structure); i++)
 	{
 		DotParanthStructure[i] = structure[i];
 	}
@@ -1838,12 +1838,7 @@ float Loop::getPartialCoaxialEnergyAll(int flag) {
     Loop * L2;
 
 	int i = 0;
-	int combos_start = 0;  // index into allCoaxStacks[] array
-	int combos_end = 0;  // index into allCoaxStacks[] array
 	int indexMinEnergy = 0;  // index into allCoaxStacks[] array which holds the lowest energy
-	int nextToAdd = 0;  // ranges from 0 to NumberOfChildren; index represents one of the possible pairs
-	int j = 1;  // keeps track of next spot available to add a new coaxial stacking energy possibility to allCoaxStacks[]
-	int k = 2;  // number of pairs being considered
 
 	int dangle0 = -1;  // free base associated with L1
 	int dangle1 = -1;  // free base associated with L2
@@ -2537,12 +2532,10 @@ int Loop::isPKDangleInMultiPseudoLoop(int i)
 {
 	T_IntList * L1 = ILoops;
 	T_IntList * L2 = MLoops;
-	int a, ap, bp, b;
 	int k_pt = 0;
 	int i_pt = begin;
 
 	pk_str_features * feat = Input->loops;
-	int * sequence = Input->type;
 
 	int last_border = i_pt;
 	int current_border = 0;
@@ -3986,7 +3979,6 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 
 	int k_pt = 0;
 	int i_pt = begin;
-	int numRegions_pt = NumberOfBands * 2 - 1;
 
 	int last_border;
 	int current_border;
@@ -5503,7 +5495,6 @@ of pseudoknotted loop. Energy value is returned in 10*cal/mol.
 float	Loop::pseudoEnergyCC2006b(){
 
 	double Energy = 0;
-	double initPenalty = 0;
 	int * sequence = Input->type;
 
 	int numbases = end - begin + 1;
@@ -5744,7 +5735,6 @@ float	Loop::pseudoEnergyCC2006b(){
 	// CHECK: change the rest of this function to get the energy of the stacked pairs in the H-type pseudoloop
 
 	T_IntList * L1 = ILoops;
-	T_IntList * L2 = MLoops;
 
 // Calculating the free energy of internal loops that span a band (interior-pseudoknotted loops)
 
@@ -5826,7 +5816,7 @@ float	Loop::pseudoEnergyCC2006b(){
 					Input->cannot_add_dangling[dangle0] = 1;
 				if (stack_dangle == 1 && dangle1 != -1)  // only change array if the dangling end was free originally
 					Input->cannot_add_dangling[dangle1] = 1;
-				if (stack_dangle != 0 || stack_dangle != 1)
+				if (1) //(stack_dangle != 0 || stack_dangle != 1)
 					printf("ERROR: stack_dangle = %d not set properly for mismatch pseudoloop; must be 0 or 1\n", stack_dangle); 
 			}
 			else
@@ -5878,7 +5868,6 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
         }
 
 	double Energy = 0;
-	double initPenalty = 0;
 	int * sequence = Input->type;
 
 	int numbases = end - begin + 1;
@@ -6434,7 +6423,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 					Input->cannot_add_dangling[dangle0] = 1;
 				if (stack_dangle == 1 && dangle1 != -1)  // only change array if the dangling end was free originally
 					Input->cannot_add_dangling[dangle1] = 1;
-				if (stack_dangle != 0 || stack_dangle != 1)
+				if (1) //(stack_dangle != 0 || stack_dangle != 1)
 					printf("ERROR: stack_dangle = %d not set properly for mismatch pseudoloop; must be 0 or 1\n", stack_dangle); 
 			}
 			else
@@ -6506,7 +6495,6 @@ float	Loop::pseudoEnergyCC2006a(){
 	
 
 	double Energy = 0;
-	double initPenalty = 0;
 	int * sequence = Input->type;
 	
 	int numbases = end - begin + 1;
@@ -6654,7 +6642,6 @@ float	Loop::pseudoEnergyCC2006a(){
 	// CHECK: change the rest of this function to get the energy of the stacked pairs in the H-type pseudoloop
 
 	T_IntList * L1 = ILoops;
-	T_IntList * L2 = MLoops;
 
 
 // Calculating the free energy of internal loops that span a band (interior-pseudoknotted loops)
@@ -6727,7 +6714,7 @@ float	Loop::pseudoEnergyCC2006a(){
 					Input->cannot_add_dangling[dangle0] = 1;
 				if (stack_dangle == 1 && dangle1 != -1)  // only change array if the dangling end was free originally
 					Input->cannot_add_dangling[dangle1] = 1;
-				if (stack_dangle != 0 || stack_dangle != 1)
+				if (1) //(stack_dangle != 0 || stack_dangle != 1)
 					printf("ERROR: stack_dangle = %d not set properly for mismatch pseudoloop; must be 0 or 1\n", stack_dangle); 
 			}
 			else

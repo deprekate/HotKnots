@@ -1088,7 +1088,7 @@ void s_internal_loop::count_get_energy (int i, int j, int ip, int jp, int *seque
                 pp = sequence[i+1];
              
                 #if (MODEL == SIMPLE)
-                if (nn==ii && mm==jj && pp==kk && oo==ll & watson_crick(ii,jj) && !watson_crick(kk,ll))
+                if ( (nn==ii) && (mm==jj) && (pp==kk) && (oo==ll) & watson_crick(ii,jj) && !watson_crick(kk,ll))
                 {
                     sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", ii, jj, kk, ll, mm, nn, oo, pp);
                     index = structure_type_index (type);
@@ -1165,7 +1165,7 @@ void s_internal_loop::count_get_energy (int i, int j, int ip, int jp, int *seque
                 pp = sequence[jp+1];
                 
                 #if (MODEL == SIMPLE)
-                if (nn==ii && mm==jj && pp==kk && oo==ll & watson_crick(ii,jj) && !watson_crick(kk,ll))
+                if ( (nn==ii) && (mm==jj) && (pp==kk) && (oo==ll) & watson_crick(ii,jj) && !watson_crick(kk,ll))
                 {
                     sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", ii, jj, kk, ll, mm, nn, oo, pp);
                     index = structure_type_index (type);

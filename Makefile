@@ -5,16 +5,16 @@ default:
 	cd LE; make
 	
 	# make the HotKnots and computeEnergy
-	cd hotspot; make
+	cd src; make
 	
 	# copy them into the bin directory
-	cp src/HotKnots bin
-	cp src/computeEnergy bin
+	mv src/HotKnots .
+	mv src/computeEnergy .
 
 clean:
 	cd simfold; make clean
 	cd LE; make clean
-	cd hotspot; make clean
-	rm -rf bin/HotKnots bin/computeEnergy 
-	rm -rf bin/output/*
-
+	cd src; make clean
+	rm -rf HotKnots computeEnergy 
+	rm -fr build
+	rm -fr dist

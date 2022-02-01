@@ -186,7 +186,6 @@ double free_energy_PK_DP(char *sequence, char *structure)
 	Stack * s = new Stack(R);
 	Bands * B = new Bands(R, s);
 
-	int printTrace = 0;  // by default, don't print energy trace
 
 	if (DEBUG)
 	{
@@ -313,7 +312,6 @@ double get_feature_counts_quadratic_PK_DP (char *sequence, char *structure, doub
 	Stack * s = new Stack(R);
 	Bands * B = new Bands(R, s);
 
-	int printTrace = 0;  // by default, don't print energy trace
 
 	if (DEBUG)
 	{
@@ -505,7 +503,6 @@ void get_feature_counts (char *sequence, char *structure, double *counter)
 	Stack * s = new Stack(R);
 	Bands * B = new Bands(R, s);
 
-	int printTrace = 0;  // by default, don't print energy trace
 
 	printf("Seq: %s \n", R->CSequence);
 	printf("Size: %d \n", R->Size);
@@ -567,14 +564,12 @@ void get_feature_counts (char *sequence, char *structure, double *counter)
 		else
 			cout << setw(15) << left << "Rivas&Eddy" << setw(25) << left << totalEnergy/1000 << setw(40) << left << totalEnergy/1000 << endl;
 
-		if (printTrace)
-			L->printEnergyTrace();
 		cout << endl;
 	}
 	if (DP_FLAG)  // energy returned in kcal
 	{
 //		double *c = new double[R->Size];
-		double ** quadratic_matrix;
+		double ** quadratic_matrix = NULL;
 		double f = 0;
 		int reset_c = 0;
 		int ignore_dangles = no_pk_dangling_ends;
@@ -590,8 +585,6 @@ void get_feature_counts (char *sequence, char *structure, double *counter)
 
 		cout << setw(15) << left << "Dirks&Pierce" << setw(25) << left << totalEnergy - L->EnergyDangling(DP, quadratic_matrix,counter,f,reset_c,ignore_dangles,ignore_AU) << setw(40) << left << totalEnergy << endl;
 
-		if (printTrace)
-			L->printEnergyTrace();
 	}
 
 	printf("\n");
@@ -975,7 +968,6 @@ double free_energy_PK_CC2006b(char *sequence, char *structure)
 	Stack * s = new Stack(R);
 	Bands * B = new Bands(R, s);
 
-	int printTrace = 0;  // by default, don't print energy trace
 
 	if (DEBUG)
 	{
@@ -1085,7 +1077,6 @@ double get_feature_counts_quadratic_PK_CC2006b (char *sequence, char *structure,
 	Stack * s = new Stack(R);
 	Bands * B = new Bands(R, s);
 
-	int printTrace = 0;  // by default, don't print energy trace
 
 	if (DEBUG)
 	{

@@ -69,7 +69,7 @@ double hotknots_DP_name(char *seq, char *structure, char* fileName)
 //            TO CLEAN UP THE MESS IN THIS FILE.
 {
     if (DEBUG)
-        printf("Input parameter seq = %s, strlen = %d\n", seq, strlen(seq));
+        printf("Input parameter seq = %s, strlen = %d\n", seq, (int) strlen(seq));
 
     int length = strlen(seq);
     char* sequence = new char[length+1];
@@ -609,7 +609,7 @@ double hotknots_DP_name(char *seq, char *structure, char* fileName)
 // Defaults: no PS is output, GU is included (if want to change this, set it manually in ? TODO )
 double hotknots_DP(char *sequence, char *structure)
 {       
-        return hotknots_DP_name (sequence, structure, "Default");
+        return hotknots_DP_name (sequence, structure, (char *) "Default");
 }
 
 
@@ -622,7 +622,7 @@ double hotknots_DP_suboptimals(char *seq, char **structures, double* energies, i
 //            TO CLEAN UP THE MESS IN THIS FILE.
 {
     if (DEBUG)
-        printf("Input parameter seq = %s, strlen = %d\n", seq, strlen(seq));
+        printf("Input parameter seq = %s, strlen = %d\n", seq, (int) strlen(seq));
 
     int length = strlen(seq);
     char* sequence = new char[length+1];
@@ -1170,7 +1170,7 @@ double hotknots_CC2006b_name(char *seq, char *structure, char* fileName)
 //            TO CLEAN UP THE MESS IN THIS FILE.
 {
 	if (DEBUG)
-		printf("Input parameter seq = %s, strlen = %d\n", seq, strlen(seq));
+		printf("Input parameter seq = %s, strlen = %d\n", seq, (int) strlen(seq));
 
 	int length = strlen(seq);
 	char* sequence = new char[length+1];
@@ -1724,7 +1724,7 @@ double hotknots_CC2006b_name(char *seq, char *structure, char* fileName)
 // Defaults: no PS is output, GU is included (if want to change this, set it manually in ? TODO )
 double hotknots_CC2006b(char *sequence, char *structure)
 {       
-        return hotknots_CC2006b_name (sequence, structure, "Default");
+        return hotknots_CC2006b_name (sequence, structure, (char *)  "Default");
 }
 
 // Prototype: double hotknots_CC2006b_suboptimals (char *sequence, char **structures, double* energies)
@@ -1734,7 +1734,7 @@ double hotknots_CC2006b_suboptimals(char *seq, char **structures, double* energi
 // structure: output
 {
 	if (DEBUG)
-		printf("Input parameter seq = %s, strlen = %d\n", seq, strlen(seq));
+		printf("Input parameter seq = %s, strlen = %d\n", seq, (int) strlen(seq));
 
 	int length = strlen(seq);
 	char* sequence = new char[length+1];

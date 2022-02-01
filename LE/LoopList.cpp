@@ -834,7 +834,8 @@ float	LoopList::multiPseudoEnergyRE(){
 	pk_str_features * f = Input->loops;
 	int * sequence = Input->type;
 	int i = base1;
-    int energy, en, AUpen, h, l;
+    //int energy, en, AUpen, h, l;
+    int AUpen, h, l;
     int dang;
     float misc_energy;
 

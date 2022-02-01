@@ -1241,7 +1241,7 @@ PFTYPE simfold_partition_function_approximately (char *sequence)
             }
         }   
         
-        printf ("Substr %d: %s\ten=%.2lf \tprob=%Le\n", i, tmp_structures[i], energy, strprob);
+        printf ("Substr %d: %s\ten=%.2lf \tprob=%f\n", i, tmp_structures[i], energy, strprob);
         Z += exp (-1.0 * energy * beta);
     }
     for(i=0; i < seqlen; i++)

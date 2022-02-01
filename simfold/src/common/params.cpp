@@ -5093,6 +5093,7 @@ double simfold_restricted_logZ_gradient (char *sequence, char *real_structure, c
         logZ_gradient[i] = numerator[i] / denominator;
     }      
     //printf ("logZ_gradient[i] = %e\n", logZ_gradient[7646]);
+	return 0;
 }
 
 
@@ -7820,7 +7821,8 @@ int get_data_from_buffer (char *buffer, char *header, char last_char, char *outp
     while (1)
     {
         if (begin[i] == last_char) { output[i] = '\0'; break; }
-        output[i] = begin[i++];
+        output[i] = begin[i];
+		++i;
     }
     if (strstr (header, "sequence") != NULL || strstr (header, "structure") != NULL)
     {
