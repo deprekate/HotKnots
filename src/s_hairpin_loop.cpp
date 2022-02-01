@@ -580,7 +580,7 @@ void s_hairpin_loop::count_get_energy (int i, int j, int* sequence, char *cseque
             sequence[i] == G && sequence[j] == U)
           {
             special_bonus += misc.hairpin_GGG;
-            index = structure_type_index("misc.hairpin_GGG");
+            index = structure_type_index( (char *) "misc.hairpin_GGG");
             counter[index]++;
           }
     }
@@ -602,15 +602,15 @@ void s_hairpin_loop::count_get_energy (int i, int j, int* sequence, char *cseque
         if (size == 3)
           {
             special_bonus += misc.hairpin_c3;
-            index = structure_type_index("misc.hairpin_c3");
+            index = structure_type_index( (char *) "misc.hairpin_c3");
             counter[index]++;
           }
         else
           {
             special_bonus += misc.hairpin_c2 + misc.hairpin_c1 * size;
-            index = structure_type_index("misc.hairpin_c2");
+            index = structure_type_index( (char *) "misc.hairpin_c2");
             counter[index]++;
-            index = structure_type_index("misc.hairpin_c1");
+            index = structure_type_index( (char *) "misc.hairpin_c1");
             counter[index]+= size;
           }
     }

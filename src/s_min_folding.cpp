@@ -60,25 +60,25 @@ void s_min_folding::allocate_space()
     nb_nucleotides = strlen(sequence);
     
     f = new minimum_fold [nb_nucleotides];
-    if (f == NULL) giveup ("Cannot allocate memory", "energy");
+    if (f == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "energy");
     W = new PARAMTYPE [nb_nucleotides];
-    if (W == NULL) giveup ("Cannot allocate memory", "energy");
+    if (W == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "energy");
     for (i=0; i < nb_nucleotides; i++) W[i] = 0;
 
     int_sequence = new int[nb_nucleotides];
-    if (int_sequence == NULL) giveup ("Cannot allocate memory", "energy");
+    if (int_sequence == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "energy");
     for (i=0; i < nb_nucleotides; i++) int_sequence[i] = nuc_to_int(sequence[i]);
 
     H = new s_hairpin_loop (sequence, int_sequence, nb_nucleotides);
-    if (H == NULL) giveup ("Cannot allocate memory", "energy");
+    if (H == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "energy");
     S = new s_stacked_pair (int_sequence, nb_nucleotides);
-    if (S == NULL) giveup ("Cannot allocate memory", "energy");
+    if (S == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "energy");
     VBI = new s_internal_loop (int_sequence, nb_nucleotides);
-    if (VBI == NULL) giveup ("Cannot allocate memory", "energy");
+    if (VBI == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "energy");
     VM = new s_multi_loop (int_sequence, nb_nucleotides);
-    if (VM == NULL) giveup ("Cannot allocate memory", "energy");
+    if (VM == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "energy");
     V = new s_energy_matrix (int_sequence, nb_nucleotides);
-    if (V == NULL) giveup ("Cannot allocate memory", "energy");
+    if (V == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "energy");
 
     // initialize the structure
 
@@ -196,7 +196,7 @@ double s_min_folding::fold_sequence_restricted ()
     int i, j;
 
     str_features *fres;
-    if ((fres = new str_features[nb_nucleotides]) == NULL) giveup ("Cannot allocate memory", "str_features");   
+    if ((fres = new str_features[nb_nucleotides]) == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "str_features");   
     // detect the structure features  
     detect_structure_features (restricted, fres);
     

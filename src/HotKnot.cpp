@@ -115,7 +115,6 @@ int main(int argc, char *argv[])
 	int first = 0;
 
 	string=NULL;
-
 	strcpy(currentModel,"DP");  // added for each command line usage - default model is DP 
 	for (i=1; i<argc; i++) {
 		if (argv[i][0]=='-') 
@@ -166,7 +165,7 @@ int main(int argc, char *argv[])
 
 	//   init_data (config_file, dna_or_rna, temperature);  // CHANGED to lines below
 	init_data(argv[0], config_file, dna_or_rna, temperature);
-	fill_data_structures_with_new_parameters ("./params/turner_parameters_fm363_constrdangles.txt");
+	fill_data_structures_with_new_parameters(  (char *) "./params/turner_parameters_fm363_constrdangles.txt");
 	init_dataPK(argv[0], config_filePK, dna_or_rna, temperature);
 
 	// added for easy command line usage
@@ -231,7 +230,7 @@ int main(int argc, char *argv[])
 
 		int sclen; 
 		sclen = strlen(line);
-		if (strlen(line) > length) {
+		if ( (int) strlen(line) > length) {
 			fprintf(stderr, "--------------------WARNING-----------------------\n");
 			fprintf(stderr, "The length of the structure constraint is %d\n", sclen);
 			fprintf(stderr, "The length of the sequence is %d\n", length);
@@ -239,7 +238,7 @@ int main(int argc, char *argv[])
 			line[length] = 0;
 			strcpy(structure, line);
 		}
-		else if (strlen(line) < length) {
+		else if ( (int) strlen(line) < length) {
 			fprintf(stderr, "--------------------WARNING----------------------\n");
 			fprintf(stderr, "The length of the structure constraint is %d\n", sclen);
 			fprintf(stderr, "The length of the sequence is %d\n", length);

@@ -203,7 +203,6 @@ void traceback(int length, char* seq, int** V, int** G, int** F, int**E, int**R,
   int i,j,num=0;
   
   int currentBest = -1, previousBest = 999999, cBi, cBj;
-  int temp[length];
   
   while(1) {
     for (i = 1; i < length; i++){
@@ -240,7 +239,6 @@ void trace(int length, char* seq, int si, int sj,  int** V, int** G, int** F, in
 {
      int i, j, k,l;
      int temp[length];
-     int cellScore;
      int ti, tj, startbase,mm,hl;
 
      for (i = 0; i < length; i++) {temp[i] = 0;}
@@ -336,7 +334,7 @@ void printMatrix(int** m, int length)
       
 void revComp(int length, char* seq, char* rcSeq)
 {
-  int i,j;
+  int i;
   char c;
   
   for (i = 0; i <= length; i++){rcSeq[i] = '\0';}

@@ -42,7 +42,7 @@ s_multi_loop::s_multi_loop (int *seq, int length)
         index[i] = index[i-1]+length-i+1;
 
     WM = new PARAMTYPE [total_length];
-    if (WM == NULL) giveup ("Cannot allocate memory", "s_multi_loop");
+    if (WM == NULL) giveup ( (char *) "Cannot allocate memory", (char *) "s_multi_loop");
     for (i=0; i < total_length; i++) WM[i] = INF;                                    
 }
 

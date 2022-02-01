@@ -221,8 +221,6 @@ PARAMTYPE s_internal_loop::compute_energy_restricted (int i, int j, str_features
 
     int ip, jp, minq;
     PARAMTYPE mmin, ttmp;
-    PARAMTYPE penalty_size, asym_penalty, ip_jp_energy, i_j_energy, en;
-    int branch1, branch2, l;
     mmin = INF;
 
     for (ip = i+1; ip <= MIN(j-2,i+MAXLOOP+1) ; ip++)  // the -TURN shouldn't be there

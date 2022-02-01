@@ -2,22 +2,6 @@
 //#include <limits.h>
 #include <Python.h>
 
-#include <fstream>
-#include <iostream>
-#include <sys/time.h>
-#include <stack>
-#include <tuple>
-#include <cassert>
-#include <unordered_map>
-#include <algorithm>
-#include <string>
-#include <map>
-#include <set>
-//#include "HotKnots.h"
-//#include "HotKnots.cpp" // adding eval mode
-//#include "Utils/utility.h"
-//#include "Utils/utility_v.h"
-//#include "HotKnotsEval.cpp" // adding eval mode
 
 typedef struct {
 	PyObject_HEAD

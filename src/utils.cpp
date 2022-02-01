@@ -53,7 +53,7 @@ void nrerror(char *message)       /* output message upon error */
 void printRnaStruct(short* structure, int length) 
 //print out secondary struct in the form: 1-4;13-16, 6-10; 30-34...
 {
-  int i,j;
+  int i;
   int st, stp;
 
   i = 0;

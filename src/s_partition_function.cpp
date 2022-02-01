@@ -544,8 +544,7 @@ void s_partition_function::compute_u (int i, int j)
 // called only when no dangling ends
 {
     int ij = index[i]+j-i;
-    int hj, il, lp2j, lp1j;
-    int h, l;    
+    int hj, h;    
 
     // we don't need separate cases to compute u, because we don't care about dangling ends
 
@@ -584,7 +583,7 @@ void s_partition_function::compute_s1 (int h, int j)
 // called only when no dangling ends
 {
     // if (h < 1)  return;  // we don't want this here, because we don't care about dangling ends
-    int hj, hl, l, lp2j, lp1j;
+    int hj, hl, l, lp1j;
     hj = index[h]+j-h;
     s1[hj] = 0;
 
@@ -630,7 +629,7 @@ void s_partition_function::compute_u1 (int i, int j)
 // called only when no dangling ends
 // contains at least one branch of a multi-loop
 {
-    int ij, il, l, h, lp1j, lp2j, ip1l, hj;
+    int ij, h, hj;
     ij = index[i]+j-i;
     u1[ij] = 0;
 
@@ -660,7 +659,7 @@ void s_partition_function::compute_s3 (int h, int j)
 // s3 doesn't contain the helix penalty
 {
     if (h < 1) return;
-    int hj, hl, l, lp2j, lp1j;
+    int hj, hl, l, lp1j;
     hj = index[h]+j-h;
     s3[hj] = 0;   
     
@@ -690,9 +689,7 @@ void s_partition_function::compute_upm_nodangles (int i, int j)
 // i and j close a multi-loop
 {
     int ij = index[i]+j-i;
-    int l, h;
-    int ip1l, ip2l, lp2jm1, lp1jm1, lp2jm2, lp1jm2, lp2jm3, lp1jm3, hj;
-    PFTYPE upm_temp;
+    int h, hj;
     
     if (!can_pair(sequence[i], sequence[j]))
         return;
@@ -753,7 +750,7 @@ void s_partition_function::compute_s2 (int h, int j)
 // modified from Ding and Lawrence, to be able to add the right most d5 dangling end: (--(...)..)
 // has at least 2 branches, and h is paired with some l in between h and j
 {
-    int hj, hl, l, lp2j, lp1j;
+    int hj, hl, l, lp1j;
     hj = index[h]+j-h;
     s2[hj] = 0;
     
@@ -773,8 +770,8 @@ void s_partition_function::compute_u_ip_jp (int i, int j)
 // j paired or j-1 paired
 {
     int ij = index[i]+j-i;
-    int hj, il, lp2j, lp1j;
-    int h, l;    
+    int il, lp2j, lp1j;
+    int l;    
     int ijm1 = index[i]+j-1-i;
 
     u_ip_jp[ij] = up[ij] * exp_AUpenalty (i,j);    // case (...)
@@ -799,8 +796,8 @@ void s_partition_function::compute_u_ip_ju (int i, int j)
 // j must be unpaired and j-1 must be unpaired
 {
     int ij = index[i]+j-i;
-    int hj, il, lp2j, lp1j;
-    int h, l;    
+    int il, lp2j, lp1j;
+    int l;    
     
     u_ip_ju[ij] = 0;
     
@@ -826,8 +823,7 @@ void s_partition_function::compute_u_iu_jp (int i, int j)
 // j paired or j-1 paired
 {
     int ij = index[i]+j-i;
-    int hj, il, lp2j, lp1j, hjm1;
-    int h, l;    
+    int hj, h;    
     
     u_iu_jp[ij] = 0;
     //for (h = i+1; h < j-1; h++)                    // case ...(...) or ...(...).
@@ -849,8 +845,7 @@ void s_partition_function::compute_u_iu_ju (int i, int j)
 // j unpaired and j-1 unpaired
 {
     int ij = index[i]+j-i;
-    int hj, il, lp2j, lp1j;
-    int h, l;    
+    int hj, h;    
     
     u_iu_ju[ij] = 1;
     for (h = i+1; h < j-1; h++)                 // case ...(...)...---
@@ -1075,8 +1070,6 @@ void s_partition_function::compute_upm (int i, int j)
     {
         hj = index[h]+j-h;
         int hjm1 = index[h] + j-1 -h;
-        int hjm2 = index[h] + j-2 -h;
-        int hjm3 = index[h] + j-3 -h;
             
         upm_temp += EXPC[h-i-1] *
                 ( s2_jp[hjm1]    // --(...)) or --(...).) 
@@ -1134,7 +1127,7 @@ void s_partition_function::compute_u1_ip_jp (int i, int j)
 // i must be paired
 // j must be paired, or j-1 must be paired
 {
-    int ij, il, l, h, lp1j, lp2j, ip1l, hj;
+    int ij, il, l, lp1j, lp2j;
     ij = index[i]+j-i;
     u1_ip_jp[ij] = 0;
 
@@ -1163,7 +1156,7 @@ void s_partition_function::compute_u1_ip_ju_jm1p (int i, int j)
 // i must be paired
 // j must be paired, or j-1 must be paired
 {
-    int ij, il, l, h, lp1j, lp2j, ip1l, hj;
+    int ij, il, l, lp1j, lp2j;
     ij = index[i]+j-i;
     u1_ip_ju_jm1p[ij] = 0;
     int ijm1 = index[i]+j-1-i;       
@@ -1186,7 +1179,7 @@ void s_partition_function::compute_u1_ip_ju (int i, int j)
 // i must be paired
 // j must be unpaired, and j-1 must be unpaired
 {
-    int ij, il, l, h, lp1j, lp2j, ip1l, hj;
+    int ij, il, l, lp1j, lp2j;
     ij = index[i]+j-i;
     u1_ip_ju[ij] = 0;
     PFTYPE temp;
@@ -1214,7 +1207,7 @@ void s_partition_function::compute_u1_iu_jp (int i, int j)
 // i must be unpaired
 // j must be paired, or j-1 must be paired
 {
-    int ij, il, l, h, lp1j, lp2j, ip1l, hj;
+    int ij, l, h, lp1j, lp2j, ip1l, hj;
     ij = index[i]+j-i;
     u1_iu_jp[ij] = 0;
 
@@ -1249,7 +1242,7 @@ void s_partition_function::compute_u1_iu_ju_jm1p (int i, int j)
 // i must be unpaired
 // j must be paired, or j-1 must be paired
 {
-    int ij, il, l, h, lp1j, lp2j, ip1l, hj;
+    int ij, l, h, lp1j, lp2j, ip1l, hj;
     ij = index[i]+j-i;
     u1_iu_ju_jm1p[ij] = 0;
 
@@ -1281,7 +1274,7 @@ void s_partition_function::compute_u1_iu_ju (int i, int j)
 // i must be unpaired
 // j must be unpaired, and j-1 must be unpaired
 {
-    int ij, il, l, h, lp1j, lp2j, ip1l, hj;
+    int ij, l, h, lp1j, lp2j, ip1l, hj;
     ij = index[i]+j-i;
     u1_iu_ju[ij] = 0;
 
@@ -1924,8 +1917,7 @@ void s_partition_function::compute_pm2 (int h, int j)
 // i---------h...l.-.j
 // (-(---)-..[...].-.)
 {
-    int i, ij;
-    int hj, ip1;
+    int i, ij, hj;
     hj = index[h]+j-h;   
     
     // intialize, just in case
@@ -1952,8 +1944,7 @@ void s_partition_function::compute_pm2d5_needmidd5 (int h, int j)
 // i---------h...l.-.j
 // (-(---)-..[...].-.)
 {
-    int i, ij;
-    int hj, ip1;
+    int i, ij, hj;
     hj = index[h]+j-h;   
     // intialize, just in case
     pm2d5_needmidd5[hj] = 0;
@@ -1982,8 +1973,7 @@ void s_partition_function::compute_pm2d5_noneedmidd5 (int h, int j)
 // i------.h...l.-.j
 // (-(---).[...].-.) or (-(---)[...].-.)
 {
-    int i, ij;
-    int hj, ip1;
+    int i, ij, hj;
     hj = index[h]+j-h;   
     // intialize, just in case
     pm2d5_noneedmidd5[hj] = 0;
@@ -2011,8 +2001,7 @@ void s_partition_function::compute_pm2nod5_needmidd5 (int h, int j)
 // (-(---)-..[...]) or (-(---)-..[...].)
 // exactly the same as compute_pm2d5_needmidd5, but withour exp_dangle5
 {
-    int i, ij;
-    int hj, ip1;
+    int i, ij, hj;
     hj = index[h]+j-h;   
     // intialize, just in case
     pm2nod5_needmidd5[hj] = 0;
@@ -2041,8 +2030,7 @@ void s_partition_function::compute_pm2nod5_noneedmidd5 (int h, int j)
 // (-(---).[...]) or (-(---)[...])         or   (-(---).[...].) or (-(---)[...].)
 // same as compute_pm2d5_noneedmidd5, just remove the exp_dangle5
 {
-    int i;
-    int hj, ip1, ij;
+    int i, hj, ij;
     hj = index[h]+j-h;   
     // intialize, just in case
     pm2nod5_noneedmidd5[hj] = 0;
@@ -2300,7 +2288,7 @@ PFTYPE s_partition_function::compute_partition_function_exhaustively ()
     double min_energy, max_energy;
     int actual_num_str;
     int i,ii,j, k;
-    double R, temp, beta;
+    double beta;
     //R = 0.00198717;
     //temp = 310.15;
     beta = (PFTYPE)1000.0/(1.98717*310.15);
@@ -2360,7 +2348,7 @@ PFTYPE s_partition_function::compute_partition_function_exhaustively ()
         {
             //printf ("Unrestricted str[%d]: %s\n", j, tmp_structures2[j]);
             include = 1;
-            for (i=0; i < strlen (csequence); i++)
+            for (i=0; i < (int) strlen(csequence); i++)
             {
                 if ((restricted[i] == '(' || restricted[i] == ')' || restricted[i] == '.') &&
                     (restricted[i] != tmp_structures2[j][i]))
@@ -2650,7 +2638,6 @@ int s_partition_function::verify_partition_function()
 // POST: returns 1 if there's error, 0 otherwise
 {
     //#define PREC 0.0000000001    
-    int i,j,ij;
     int error = 0;
     if (num_substructures == 0 || num_substructures >= MAXSUBSTR)
     {
@@ -2873,11 +2860,9 @@ void s_partition_function::compute_logZ_gradient_finite_differences ()
 
 void s_partition_function::compute_logZ_gradient_exhaustively ()
 {        
-    char structure[MAXSLEN];
     double enthalpy, energy;
     char tmp_structures[MAXSUBSTR][MAXSLEN];
     double tmp_energies[MAXSUBSTR];
-    double min_energy, max_energy;
     int i, j, k;
     double R, temp, beta;
     int real_str_found, actual_num_str;    
@@ -2918,7 +2903,7 @@ void s_partition_function::compute_logZ_gradient_exhaustively ()
         {
             //printf ("Unrestricted str[%d]: %s\n", j, tmp_structures2[j]);
             include = 1;
-            for (i=0; i < strlen (csequence); i++)
+            for (i=0; i < (int) strlen(csequence); i++)
             {
                 if ((restricted[i] == '(' || restricted[i] == ')' || restricted[i] == '.') &&
                     (restricted[i] != tmp_structures2[j][i]))
@@ -2951,7 +2936,7 @@ void s_partition_function::compute_logZ_gradient_exhaustively ()
         {
             energy = free_energy_simfold (csequence, tmp_structures[k]);
             denominator += EXP ((-1) * energy * beta);
-            count_each_structure_type (csequence, tmp_structures[k], "", counter, f, 1);
+            count_each_structure_type (csequence, tmp_structures[k], (char *) "", counter, f, 1);
             }        
         else
         {
@@ -3010,17 +2995,16 @@ void s_partition_function::compute_logZ_gradient ()
 
     int index_param;
     int i, j, k, l, m, n, o, r, h;
-    int ii, jj, iip, jjp, iijj, iipjjp, iip1jjm1;
+    int ii, jj, iip, jjp, iijj, iipjjp;
     PARAMTYPE en_hairpin, en_stack, en_internal;
     PARAMTYPE AUpen;  //, dangle, dangle5, dangle3;
     char type[100];
     int tindex;    // type index
-    int il_i, il_j, il_ip1, il_jm1;
     int index_should_be;
     
     num_params = create_string_params();
 
-    int AUpen_index = structure_type_index ("misc.terminal_AU_penalty");
+    int AUpen_index = structure_type_index( (char *) "misc.terminal_AU_penalty");
    
     for (i=0; i < num_params; i++)    GlogZ[i] = 0;
     
@@ -3127,7 +3111,7 @@ void s_partition_function::compute_logZ_gradient ()
     // TODO: remove return;
     //return;
                  
-    index_should_be = structure_type_index("tstackh[0][3][0][0]");                
+    index_should_be = structure_type_index( (char *) "tstackh[0][3][0][0]");                
     if (index_param != index_should_be)
     {
         printf ("Index param after stack = %d, should be %d\n", index_param, index_should_be);
@@ -3192,7 +3176,7 @@ void s_partition_function::compute_logZ_gradient ()
                                     {
                                         sprintf (s, "hairpin_penalty_by_size[%d]", jj-ii-1);
                                         // this is very slow, it's linear in the number of parameters
-                                        int sizeindex = structure_type_index (s);
+                                        int sizeindex = structure_type_index( (char *) s);
                                         GlogZ[sizeindex] += grad;  
                                     }
                                     
@@ -3208,7 +3192,7 @@ void s_partition_function::compute_logZ_gradient ()
                                             if (strcmp (seq, triloop[kk].seq) == 0)
                                             {
                                                 sprintf (s, "triloop[%d].energy", kk);
-                                                sizeindex = structure_type_index (s);
+                                                sizeindex = structure_type_index( (char *) s);
                                                 GlogZ[sizeindex] += grad;  
                                             }
                                         }
@@ -3224,7 +3208,7 @@ void s_partition_function::compute_logZ_gradient ()
                                             if (strcmp (seq, tloop[kk].seq) == 0)
                                             {
                                                 sprintf (s, "tloop[%d].energy", kk);
-                                                sizeindex = structure_type_index (s);
+                                                sizeindex = structure_type_index( (char *) s);
                                                 GlogZ[sizeindex] += grad;  
                                             }
                                         }
@@ -3239,7 +3223,7 @@ void s_partition_function::compute_logZ_gradient ()
                                             if (strcmp (seq, special_hl[kk].seq) == 0)
                                             {
                                                 sprintf (s, "special_hl[%d].energy", kk);
-                                                sizeindex = structure_type_index (s);
+                                                sizeindex = structure_type_index( (char *) s);
                                                 GlogZ[sizeindex] += grad;  
                                             }
                                         }
@@ -3251,7 +3235,7 @@ void s_partition_function::compute_logZ_gradient ()
                                     {
                                         if (sequence[ii]==G && sequence[ii-1]==G && sequence[ii-2]==G and sequence[jj]==U)
                                         {
-                                            sizeindex = structure_type_index ("misc.hairpin_GGG");
+                                            sizeindex = structure_type_index( (char *) "misc.hairpin_GGG");
                                             GlogZ[sizeindex] += grad;  
                                         }
                                     }
@@ -3270,15 +3254,15 @@ void s_partition_function::compute_logZ_gradient ()
                                     {
                                         if (jj-ii-1 == 3)
                                         {
-                                            sizeindex = structure_type_index ("misc.hairpin_c3");
+                                            sizeindex = structure_type_index( (char *) "misc.hairpin_c3");
                                             GlogZ[sizeindex] += grad;  
                                         }
                                         else
                                         {
-                                            sizeindex = structure_type_index ("misc.hairpin_c1");
+                                            sizeindex = structure_type_index( (char *) "misc.hairpin_c1");
                                             // we have to multiply by size because this param is multiplied by size in the hairpin loop calculation
                                             GlogZ[sizeindex] += (jj-ii-1) * grad;
-                                            sizeindex = structure_type_index ("misc.hairpin_c2");
+                                            sizeindex = structure_type_index( (char *) "misc.hairpin_c2");
                                             GlogZ[sizeindex] += grad;
                                         }
                                     }
@@ -3294,7 +3278,7 @@ void s_partition_function::compute_logZ_gradient ()
                     }
                 }
 
-    index_should_be = structure_type_index("misc.internal_AU_closure");                
+    index_should_be = structure_type_index( (char *) "misc.internal_AU_closure");                
     if (index_param != index_should_be)
     {
         printf ("Index param after tstackh = %d, should be %d\n", index_param, index_should_be);
@@ -3310,13 +3294,13 @@ void s_partition_function::compute_logZ_gradient ()
         char s[100];
         //strcpy (s, "misc.terminal_AU_penalty");
         // this is very slow, it's linear in the number of parameters
-        //int index_terminal_AU_penalty = structure_type_index (s);                        
+        //int index_terminal_AU_penalty = structure_type_index( (char *) s);                        
         strcpy (s, "misc.internal_AU_closure");
-        int index_internal_AU_closure = structure_type_index (s);                        
+        int index_internal_AU_closure = structure_type_index( (char *) s);                        
         strcpy (s, "misc.internal_AG_mismatch");
-        int index_internal_AG_mismatch = structure_type_index (s);
+        int index_internal_AG_mismatch = structure_type_index( (char *) s);
         strcpy (s, "misc.internal_UU_mismatch");
-        int index_internal_UU_mismatch = structure_type_index (s);    
+        int index_internal_UU_mismatch = structure_type_index( (char *) s);    
                                     
         for (i=0; i < NUCL; i++)
             for (j=0; j < NUCL; j++)
@@ -3360,7 +3344,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                         //char s[100];
                                                         sprintf (s, "internal_penalty_by_size[%d]", branch1+branch2);
                                                         // this is very slow, it's linear in the number of parameters
-                                                        int sizeindex = structure_type_index (s);
+                                                        int sizeindex = structure_type_index( (char *) s);
                                                         //printf ("sizeindex=%d\n", sizeindex);
                                                     
                                                         en_internal = s_internal_loop::get_energy (ii, jj, iip, jjp, sequence, ptable_restricted);
@@ -3420,7 +3404,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                         //char s[100];
                                                         sprintf (s, "bulge_penalty_by_size[%d]", branch1+branch2);
                                                         // this is very slow, it's linear in the number of parameters
-                                                        int sizeindex = structure_type_index (s);
+                                                        int sizeindex = structure_type_index( (char *) s);
                                                         en_internal = s_internal_loop::get_energy (ii, jj, iip, jjp, sequence, ptable_restricted);
                                                         iipjjp = index[iip] + jjp - iip;
                                                         PFTYPE grad = p[iijj] * up[iipjjp] / up[iijj] * EXP (en_internal * oneoverRT);
@@ -3444,7 +3428,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                     //char s[100];
                                                     sprintf (s, "internal_penalty_by_size[%d]", branch1+branch2);
                                                     // this is very slow, it's linear in the number of parameters
-                                                    int sizeindex = structure_type_index (s);
+                                                    int sizeindex = structure_type_index( (char *) s);
                                                     //printf ("sizeindex=%d\n", sizeindex);
                                                         
                                                     iipjjp = index[iip] + jjp - iip;  
@@ -3603,7 +3587,7 @@ void s_partition_function::compute_logZ_gradient ()
                     }
                     
         index_param += 3;           
-        index_should_be = structure_type_index("int11[0][3][3][3][0][3]");     
+        index_should_be = structure_type_index( (char *) "int11[0][3][3][3][0][3]");     
         if (index_param != index_should_be)
         {
             printf ("Index param after tstacki = %d, should be %d\n", index_param, index_should_be);
@@ -3660,13 +3644,13 @@ void s_partition_function::compute_logZ_gradient ()
                                                                     sprintf (type, "int11[%d][%d][%d][%d][%d][%d]", iinuc, jjnuc, kknuc, llnuc, mmnuc, nnnuc);
                                                                 else
                                                                     sprintf (type, "misc.internal11_basic_mismatch");
-                                                                tindex = structure_type_index (type);                                                            
+                                                                tindex = structure_type_index( (char *) type);                                                            
                                                                 GlogZ[tindex] += grad;
                                                             }        
                                                             else if (watson_crick(iinuc,jjnuc) && watson_crick(mmnuc,nnnuc) && kknuc==U && llnuc==U)
                                                             {
                                                                 sprintf (type, "int11[%d][%d][%d][%d][%d][%d]", iinuc, jjnuc, kknuc, llnuc, mmnuc, nnnuc);
-                                                                tindex = structure_type_index (type);
+                                                                tindex = structure_type_index( (char *) type);
                                                                 GlogZ[tindex] += grad;
                                                             }
                                                             else
@@ -3675,19 +3659,19 @@ void s_partition_function::compute_logZ_gradient ()
                                                                     sprintf (type, "misc.internal11_GG_mismatch");
                                                                 else
                                                                     sprintf (type, "misc.internal11_basic_mismatch");
-                                                                tindex = structure_type_index (type);
+                                                                tindex = structure_type_index( (char *) type);
                                                                 GlogZ[tindex] += grad;
                                                                                             
                                                                 if (has_AU_penalty(iinuc,jjnuc))
                                                                 {
                                                                     sprintf (type, "misc.internal_AU_closure");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;         
                                                                 }
                                                                 if (has_AU_penalty(mmnuc,nnnuc))
                                                                 {
                                                                     sprintf (type, "misc.internal_AU_closure");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                 }
                                                             }                                                                                                       
@@ -3732,13 +3716,13 @@ void s_partition_function::compute_logZ_gradient ()
                                                                         sprintf (type, "int11[%d][%d][%d][%d][%d][%d]", iinuc, jjnuc, kknuc, llnuc, mmnuc, nnnuc);
                                                                     else
                                                                         sprintf (type, "misc.internal11_basic_mismatch");
-                                                                    tindex = structure_type_index (type);                                                            
+                                                                    tindex = structure_type_index( (char *) type);                                                            
                                                                     GlogZ[tindex] += grad;
                                                                 }        
                                                                 else if (watson_crick(iinuc,jjnuc) && watson_crick(mmnuc,nnnuc) && kknuc==U && llnuc==U)
                                                                 {
                                                                     sprintf (type, "int11[%d][%d][%d][%d][%d][%d]", iinuc, jjnuc, kknuc, llnuc, mmnuc, nnnuc);
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                 }
                                                                 else
@@ -3747,19 +3731,19 @@ void s_partition_function::compute_logZ_gradient ()
                                                                         sprintf (type, "misc.internal11_GG_mismatch");
                                                                     else
                                                                         sprintf (type, "misc.internal11_basic_mismatch");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                                                 
                                                                     if (has_AU_penalty(iinuc,jjnuc))
                                                                     {
                                                                         sprintf (type, "misc.internal_AU_closure");
-                                                                        tindex = structure_type_index (type);
+                                                                        tindex = structure_type_index( (char *) type);
                                                                         GlogZ[tindex] += grad;  
                                                                     }
                                                                     if (has_AU_penalty(mmnuc,nnnuc))
                                                                     {
                                                                         sprintf (type, "misc.internal_AU_closure");
-                                                                        tindex = structure_type_index (type);
+                                                                        tindex = structure_type_index( (char *) type);
                                                                         GlogZ[tindex] += grad;
                                                                     }
                                                                 }                                                                                                       
@@ -3773,7 +3757,7 @@ void s_partition_function::compute_logZ_gradient ()
                                     } // end if (int11[i][j][k][l][m][n] < INF)
                                 }    // end int11
             index_param += 33;
-            index_should_be = structure_type_index("int21[1][2][0][0][1][2][0]");
+            index_should_be = structure_type_index( (char *) "int21[1][2][0][0][1][2][0]");
             if (index_param != index_should_be)
             {
                 printf ("Index param after int11 = %d, should be %d\n", index_param, index_should_be);
@@ -3827,7 +3811,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                                     sprintf (type, "misc.internal21_match");
                                                                 else
                                                                     sprintf (type, "int21[%d][%d][%d][%d][%d][%d][%d]", iinuc, jjnuc, kknuc, llnuc, mmnuc, nnnuc, oonuc);
-                                                                tindex = structure_type_index (type);
+                                                                tindex = structure_type_index( (char *) type);
                                                                 GlogZ[tindex] += grad;
                                                             }
                                                             else
@@ -3835,29 +3819,29 @@ void s_partition_function::compute_logZ_gradient ()
                                                                 if (can_pair(kknuc,llnuc) || can_pair(kknuc,oonuc))
                                                                 {
                                                                     sprintf (type, "misc.internal21_match");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                 }
                                                                 else
                                                                 {
                                                                     sprintf (type, "int21[%d][%d][%d][%d][%d][%d][%d]", C, G, kknuc, llnuc, C, G, oonuc);
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += 0.5 * grad;
                                                                     
                                                                     sprintf (type, "int21[%d][%d][%d][%d][%d][%d][%d]", G, C, kknuc, llnuc, G, C, oonuc);
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += 0.5 * grad;
                                                                 }    
                                                                 if (has_AU_penalty(iinuc,jjnuc))
                                                                 {
                                                                     sprintf (type, "misc.internal21_AU_closure");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                 }    
                                                                 if (has_AU_penalty(mmnuc,nnnuc))    
                                                                 {
                                                                     sprintf (type, "misc.internal21_AU_closure");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                 }    
                                                             }                                                                                                                                                    
@@ -3902,7 +3886,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                                     sprintf (type, "misc.internal21_match");
                                                                 else
                                                                     sprintf (type, "int21[%d][%d][%d][%d][%d][%d][%d]", iinuc, jjnuc, kknuc, llnuc, mmnuc, nnnuc, oonuc);
-                                                                tindex = structure_type_index (type);
+                                                                tindex = structure_type_index( (char *) type);
                                                                 GlogZ[tindex] += grad;
                                                             }
                                                             else
@@ -3910,29 +3894,29 @@ void s_partition_function::compute_logZ_gradient ()
                                                                 if (can_pair(kknuc,llnuc) || can_pair(kknuc,oonuc))
                                                                 {
                                                                     sprintf (type, "misc.internal21_match");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                 }
                                                                 else
                                                                 {
                                                                     sprintf (type, "int21[%d][%d][%d][%d][%d][%d][%d]", C, G, kknuc, llnuc, C, G, oonuc);
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += 0.5 * grad;
                                                                     
                                                                     sprintf (type, "int21[%d][%d][%d][%d][%d][%d][%d]", G, C, kknuc, llnuc, G, C, oonuc);
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += 0.5 * grad;
                                                                 }
                                                                 if (has_AU_penalty(iinuc,jjnuc))
                                                                 {
                                                                     sprintf (type, "misc.internal21_AU_closure");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                 }    
                                                                 if (has_AU_penalty(mmnuc,nnnuc))    
                                                                 {
                                                                     sprintf (type, "misc.internal21_AU_closure");
-                                                                    tindex = structure_type_index (type);
+                                                                    tindex = structure_type_index( (char *) type);
                                                                     GlogZ[tindex] += grad;
                                                                 }    
                                                             }                
@@ -3945,7 +3929,7 @@ void s_partition_function::compute_logZ_gradient ()
                                     } // end int21
                                     
             index_param += 54;                                
-            index_should_be = structure_type_index("int22[0][3][0][0][3][0][0][0]");                                
+            index_should_be = structure_type_index( (char *) "int22[0][3][0][0][3][0][0][0]");                                
             if (index_param != index_should_be)
             {
                 printf ("Index param after int21 = %d, should be %d\n", index_param, index_should_be);
@@ -3999,7 +3983,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                                     if ( (nnnuc==iinuc) && (mmnuc==jjnuc) && (ppnuc==kknuc) && (oonuc==llnuc) & watson_crick(iinuc,jjnuc) && !watson_crick(kknuc,llnuc))
                                                                     {
                                                                         sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", iinuc, jjnuc, kknuc, llnuc, mmnuc, nnnuc, oonuc, ppnuc);
-                                                                        tindex = structure_type_index (type);
+                                                                        tindex = structure_type_index( (char *) type);
                                                                         GlogZ[tindex] += grad;
                                                                     }
                                                                 
@@ -4012,23 +3996,23 @@ void s_partition_function::compute_logZ_gradient ()
                                                                     if (watson_crick(kknuc,llnuc) || watson_crick(oonuc,ppnuc))
                                                                     {
                                                                         sprintf (type, "misc.internal22_match");
-                                                                        tindex = structure_type_index (type);
+                                                                        tindex = structure_type_index( (char *) type);
                                                                         GlogZ[tindex] += grad;
                                                                     }
                                                                     else if ( ((iinuc==G && jjnuc==U) || (iinuc==U && jjnuc==G) || (mmnuc==G && nnnuc==U) || (mmnuc==U && nnnuc==G)) &&  
                                                                             (nnnuc2==iinuc2 && mmnuc2==jjnuc2 && ppnuc==kknuc && oonuc==llnuc))  // the UG closing pairs are the same as UA
                                                                     {
                                                                         sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", iinuc2, jjnuc2, kknuc, llnuc, mmnuc2, nnnuc2, oonuc, ppnuc);
-                                                                        tindex = structure_type_index (type);
+                                                                        tindex = structure_type_index( (char *) type);
                                                                         GlogZ[tindex] += grad;
                                                                     }                
                                                                     else if (!(nnnuc==iinuc && mmnuc==jjnuc && ppnuc==kknuc && oonuc==llnuc))   // was already filled above
                                                                     {
                                                                         sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", iinuc2, jjnuc2, kknuc, llnuc, jjnuc2, iinuc2, llnuc, kknuc);
-                                                                        tindex = structure_type_index (type);
+                                                                        tindex = structure_type_index( (char *) type);
                                                                         GlogZ[tindex] += 0.5 * grad;
                                                                         sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", nnnuc2, mmnuc2, ppnuc, oonuc, mmnuc2, nnnuc2, oonuc, ppnuc);
-                                                                        tindex = structure_type_index (type);
+                                                                        tindex = structure_type_index( (char *) type);
                                                                         GlogZ[tindex] += 0.5 * grad;
                                                                         
                                                                         int result = check_stability_and_size (kknuc, llnuc, oonuc, ppnuc);                    
@@ -4050,7 +4034,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                                                 printf ("ERROR: result %d for k=%d, l=%d, o=%d, p=%d, ABORT!\n", result, kknuc, llnuc, oonuc, ppnuc);
                                                                                 exit(1);
                                                                         }
-                                                                        tindex = structure_type_index (type);
+                                                                        tindex = structure_type_index( (char *) type);
                                                                         GlogZ[tindex] += grad;
                                                                     }                                                                
                                                                 }    
@@ -4093,7 +4077,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                                         if ( (nnnuc==iinuc) && (mmnuc==jjnuc) && (ppnuc==kknuc) && (oonuc==llnuc) & watson_crick(iinuc,jjnuc) && !watson_crick(kknuc,llnuc))
                                                                         {
                                                                             sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", iinuc, jjnuc, kknuc, llnuc, mmnuc, nnnuc, oonuc, ppnuc);
-                                                                            tindex = structure_type_index (type);
+                                                                            tindex = structure_type_index( (char *) type);
                                                                             GlogZ[tindex] += grad;
                                                                         }
                                                                     
@@ -4106,23 +4090,23 @@ void s_partition_function::compute_logZ_gradient ()
                                                                         if (watson_crick(kknuc,llnuc) || watson_crick(oonuc,ppnuc))
                                                                         {
                                                                             sprintf (type, "misc.internal22_match");
-                                                                            tindex = structure_type_index (type);
+                                                                            tindex = structure_type_index( (char *) type);
                                                                             GlogZ[tindex] += grad;
                                                                         }
                                                                         else if ( ((iinuc==G && jjnuc==U) || (iinuc==U && jjnuc==G) || (mmnuc==G && nnnuc==U) || (mmnuc==U && nnnuc==G)) &&  
                                                                                 (nnnuc2==iinuc2 && mmnuc2==jjnuc2 && ppnuc==kknuc && oonuc==llnuc))  // the UG closing pairs are the same as UA
                                                                         {
                                                                             sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", iinuc2, jjnuc2, kknuc, llnuc, mmnuc2, nnnuc2, oonuc, ppnuc);
-                                                                            tindex = structure_type_index (type);
+                                                                            tindex = structure_type_index( (char *) type);
                                                                             GlogZ[tindex] += grad;
                                                                         }                
                                                                         else if (!(nnnuc==iinuc && mmnuc==jjnuc && ppnuc==kknuc && oonuc==llnuc))   // was already filled above
                                                                         {
                                                                             sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", iinuc2, jjnuc2, kknuc, llnuc, jjnuc2, iinuc2, llnuc, kknuc);
-                                                                            tindex = structure_type_index (type);
+                                                                            tindex = structure_type_index( (char *) type);
                                                                             GlogZ[tindex] += 0.5 * grad;
                                                                             sprintf (type, "int22[%d][%d][%d][%d][%d][%d][%d][%d]", nnnuc2, mmnuc2, ppnuc, oonuc, mmnuc2, nnnuc2, oonuc, ppnuc);
-                                                                            tindex = structure_type_index (type);
+                                                                            tindex = structure_type_index( (char *) type);
                                                                             GlogZ[tindex] += 0.5 * grad;
                                                                             
                                                                             int result = check_stability_and_size (kknuc, llnuc, oonuc, ppnuc);                    
@@ -4144,7 +4128,7 @@ void s_partition_function::compute_logZ_gradient ()
                                                                                     printf ("ERROR: result %d for k=%d, l=%d, o=%d, p=%d, ABORT!\n", result, kknuc, llnuc, oonuc, ppnuc);
                                                                                     exit(1);
                                                                             }
-                                                                            tindex = structure_type_index (type);
+                                                                            tindex = structure_type_index( (char *) type);
                                                                             GlogZ[tindex] += grad;
                                                                         }
                                                                     }    
@@ -4158,7 +4142,7 @@ void s_partition_function::compute_logZ_gradient ()
                                         }    // end int11
                                             
             index_param += 53;                                    
-            index_should_be = structure_type_index("dangle_top[0][3][0]");                                                
+            index_should_be = structure_type_index( (char *) "dangle_top[0][3][0]");
             if (index_param != index_should_be)
             {
                 printf ("Index param after int22 = %d, should be %d\n", index_param, index_should_be);
@@ -4247,10 +4231,6 @@ void s_partition_function::compute_logZ_gradient ()
                                     int iip2l = index[ii+2]+l-ii-2;
                                     int lp2jjm1 = index[l+2]+jj-1-l-2;
                                     int lp1jjm1 = index[l+1]+jj-1-l-1;
-                                    int lp2jjm2 = index[l+2]+jj-2-l-2;
-                                    int lp1jjm2 = index[l+1]+jj-2-l-1;        
-                                    int lp2jjm3 = index[l+2]+jj-3-l-2;
-                                    int lp1jjm3 = index[l+1]+jj-3-l-1;                
                                     temp += up[iip2l] *
                                             exp_AUpenalty (ii+2, l) *
                                             ( u1_ip_jp[lp1jjm1]      // [.(...)(.-..)] or [.(...)(.-..).]                    
@@ -4261,10 +4241,7 @@ void s_partition_function::compute_logZ_gradient ()
                                 }
                                 for (h=ii+3; h < jj-TURN-2; h++)    // case (....(...)--(--)-)
                                 {
-                                    int hjj = index[h]+jj-h;
                                     int hjjm1 = index[h] + jj-1 -h;
-                                    int hjjm2 = index[h] + jj-2 -h;
-                                    int hjjm3 = index[h] + jj-3 -h;
                                     temp += EXPC[h-ii-2] *
                                         ( s2_jp[hjjm1]    // --(...)) or --(...).) 
                                           + s2_ju[hjjm1]* exp_dangle5(ii,jj,jj-1));    // --(...)..)
@@ -4313,15 +4290,7 @@ void s_partition_function::compute_logZ_gradient ()
                                     if (ii < h - TURN -2)    // only now we can have a branch to the left
                                     {        
                                         int iip1hm1 = index[ii+1] + h-1 - (ii+1);
-                                        int iip1hm2 = index[ii+1] + h-2 - (ii+1);
-                                        int iip1hm3 = index[ii+1] + h-3 - (ii+1);
                                         int iip2hm1 = index[ii+2] + h-1 - (ii+2);
-                                        int iip2hm2 = index[ii+2] + h-2 - (ii+2);
-                                        int iip2hm3 = index[ii+2] + h-3 - (ii+2);
-                                        int iip3hm1 = index[ii+3] + h-1 - (ii+3);
-                                        int iip3hm2 = index[ii+3] + h-2 - (ii+3);
-                                        int iip3hm3 = index[ii+3] + h-3 - (ii+3);
-                                        int iilp1 = index[ii] + l+1 - ii;
                                         // removed term1, no dangling end of interest
                                         
                                         temp +=
@@ -4370,7 +4339,7 @@ void s_partition_function::compute_logZ_gradient ()
                     index_param++;
                 }
             }
-    index_should_be = structure_type_index("dangle_bot[0][3][0]");            
+    index_should_be = structure_type_index( (char *) "dangle_bot[0][3][0]");            
     if (index_param != index_should_be)
     {
         printf ("Index param after dangle_top = %d, should be %d\n", index_param, index_should_be);
@@ -4520,14 +4489,7 @@ void s_partition_function::compute_logZ_gradient ()
                                     if (ii < h - TURN -2)    // only now we can have a branch to the left
                                     {        
                                         int iip1hm1 = index[ii+1] + h-1 - (ii+1);
-                                        int iip1hm2 = index[ii+1] + h-2 - (ii+1);
-                                        int iip1hm3 = index[ii+1] + h-3 - (ii+1);
                                         int iip2hm1 = index[ii+2] + h-1 - (ii+2);
-                                        int iip2hm2 = index[ii+2] + h-2 - (ii+2);
-                                        int iip2hm3 = index[ii+2] + h-3 - (ii+2);
-                                        int iip3hm1 = index[ii+3] + h-1 - (ii+3);
-                                        int iip3hm2 = index[ii+3] + h-2 - (ii+3);
-                                        int iip3hm3 = index[ii+3] + h-3 - (ii+3);
                                         int iilp1 = index[ii] + l+1 - ii;
                                         PFTYPE term1 = 0.0;
                                         
@@ -4589,7 +4551,7 @@ void s_partition_function::compute_logZ_gradient ()
                     index_param++;
                 }
             }
-    index_should_be = structure_type_index("internal_penalty_by_size[4]");            
+    index_should_be = structure_type_index( (char *) "internal_penalty_by_size[4]");            
     if (index_param != index_should_be)
     {
         printf ("Index param after dangle_bot = %d, should be %d\n", index_param, index_should_be);
@@ -4672,7 +4634,7 @@ void s_partition_function::compute_logZ_gradient ()
 
     if (!ignore_multi)
     {
-        int sizeindex = structure_type_index ("misc.multi_offset");
+        int sizeindex = structure_type_index( (char *) "misc.multi_offset");
         for (ii = 0; ii < seqlen; ii++)
         {
             // removed TURN on Apr 27, 2008      
@@ -4688,7 +4650,7 @@ void s_partition_function::compute_logZ_gradient ()
             }
         }
         
-        sizeindex = structure_type_index ("misc.multi_helix_penalty");
+        sizeindex = structure_type_index( (char *) "misc.multi_helix_penalty");
         // took the multi-loop contribution of p, and upm, like above
         // taken from compute_upm and compute_p
         PFTYPE temp;
@@ -4745,14 +4707,7 @@ void s_partition_function::compute_logZ_gradient ()
                         }
                         else
                         {
-                            int ip1hm2 = index[i+1] + h-2 - (i+1);
-                            int ip1hm3 = index[i+1] + h-3 - (i+1);
                             int ip2hm1 = index[i+2] + h-1 - (i+2);
-                            int ip2hm2 = index[i+2] + h-2 - (i+2);
-                            int ip2hm3 = index[i+2] + h-3 - (i+2);
-                            int ip3hm1 = index[i+3] + h-1 - (i+3);
-                            int ip3hm2 = index[i+3] + h-2 - (i+3);
-                            int ip3hm3 = index[i+3] + h-3 - (i+3);
                             int ilp1 = index[i] + l+1 - i;
                             PFTYPE term1 = 0.0;
                             if (up[ilp1] != 0)
@@ -4818,11 +4773,9 @@ void s_partition_function::compute_logZ_gradient ()
             }
         }
                     
-        sizeindex = structure_type_index ("misc.multi_free_base_penalty");
+        sizeindex = structure_type_index( (char *) "misc.multi_free_base_penalty");
         // traverse the sequence from left to right         
         int ij, hl;
-        int ip1l, ip2l, lp2jm1, lp1jm1, lp2jm2, lp1jm2, lp2jm3, lp1jm3, hj;
-        PFTYPE upm_temp;
     
         // the first free bases
         for (h=0; h < seqlen; h++)   
@@ -4888,15 +4841,8 @@ void s_partition_function::compute_logZ_gradient ()
                         else
                         {
                             int ip1k = index[i+1] + k - (i+1);                    
-                            int ip1km2 = index[i+1] + k-2 - (i+1);
                             int ip2k = index[i+2] + k - (i+2);
-                            int ip2km1 = index[i+2] + k-1 - (i+2);
-                            int ip2km2 = index[i+2] + k-2 - (i+2);
                             int kjm1 = index[k] + j-1 - (k);
-                            int kjm2 = index[k] + j-2 - (k);
-                            int kjm3 = index[k] + j-3 - (k);                    
-                            int kp1jm2 = index[k+1] + j-2 - (k+1);
-                            int kp1jm3 = index[k+1] + j-3 - (k+1);
                             // first situation (---)-.k---
                                             
                             temp +=
@@ -4977,7 +4923,7 @@ int s_partition_function::correct_gradient ()
 // return 1 if it is correct, 0 otherwise
 {
     int index_param;
-    int i, j, k, l, m, n, o, p;
+    int i;
     index_param = 0;
     int correct = 1;
  

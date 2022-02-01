@@ -137,7 +137,6 @@ void print_stack_equation_dangling()
 void print_int22_tstacki()
 // prints the int22 and tstacki energies
 {
-    int met = 0;
     int i,j,k,l,m,n,o,p;
     for (i=0; i < NUCL; i++)            
         for (j=0; j < NUCL; j++)    
@@ -164,7 +163,6 @@ void print_int22_tstacki()
 void print_int22()
 // prints the int22 and tstacki energies
 {
-    int met = 0;
     int i,j,k,l,m,n,o,p;
     for (i=0; i < NUCL; i++)            
         for (j=0; j < NUCL; j++)
@@ -219,7 +217,7 @@ void test_int22_differences()
     //save_parameters("turner_parameters_fmnew.txt");
     num_params = create_string_params();
 
-    fill_data_structures_with_new_parameters("turner_parameters_fmnew.txt");
+    fill_data_structures_with_new_parameters( (char *) "turner_parameters_fmnew.txt");
 
     for (i=0; i < NUCL; i++)
         for (j=0; j < NUCL; j++)
@@ -256,7 +254,7 @@ void test_tstacki_differences()
     //save_parameters("turner_parameters_fmnew.txt");
     num_params = create_string_params();
 
-    fill_data_structures_with_new_parameters("turner_parameters_fmnew.txt");
+    fill_data_structures_with_new_parameters( (char *) "turner_parameters_fmnew.txt");
 
     for (i=0; i < NUCL; i++)
         for (j=0; j < NUCL; j++)
@@ -286,7 +284,7 @@ void test_int21_differences()
                                 sint[i][j][k][l][m][n][o] = int21[i][j][k][l][m][n][o];
                             }
 
-    fill_data_structures_with_new_parameters("turner_parameters_fmnew.txt");
+    fill_data_structures_with_new_parameters( (char *) "turner_parameters_fmnew.txt");
 
     for (i=0; i < NUCL; i++)
         for (j=0; j < NUCL; j++)
@@ -307,7 +305,7 @@ void test_int11_differences()
 // they are the same as turner's, within 0.05 kcal/mol
 {
     PARAMTYPE sint  [NUCL] [NUCL] [NUCL] [NUCL] [NUCL] [NUCL];
-    int i,j,k,l,m,n,o;
+    int i,j,k,l,m,n;
     for (i=0; i < NUCL; i++)
         for (j=0; j < NUCL; j++)
             for (k=0; k < NUCL; k++)
@@ -319,7 +317,7 @@ void test_int11_differences()
                             int11[i][j][k][l][m][n] = INF;
                         }
 
-    fill_data_structures_with_new_parameters("turner_parameters_fmnew.txt");
+    fill_data_structures_with_new_parameters( (char *) "turner_parameters_fmnew.txt");
 
     for (i=0; i < NUCL; i++)
         for (j=0; j < NUCL; j++)
@@ -502,7 +500,7 @@ void count_AU_penalty (int base_i, int base_j, double *counter)
     if ((base_i != C || base_j != G) &&
         (base_i != G || base_j != C))      
       {
-        index = structure_type_index ("misc.terminal_AU_penalty");
+        index = structure_type_index( (char *) "misc.terminal_AU_penalty");
         counter[index]++;
       }
 }
@@ -522,7 +520,7 @@ void count_dangling_energy (int *sequence, char *structure, int link, int i1, in
     char type[100];
     int index_top, index_bot;
     int first_index;    // first index should be dangle_top[0][3][0]
-    first_index = structure_type_index ("dangle_top[0][3][0]");
+    first_index = structure_type_index( (char *) "dangle_top[0][3][0]");
     
     d_top = 0;
     d_bot = 0;
@@ -638,7 +636,7 @@ void count_dangling_energy_left (int *sequence, char *structure, int link, int i
     d_top = 0;
     d_bot = 0;
     int first_index;    // first index should be dangle_top[0][3][0]
-    first_index = structure_type_index ("dangle_top[0][3][0]");
+    first_index = structure_type_index( (char *) "dangle_top[0][3][0]");
 
     // this will be used in multi-loops.
     // add the dangle_top, even if it is positive
@@ -731,7 +729,7 @@ void count_dangling_energy_right (int *sequence, char *structure, int link, int 
     char type[100];
     int index_top, index_bot;
     int first_index;    // first index should be dangle_top[0][3][0]
-    first_index = structure_type_index ("dangle_top[0][3][0]");
+    first_index = structure_type_index( (char *) "dangle_top[0][3][0]");
     
     d_top = 0;
     d_bot = 0;
@@ -1167,7 +1165,7 @@ double count_types (int link, int *sequence, char *csequence, char *structure, c
             {    
                 // add intermolecular initiation
                 misc_energy = misc.intermolecular_initiation;
-                index = structure_type_index ("misc.intermolecular_initiation");
+                index = structure_type_index( (char *) "misc.intermolecular_initiation");
                 if (debug)
                     printf ("%d intermol \t- add energy %6d\n", i, misc.intermolecular_initiation);                
                 if (counter != NULL)    counter[index]++;
@@ -1262,7 +1260,7 @@ double count_types (int link, int *sequence, char *csequence, char *structure, c
             {
 //                printf ("Regular ML\n");
               // consider the contribution of unpaired bases  
-              index = structure_type_index ("misc.multi_free_base_penalty");
+              index = structure_type_index( (char *) "misc.multi_free_base_penalty");
                 for (l=i+1; l < f[i].bri[0]; l++)
                   {
                     misc_energy += misc.multi_free_base_penalty;
@@ -1284,9 +1282,9 @@ double count_types (int link, int *sequence, char *csequence, char *structure, c
                 // done considering the contribution of unpaired bases  
                 misc_energy += misc.multi_offset;
                 misc_energy += misc.multi_helix_penalty * (f[i].num_branches + 1);
-                index = structure_type_index ("misc.multi_offset");
+                index = structure_type_index( (char *) "misc.multi_offset");
                 if (counter != NULL)    counter[index]++;
-                index = structure_type_index ("misc.multi_helix_penalty");
+                index = structure_type_index( (char *) "misc.multi_helix_penalty");
                 if (counter != NULL)    counter[index]+= f[i].num_branches + 1;
             }
             /*
@@ -1399,7 +1397,7 @@ double get_feature_counts_restricted (char *sequence, char *structure, double *c
     if (ignore_dangles)     no_dangling_ends = 1;
     else                    no_dangling_ends = 0;
     ignore_AU_penalty = ignore_first_AU_penalty;
-    return count_each_structure_type (sequence, structure, "", c, f, reset_c);
+    return count_each_structure_type(sequence, structure,  (char *) "", c, f, reset_c);
 }
 
 
@@ -1493,7 +1491,7 @@ double count_each_structure_type (char *sequence, char *structure, char *restric
 // If reset is 1, then counter will be reset to 0 first, otherwise, the values will be added to the current value of counter
 // returns the energy value
 {
-    int i, j;
+    int i;
     str_features *f;
     int *int_sequence;
     char *actual_seq;
@@ -1557,14 +1555,14 @@ double count_each_structure_type (char *sequence, char *structure, char *restric
     }
     
     nb_nucleotides = strlen(actual_seq);    
-    if ((f = new str_features[nb_nucleotides]) == NULL) giveup ("Cannot allocate memory", "str_features");    
+    if ((f = new str_features[nb_nucleotides]) == NULL) giveup( (char *) "Cannot allocate memory", (char *) "str_features");    
     // detect the structure features
     // this function call should be the same for single sequence of duplex
     //printf ("Structure:\n%s\n", structure);
     detect_structure_features (actual_str, f);
     
     int_sequence = new int[nb_nucleotides];
-    if (int_sequence == NULL) giveup ("Cannot allocate memory", "energy");
+    if (int_sequence == NULL) giveup( (char *) "Cannot allocate memory", (char *) "energy");
     for (i=0; i < nb_nucleotides; i++) int_sequence[i] = nuc_to_int(actual_seq[i]);
     // count_types adds the free value at the end of counter. I don't want to look through all those functions, so I'm just hacking it here
 
@@ -2283,12 +2281,7 @@ int traverse_features_and_do_work (char *calling_function, PARAMTYPE *array, cha
     int start;  // used in penalty_by_size
     int i, j, k, l, m, n, o, p;
     index = 0;
-    int job;        // used to figure out what kind of work to do; faster to use int
-    int ip, jp;
-    char type[100];
-    int tindex;
-    int kalt;   // alternative to k
-    
+    int job = 0;        // used to figure out what kind of work to do; faster to use int
     
     // need for save_parameters
     FILE *file;
@@ -2306,7 +2299,7 @@ int traverse_features_and_do_work (char *calling_function, PARAMTYPE *array, cha
     {
         if ((file = fopen (filename, "w")) == NULL)
         {
-            giveup ("Cannot open file", filename);
+            giveup( (char *) "Cannot open file", filename);
         }    
     }
   
@@ -4128,7 +4121,7 @@ int create_string_params ()
   // Mirela: Dec 18, 2007: added a more human readable version of string_params
   // TODO: do I still need string_params? Or can I have one set of strings, that's human readable? Probably not, except that I use them in several places
 {
-    return traverse_features_and_do_work ("create_string_params", NULL, NULL);
+    return traverse_features_and_do_work( (char *) "create_string_params", NULL, NULL);
 }
 
 
@@ -4232,7 +4225,7 @@ void fill_data_structures_with_new_parameters (char *filename)
     //printf ("FILENAME: %s\n", filename);
     if ((file = fopen (filename, "r")) == NULL)
     {
-        giveup ("Cannot open file", filename);
+        giveup( (char *) "Cannot open file", filename);
     }
     
     index = 0;
@@ -4936,13 +4929,12 @@ void save_paramtypes (char *filename)
 // PRE: call create_string_params ()
 // save all parameter types in the given file
 {
-    int index;
-    int i, j, k, l, m, n, o, p;
+    int i;
     FILE *file;
 
     if ((file = fopen (filename, "w")) == NULL)
     {
-        giveup ("Cannot open file", filename);
+        giveup( (char *) "Cannot open file", filename);
     }
     for (i=0; i < num_params; i++)
     {
@@ -4958,7 +4950,7 @@ void save_parameters (char *filename)
   // Mirela: Dec 16, 2003
   // save all parameters in the given file
 {
-    traverse_features_and_do_work ("save_parameters", NULL, filename);
+    traverse_features_and_do_work( (char *) "save_parameters", NULL, filename);
 }
 
 
@@ -4966,7 +4958,7 @@ void save_parameters_in_array (PARAMTYPE *array)
 // PRE: parameters have been read
 // save all parameters in the given array
 {
-    traverse_features_and_do_work ("save_parameters_in_array", array, NULL);
+    traverse_features_and_do_work( (char *) "save_parameters_in_array", array, NULL);
 }
 
 
@@ -5430,7 +5422,7 @@ void compute_gradient_f_smart (char *input_file, PFTYPE *f_gradient)
             continue;
         
         //printf ("Seq: |%s|\nStr: |%s|\nRes: |%s|\n", sequence, real_structure, restricted);
-        count_each_structure_type (sequence, real_structure, "", counter, f, 1);
+        count_each_structure_type(sequence, real_structure, (char *) "", counter, f, 1);
         simfold_gradient_smart (sequence, logZ_gradient);        
         for (i = 0; i < num_params; i++)
         {
@@ -5484,7 +5476,7 @@ PFTYPE compute_f_and_gradient_f_smart (char *input_file, PFTYPE *f_gradient)
             continue;
         
         //printf ("Seq: |%s|\nStr: |%s|\nRes: |%s|\n", sequence, real_structure, restricted);
-        count_each_structure_type (sequence, real_structure, "", counter, f, 1);
+        count_each_structure_type(sequence, real_structure, (char *) "", counter, f, 1);
         energy = free_energy_simfold (sequence, real_structure); 
         Z = simfold_f_and_gradient_smart (sequence, NULL, logZ_gradient);
         f += 1.0*beta*energy + log(Z);
@@ -5811,7 +5803,6 @@ int generate_structure_withbb (char *sequence, char *known_structure, char *give
     char restricted[MAXSLEN];
     int seqlen, i, numstr;   
     int bb_index;
-    double counter_other[MAXNUMPARAMS];
     double energies[MAXSUBSTR];
     double known_fe;
     int considered;
@@ -5862,7 +5853,7 @@ int generate_structure_withbb (char *sequence, char *known_structure, char *give
                         position_right = strstr (position_right+1, bbseq_right[bb_index]);
                         continue;
                     }
-                    for (i=0; i < position_right - position_left - strlen (bbstr_left[bb_index]); i++)
+                    for (i=0; (unsigned long) i < position_right - position_left - strlen (bbstr_left[bb_index]); i++)
                         restricted[position_left - sequence + strlen (bbstr_left[bb_index]) + i] = '.';
                 }
                 if (strstr (string_params[bb_index], "tstacki") != NULL)
@@ -5876,7 +5867,7 @@ int generate_structure_withbb (char *sequence, char *known_structure, char *give
                     // we have to find another tstacki inside, at the right distance
                     // the second stacki can be any stacki, not only the current one
                     int first, last, k;
-                    find_indeces_of_bbtypes (first, last, "tstacki", num_params);
+                    find_indeces_of_bbtypes(first, last, (char *) "tstacki", num_params);
                     // try about 20 times
                     for (k=0; k < 20; k++)
                     {
@@ -6263,7 +6254,6 @@ int generate_structure_withbb_many_thresholds (char *sequence, char structures[]
     char restricted[MAXSLEN];
     int seqlen, i, numstr;   
     int bb_index;
-    double counter_other[MAXNUMPARAMS];
     double f;
     
     seqlen = strlen(sequence);
@@ -6303,7 +6293,7 @@ int generate_structure_withbb_many_thresholds (char *sequence, char structures[]
                         position_right = strstr (position_right+1, bbseq_right[bb_index]);
                         continue;
                     }
-                    for (i=0; i < position_right - position_left - strlen (bbstr_left[bb_index]); i++)
+                    for (i=0; (unsigned long) i < position_right - position_left - strlen (bbstr_left[bb_index]); i++)
                         restricted[position_left - sequence + strlen (bbstr_left[bb_index]) + i] = '.';
                 }
                 if (strstr (string_params[bb_index], "tstacki") != NULL)
@@ -6317,7 +6307,7 @@ int generate_structure_withbb_many_thresholds (char *sequence, char structures[]
                     // we have to find another tstacki inside, at the right distance
                     // the second stacki can be any stacki, not only the current one
                     int first, last, k;
-                    find_indeces_of_bbtypes (first, last, "tstacki", num_params);
+                    find_indeces_of_bbtypes(first, last, (char *) "tstacki", num_params);
                     // try about 20 times
                     for (k=0; k < 20; k++)
                     {
@@ -6420,7 +6410,6 @@ void search_bb (char *sequence, double *old_counts, int threshold, int num_param
     char restricted[MAXSLEN];
     int seqlen, i, numstr;   
     int bb_index;
-    double counter_other[MAXNUMPARAMS];
     
     seqlen = strlen(sequence);
     numstr = 0;
@@ -6457,7 +6446,7 @@ void search_bb (char *sequence, double *old_counts, int threshold, int num_param
                         position_right = strstr (position_right+1, bbseq_right[bb_index]);
                         continue;
                     }
-                    for (i=0; i < position_right - position_left - strlen (bbstr_left[bb_index]); i++)
+                    for (i=0; (unsigned long) i < position_right - position_left - strlen (bbstr_left[bb_index]); i++)
                         restricted[position_left - sequence + strlen (bbstr_left[bb_index]) + i] = '.';
                 }
                 if (strstr (string_params[bb_index], "tstacki") != NULL)
@@ -6471,7 +6460,7 @@ void search_bb (char *sequence, double *old_counts, int threshold, int num_param
                     // we have to find another tstacki inside, at the right distance
                     // the second stacki can be any stacki, not only the current one
                     int first, last, k;
-                    find_indeces_of_bbtypes (first, last, "tstacki", num_params);
+                    find_indeces_of_bbtypes(first, last, (char *) "tstacki", num_params);
                     // try about 20 times
                     for (k=0; k < 20; k++)
                     {
@@ -7843,8 +7832,6 @@ void fill_similarity_rule_with_optical_melting_reference (char *xml_filename)
     
     int k;
     k = 0;
-    double margin;
-    int counter = 0;   
      
     while (!feof (xml))
     {    
@@ -7893,5 +7880,5 @@ void fill_similarity_rule_with_optical_melting_reference (char *xml_filename)
 
 void fill_similarity_rules ()
 {
-    traverse_features_and_do_work ("fill_similarity_rules", NULL, NULL);
+    traverse_features_and_do_work( (char *) "fill_similarity_rules", NULL, NULL);
 }

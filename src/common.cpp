@@ -677,7 +677,7 @@ void replace_str_piece (char *sequence, int position, char *seq)
 // POST: In sequence, at position, replace what is was by seq
 {
     int i;
-    for (i = 0; i < strlen(seq); i++)
+    for (i = 0; i < (int) strlen(seq); i++)
         sequence[position+i] = seq[i];
 }
 

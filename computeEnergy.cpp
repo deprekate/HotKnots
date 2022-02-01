@@ -66,7 +66,7 @@ void parameter_init(char* argv0)
     // call init_data only once for the same dna_or_rna and same temperature
     // if one of them changes, call init_data again (see below)
     init_data(argv0, config_file, dna_or_rna, temperature);
-    fill_data_structures_with_new_parameters ("./params/turner_parameters_fm363_constrdangles.txt");
+    fill_data_structures_with_new_parameters( (char *) "./params/turner_parameters_fm363_constrdangles.txt");
 
     init_dataPK(argv0, config_filePK, dna_or_rna, temperature);
 

@@ -56,10 +56,10 @@ extern void PlotRna(char* seqName, char *sequence, short *structure, char *filen
 
 #define PRIVATE static
 
-static char  scale1[] = "....,....1....,....2....,....3....,....4";
-static char  scale2[] = "....,....5....,....6....,....7....,....8";
+//static char  scale1[] = "....,....1....,....2....,....3....,....4";
+//static char  scale2[] = "....,....5....,....6....,....7....,....8";
 
-PRIVATE void usage(void);
+//PRIVATE void usage(void);
 
 double hotknots_DP_name(char *seq, char *structure, char* fileName)
 // fileName: input - does not include path, just the name of the file without extension (sequence name)

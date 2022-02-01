@@ -161,7 +161,7 @@ void read_tloop_file (char *filename, hairpin_tloop tloop[], int &nb_loops)
             continue;
         }
         sscanf (buffer, "%s%s", tloop[i].seq, energy);
-        for (j=0; j < strlen(tloop[i].seq); j++)
+        for (j=0; j < (int) strlen(tloop[i].seq); j++)
             tloop[i].seq[j] = toupper(tloop[i].seq[j]);
         tloop[i].energy = ascii_to_param_type(energy);
         fgets (buffer, sizeof(buffer), file);
