@@ -2,6 +2,7 @@
 //#include <limits.h>
 #include <Python.h>
 
+extern int run( const char *string, char *currentModel, char *paramsFile);
 
 typedef struct {
 	PyObject_HEAD
@@ -75,7 +76,7 @@ static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
 	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "s|ss", kwlist, &string, &model, &params)){
 		return NULL;
 	}
-	
+	run("UUUGCCCUGAAACUGGCGCGUGAGAUGGGGCGACCCGACUGGCGUGCCAU", "CC", "params/parameters_DP09.txt");	
 	return Py_BuildValue("[sf]", "string", -100.0);
 }
 
