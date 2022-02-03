@@ -83,7 +83,7 @@ void read_configuration_file (char *filename)
     int i;
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "1Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     while (!feof(file))
@@ -119,7 +119,7 @@ void read_loop_file (char *filename, PARAMTYPE internal_penalty_by_size[],
     char internal[10], bulge[10], hairpin[10];
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "2Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     while (!feof(file))
@@ -150,7 +150,7 @@ void read_tloop_file (char *filename, hairpin_tloop tloop[], int &nb_loops)
     i = 0;
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "3Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     while (!feof(file))
@@ -215,7 +215,7 @@ void read_int11_file (char *filename, PARAMTYPE int11[][NUCL][NUCL][NUCL][NUCL][
 
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "4Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     while (!feof(file))
@@ -324,7 +324,7 @@ void read_int21_file (char *filename, PARAMTYPE int21[][NUCL][NUCL][NUCL][NUCL][
 
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "5Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     while (!feof(file))
@@ -431,7 +431,7 @@ void read_int22_file (char *filename, PARAMTYPE int22[][NUCL][NUCL][NUCL][NUCL][
     
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "6Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     i = 0; ip = 0; j = 0; jp = 0;
@@ -492,7 +492,6 @@ void read_int22_file (char *filename, PARAMTYPE int22[][NUCL][NUCL][NUCL][NUCL][
 
 }
 
-
 void read_stack_file (char *filename, PARAMTYPE stack[][NUCL][NUCL][NUCL])
 // PRE:  filename is the file that contains the stacked pairs energy data for DNA    
 // POST: the values are stored in the 4-D array stack
@@ -506,7 +505,7 @@ void read_stack_file (char *filename, PARAMTYPE stack[][NUCL][NUCL][NUCL])
     i=0; j=0; ii=0; jj=0;       
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "7Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     while (!feof(file))
@@ -570,7 +569,7 @@ void read_dangle_file (char *filename, PARAMTYPE dangle_top[][NUCL][NUCL], PARAM
     int counter;
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "8Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     i = 0;
@@ -670,7 +669,7 @@ void read_sequence_file (char *filename, char *sequence)
     empty_string (sequence);
     if ((file = fopen (filename, "r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "9Cannot open file", filename);
     }
     fgets (buffer, sizeof(buffer), file);
     while (!feof(file))
@@ -700,7 +699,7 @@ void read_miscloop_file (char *filename, miscinfo &misc)
     char  v1[10],  v2[10],  v3[10],  v4[10];
     if ((file = fopen (filename,"r")) == NULL)
     {
-        giveup ( (char *) "Cannot open file", filename);
+        giveup ( (char *) "10Cannot open file", filename);
     }
 
     fgets (buffer, sizeof(buffer), file);
@@ -865,8 +864,7 @@ void calculate_energies (double temp)
     #endif
 }
 
-//void init_data (char *config_file, int what, double temperature)
-void init_data(char *arg, char *config_file, int what, double temperature)
+void init_data (char *config_file, int what, double temperature)
 // the function that must be called by the main program to read data files
 // PRE:  None
 // POST: Read all data and configuration files
@@ -884,89 +882,12 @@ void init_data(char *arg, char *config_file, int what, double temperature)
     char int21_enthalpy_filename[200], int22_enthalpy_filename[200];
     char miscloop_enthalpy_filename[200], dangle_enthalpy_filename[200];
     char triloop_enthalpy_filename[200];
-    char conf[200];
     
     // Added on Mar 19, 2008
     char special_hl_energy37_filename[200];
     
     // configuration file
     // first find the path to params
-    int i;
-    int len;
-    int index;
-    char path[200];
-    char separator;
-    char config_dir[200];
-    
-    len = strlen(arg);
-    index = -1;    
-    separator = '/';
-
-    strcpy (path, "");
-    for (i = len; i >=0; i--)
-    {
-        // make it work on Linux 
-        if (arg[i] == '/')
-        {
-            separator = '/';
-            index = i;
-            break;
-        }
-        // make it work on Windows  
-        else if (arg[i] == '\\')
-        {
-            separator = '\\';
-            index = i;
-            break;
-        }
-    }
-    if (index > -1)
-	{
-		for (i=0; i < index+1; i++)
-			path[i] = arg[i];
-		path[i] = '\0';
-	}
-
-        strncpy (path, arg, index+1);
-
-    // get the path of the configuration directory
-    strcpy (conf, config_file);
-    sprintf (config_file, "%s%s", path, conf);    
-
-    len = strlen(config_file);
-    index = -1;    
-    separator = '/';
-
-    strcpy (config_dir, "");
-    for (i = len; i >=0; i--)
-    {
-        // make it work on Linux 
-        if (config_file[i] == '/')
-        {
-            separator = '/';
-            index = i;
-            break;
-        }
-        // make it work on Windows  
-        else if (config_file[i] == '\\')
-        {
-            separator = '\\';
-            index = i;
-            break;
-        }
-    }    
-
-    if (index > -1)
-	{
-		for (i=0; i < index+1; i++)
-			config_dir[i] = config_file[i];
-		config_dir[i] = '\0';
-	}
-    //printf ("config_dir: %s\n", config_dir);    
-    //if (separator == '/')
-        strcat (path, config_dir);   
-    //else if (separator == '\\')
-    //    strcat (path, "params\\");
 
     if (what != RNA && what != DNA)
     {
@@ -978,15 +899,14 @@ void init_data(char *arg, char *config_file, int what, double temperature)
         printf ("Temperature must be between 0 and 100 degrees Celsius\n");
         exit(1);
     }
-
-    read_configuration_file (config_file);
-    strcpy (std_dir_par, config_dir);
+	printf("cf: %s %f\n", config_file, temperature);
+	//temperature = 23;
+    read_configuration_file(config_file);
+    strcpy(std_dir_par, "params/");
 
     // if temperature is 37, there's no need to read the enthalpies
-    if (what == RNA)
-    {
-        if (temperature == 37)
-        {
+    if (what == RNA){
+        if (temperature == 37){
             strcpy (stack_energy37_filename, std_dir_par);
             strcat (stack_energy37_filename, rna_stack_energy37_v31_par);            
             strcpy (loop_energy37_filename, std_dir_par);
@@ -1011,9 +931,7 @@ void init_data(char *arg, char *config_file, int what, double temperature)
             strcat (dangle_energy37_filename, rna_dangle_energy37_v31_par);
             strcpy (special_hl_energy37_filename, std_dir_par);
             strcat (special_hl_energy37_filename, rna_special_hl_energy_par);
-        }
-        else
-        {
+        }else{
             strcpy (stack_energy37_filename, std_dir_par);
             strcat (stack_energy37_filename, rna_stack_energy37_v23_par);
             strcpy (loop_energy37_filename, std_dir_par);
@@ -1060,10 +978,7 @@ void init_data(char *arg, char *config_file, int what, double temperature)
         strcat (miscloop_enthalpy_filename, rna_miscloop_enthalpy_par);
         strcpy (dangle_enthalpy_filename, std_dir_par);
         strcat (dangle_enthalpy_filename, rna_dangle_enthalpy_par);
-    }
-
-    else if (what == DNA)
-    {
+    }else if (what == DNA){
         strcpy (stack_energy37_filename, std_dir_par);
         strcat (stack_energy37_filename, dna_stack_energy37_par);
         strcpy (loop_energy37_filename, std_dir_par);
@@ -1112,16 +1027,16 @@ void init_data(char *arg, char *config_file, int what, double temperature)
         strcat (dangle_enthalpy_filename, dna_dangle_enthalpy_par);
     }
   
-    read_stack_file (stack_energy37_filename, stack);
-    read_loop_file (loop_energy37_filename, internal_penalty_by_size, bulge_penalty_by_size, hairpin_penalty_by_size);
+    read_stack_file(stack_energy37_filename, stack);
+    read_loop_file(loop_energy37_filename, internal_penalty_by_size, bulge_penalty_by_size, hairpin_penalty_by_size);
     #if (MODEL == SIMPLE)
-    read_tloop_file (triloop_energy37_filename, triloop, nb_triloops);    
-    read_tloop_file (tloop_energy37_filename, tloop, nb_tloops);
+    read_tloop_file(triloop_energy37_filename, triloop, nb_triloops);    
+    read_tloop_file(tloop_energy37_filename, tloop, nb_tloops);
     #elif (MODEL == EXTENDED)
-    read_tloop_file (special_hl_energy37_filename, special_hl, nb_special_hl);
+    read_tloop_file(special_hl_energy37_filename, special_hl, nb_special_hl);
     #endif
-    read_stack_file (tstackh_energy37_filename, tstackh);
-    read_stack_file (tstacki_energy37_filename, tstacki);    
+    read_stack_file(tstackh_energy37_filename, tstackh);
+    read_stack_file(tstacki_energy37_filename, tstacki);    
     read_miscloop_file (miscloop_energy37_filename, misc);
     
     // now fill the 3 misc.internal parameters, maybe we need them
@@ -1162,7 +1077,7 @@ void init_data(char *arg, char *config_file, int what, double temperature)
     misc.internal21_UU_mismatch -100;
     #endif
     
-    read_int22_file (int22_energy37_filename, int22);
+    read_int22_file(int22_energy37_filename, int22);
     
     // fill the misc.internal22 parameters    
     //misc.internal22_delta_same_size = int22[G][C][A][A][G][C][A][G] - (int22[G][C][A][A][C][G][A][A] + int22[C][G][G][A][G][C][A][G])/2;
@@ -1176,67 +1091,50 @@ void init_data(char *arg, char *config_file, int what, double temperature)
     
 
     // read enthalpy files
-    read_stack_file (stack_enthalpy_filename, enthalpy_stack);
-    read_loop_file (loop_enthalpy_filename, enthalpy_internal_penalty_by_size, enthalpy_bulge_penalty_by_size, enthalpy_hairpin_penalty_by_size);
-    read_tloop_file (triloop_enthalpy_filename, enthalpy_triloop, enthalpy_nb_triloops);
-    read_tloop_file (tloop_enthalpy_filename, enthalpy_tloop, enthalpy_nb_tloops);
-    read_stack_file (tstackh_enthalpy_filename, enthalpy_tstackh);
-    read_stack_file (tstacki_enthalpy_filename, enthalpy_tstacki);
-    read_miscloop_file (miscloop_enthalpy_filename, enthalpy_misc);
-    read_dangle_file (dangle_enthalpy_filename, enthalpy_dangle_top, enthalpy_dangle_bot);
-    read_int11_file (int11_enthalpy_filename, enthalpy_int11);
-    read_int21_file (int21_enthalpy_filename, enthalpy_int21);
-    read_int22_file (int22_enthalpy_filename, enthalpy_int22);
+    read_stack_file(stack_enthalpy_filename, enthalpy_stack);
+    read_loop_file(loop_enthalpy_filename, enthalpy_internal_penalty_by_size, enthalpy_bulge_penalty_by_size, enthalpy_hairpin_penalty_by_size);
+    read_tloop_file(triloop_enthalpy_filename, enthalpy_triloop, enthalpy_nb_triloops);
+    read_tloop_file(tloop_enthalpy_filename, enthalpy_tloop, enthalpy_nb_tloops);
+    read_stack_file(tstackh_enthalpy_filename, enthalpy_tstackh);
+    read_stack_file(tstacki_enthalpy_filename, enthalpy_tstacki);
+    read_miscloop_file(miscloop_enthalpy_filename, enthalpy_misc);
+    read_dangle_file(dangle_enthalpy_filename, enthalpy_dangle_top, enthalpy_dangle_bot);
+    read_int11_file(int11_enthalpy_filename, enthalpy_int11);
+    read_int21_file(int21_enthalpy_filename, enthalpy_int21);
+    read_int22_file(int22_enthalpy_filename, enthalpy_int22);
 
 
     // fill up the new 2D array for internal loop length
     #if (MODEL == EXTENDED)    
     int j, k, ip, jp;
     // add bulge1
-    for (i=0; i < NUCL; i++)
+    for (i=0; i < NUCL; i++){
         for (j=0; j < NUCL; j++)
             for (ip=0; ip < NUCL; ip++)
                 for (jp=0; jp < NUCL; jp++)
                     for (k=0; k < NUCL; k++)
                         bulge1[i][j][k][ip][jp] = INF;
-                        
-    for (i=0; i < NUCL; i++)
-        for (j=0; j < NUCL; j++)
-        {
+    }
+    for (i=0; i < NUCL; i++){
+        for (j=0; j < NUCL; j++){
             if (! can_pair(i,j))    continue;
             for (ip=0; ip < NUCL; ip++)
-                for (jp=0; jp < NUCL; jp++)
-                {
+                for (jp=0; jp < NUCL; jp++){
                     if (! can_pair(ip,jp))    continue;
                     for (k=0; k < NUCL; k++)
                         bulge1[i][j][k][ip][jp] = stack[i][j][ip][jp] + bulge_penalty_by_size[1];
                 }
         }
-                        
-    
+	}
     // add internal_penalty_by_size_2D
-    for (i=1; i < MAXLOOP_I; i++)
-    {
-        for (j=MAX(i,3); j < MAXLOOP_I; j++)
-        {
+    for (i=1; i < MAXLOOP_I; i++){
+        for (j=MAX(i,3); j < MAXLOOP_I; j++){
             internal_penalty_by_size_2D[i][j] = internal_penalty_by_size[i+j] + asymmetry_penalty(i,j);
         }
     }
-    
-    // in the simple model this was considered 0
-    // we start from 3 because we have full tables for int1x1 and int2x2
-//     for (i=3; i <= MAXLOOP_I/2; i++)
-//         internal_symmetry[i] = 0;        
-    // we initialize with the Ninio values for the simple model
-//     for (i=1; i <= 5; i++)
-//         internal_asymmetry[i] = i*100.0/2.0;
-//     for (i=6; i <= MAXLOOP_I-2; i++)
-//         internal_asymmetry[i] = 300;
     #endif
-    
-    if (temperature != 37)
-    {
-        calculate_energies (temperature);
+    if (temperature != 37){
+        calculate_energies(temperature);
     }
 }
 

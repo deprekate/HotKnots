@@ -2,7 +2,8 @@
 //#include <limits.h>
 #include <Python.h>
 
-extern int run( const char *string, char *currentModel, char *paramsFile);
+extern int initiate(char *currentModel, char *paramsFile);
+extern char * best( char *sequence, char *currentModel);
 
 typedef struct {
 	PyObject_HEAD
@@ -68,28 +69,34 @@ static PyObject * get_windows(PyObject *self, PyObject *args){
 	return (PyObject *)p;
 }
 
-static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
-	char *string;
+// Module method definitions
+static PyObject* initialize(PyObject *self, PyObject *args, PyObject *kwargs){
 	char *model;
 	char *params;
-	static char *kwlist[] = {(char *) "string", (char *) "model", (char *) "params", NULL};
-	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "s|ss", kwlist, &string, &model, &params)){
+	static char *kwlist[] = { (char *) "model", (char *) "params", NULL};
+	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "|ss", kwlist, &model, &params)){
 		return NULL;
 	}
-	run("UUUGCCCUGAAACUGGCGCGUGAGAUGGGGCGACCCGACUGGCGUGCCAU", "CC", "params/parameters_DP09.txt");	
+	initiate("CC", "params/parameters_DP09.txt");	
+	Py_RETURN_NONE;
 	return Py_BuildValue("[sf]", "string", -100.0);
 }
 
-// Module method definitions
-static PyObject* no_args(PyObject *self, PyObject *args) {
-	Py_RETURN_NONE;
+static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
+	char *sequence;
+	char *model;
+	static char *kwlist[] = { (char *) "sequence", (char *) "model", NULL};
+	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "s|s", kwlist, &sequence, &model)){
+		return NULL;
+	}
+	return Py_BuildValue("s", best( sequence , "CC"));	
 }
 
 // Method definition object for this extension, these argumens mean:
 static PyMethodDef HotKnots_methods[] = { 
-	{"get_windows",         get_windows, METH_VARARGS,                 "Empty for now, can be used to yield a python iterator."},  
-	{"fold",        (PyCFunction)  fold, METH_VARARGS | METH_KEYWORDS, "Calculates the minimum free energy of the sequence."},  
-	{"no_args",                 no_args, METH_NOARGS,                  "Empty for now."},  
+	{"get_windows",         get_windows,            METH_VARARGS,                 "Empty for now, can be used to yield a python iterator."},  
+	{"initialize",        (PyCFunction) initialize, METH_VARARGS | METH_KEYWORDS, "Calculates the minimum free energy of the sequence."},  
+	{"fold",              (PyCFunction) fold,       METH_VARARGS | METH_KEYWORDS,                  "do it"},  
 	{NULL, NULL, 0, NULL}
 };
 

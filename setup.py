@@ -10,7 +10,7 @@ from distutils import sysconfig
 
 #os.environ["CC"] = "g++"
 
-sources = "temp.cpp HotKnot.cpp HotKnotEnergy.cpp Bands.cpp Input.cpp Loop.cpp LoopList.cpp Stack.cpp common.cpp commonPK.cpp goodStem.cpp hotspot.cpp init.cpp initPK.cpp params.cpp paramsPK.cpp python.cpp s_energy_matrix.cpp s_hairpin_loop.cpp s_internal_loop.cpp s_min_folding.cpp s_multi_loop.cpp s_multi_loop_sub.cpp s_partition_function.cpp s_specific_functions.cpp s_stacked_pair.cpp s_sub_folding.cpp sc.cpp score.cpp timer.cpp utils.cpp"
+sources = "temp.cpp HotKnotEnergy.cpp Bands.cpp Input.cpp Loop.cpp LoopList.cpp Stack.cpp common.cpp commonPK.cpp goodStem.cpp hotspot.cpp init.cpp initPK.cpp params.cpp paramsPK.cpp python.cpp s_energy_matrix.cpp s_hairpin_loop.cpp s_internal_loop.cpp s_min_folding.cpp s_multi_loop.cpp s_multi_loop_sub.cpp s_partition_function.cpp s_specific_functions.cpp s_stacked_pair.cpp s_sub_folding.cpp sc.cpp score.cpp timer.cpp utils.cpp"
 
 module = Extension('HotKnots',
 			language='c++',

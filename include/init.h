@@ -19,7 +19,7 @@
 #ifndef INIT_H
 #define INIT_H
 
-void init_data(char *arg, char *config_file, int what, double temperature);
+void init_data(char *config_file, int what, double temperature);
 // the function that must be called by the main program to read data files
 // PRE:  None
 // POST: Read all data and configuration files

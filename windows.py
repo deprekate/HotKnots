@@ -1,6 +1,10 @@
 import io
 import sys
 import gzip
+import faulthandler; faulthandler.enable()
+
+import HotKnots as hk
+hk.initialize()
 
 def read_fasta(filepath, base_trans=str.maketrans('','')):
     contigs_dict = dict()
@@ -32,6 +36,8 @@ def rev_comp(seq):
 contigs = read_fasta(sys.argv[1])
 
 for header,sequence in contigs.items():
-	for i in range(0, len(sequence), 3):
-		print(sequence[i:i+50])
+	for i in range(0, len(sequence)-50, 3):
+		#print(sequence[i:i+50])
 		#print(rev_comp(sequence[i:i+50]))
+		print(sequence[i:i+50])
+		print(hk.fold( sequence[i:i+50].upper()  ))

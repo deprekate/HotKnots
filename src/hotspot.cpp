@@ -314,14 +314,12 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	//	if (DEBUG)
 	//		printf("secondaryStruct: %s\n", sequence);
 
-
 	int i,j;
 	int start_piece, end_piece, length_piece;
 	short *temp_Pairs;
 	float min_en, energy;
 	char outPSFile[100];
 	char * temp_string, *temp_constraint, *temp_piece, *temp_constraint_piece;
-
 
 	count++;  
 	sprintf(outPSFile, "%s%d", "rna",count);
@@ -373,7 +371,7 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	//--now temp_constraint stores the 2nd structure 
 
 	//-----transform 2nd struct. to number format
-	temp_Pairs=make_pair_table(temp_constraint);
+	temp_Pairs = make_pair_table(temp_constraint);
 
 	//-----combine new structure(temp_Pairs) with the fix ones from parent.  
 	for(i=0;i<length;i++)
@@ -399,7 +397,7 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	//	if (DEBUG)
 	//		printf("secondaryStruct3a: %s\n", sequence);
 
-	currentNode->score= score(length,sequence,currentNode->secStructure,TRACE,energyModel);
+	currentNode->score = score(length,sequence,currentNode->secStructure,TRACE,energyModel);
 
 	//	if (DEBUG)
 	//		printf("secondaryStruct3b: %s\n", sequence);
@@ -413,7 +411,6 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	int fl = (currentNode->score>rootNode->score*T_RATIO  || (rootNode->score - currentNode->score) < 4000)
 		&& IsAlreadyExist(NULL, rootNode, currentNode)==0 ; 
 	if(fl) {
-
 		InsertRna(currentNode);
 	}
 	else {
