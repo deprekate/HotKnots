@@ -35,11 +35,9 @@ email       : jihong@cs.ubc.ca, baharak@cs.ubc.ca
 #include "LoopList.h"
 
 // CHECK: why does this function use tstackh (hairpin) when it is a stacked pair?
-int Score::sPair( int len, int* sequence, int i, int j)
-{
+int Score::sPair( int len, int* sequence, int i, int j){
 	i = i - 1; 
 	j = j - 1;
-
 
 	int dangle = dangle_bot[sequence[j-1]][sequence[i+1]][sequence[i]] + 
 		dangle_top[sequence[j-1]][sequence[i+1]][sequence[j]];
@@ -57,39 +55,26 @@ int Score::sPair( int len, int* sequence, int i, int j)
 }
 
 int Score::F1( int len,  char* csequence, int* sequence, int i, int j){
-
-
 	if (LEhairpin_loop_energy(i-1, j-1, sequence, csequence) >= INF)
 		return LOWINF;
-
 	return LEhairpin_loop_energy(i-1, j-1, sequence, csequence);
 }
 
-int Score::F2(  int len,  int* sequence,  int i, int k,
-		int l, int j){
-
-	if ( (k== i+1) && (j== l+1))
-	{
+int Score::F2( int len, int* sequence, int i, int k, int l, int j){
+	if ( (k== i+1) && (j== l+1)){
 		//if (DEBUGH)
 		//	printf("F2 stack (i.j = %d.%d) returns: %d\n", i, j, LEstacked_pair_energy (i-1, j-1, sequence));
-
 		if (LEstacked_pair_energy (i-1, j-1, sequence) >= INF)
 			return LOWINF;
-
 		return LEstacked_pair_energy (i-1, j-1, sequence);
-	}
-	else
-	{
+	} else {
 		if (LEinternal_loop_energy (i-1, j-1, k-1, l-1, sequence) >= INF)
 			return LOWINF;
-
 		return LEinternal_loop_energy (i-1, j-1, k-1, l-1, sequence);
 	}
 }
 
-int Score::intloop( int len,  int* s,
-		int i, int k, int l, int j)
-{
+int Score::intloop( int len, int* s, int i, int k, int l, int j){
 	return F2(len, s, i, k, l, j);
 }
 

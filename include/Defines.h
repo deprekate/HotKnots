@@ -20,7 +20,6 @@
  *                                                                         *
  ***************************************************************************/
 
-
 #ifndef DEFINES_H
 #define DEFINES_H
 #include <stdio.h>
@@ -29,8 +28,6 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
-
-
 
 #include "constants.h"
 #include "constantsPK.h"
@@ -41,10 +38,9 @@
 #include "common.h"
 #include "commonPK.h"
 
-
 // Structs
-
 struct T_IntList{
+
 	int Num;	T_IntList * Next;
 	int tuning_flag;  //dirty bit flag - used in Loop.cpp parameter tuning code 
 					  //(set to 1 if this loop's energy was already counted) 
@@ -71,7 +67,7 @@ typedef struct region {
 		begin = -1;
 		end = -1;
 	}
-} reg;
+} region;
 
 /*
 typedef struct {

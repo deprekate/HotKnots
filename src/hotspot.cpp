@@ -54,9 +54,9 @@ long parentScore=0;
 
 void InsertRna(struct Node* currentNode);
 void InitHotspots(int MaxHotspots, int length);
-int FindHotspots(char* sequence, char* structure, int MaxHotspots);
 void ClearHotspots(int MaxHotspots);
 void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *rootNode);
+int FindHotspots(char* sequence, char* structure, int MaxHotspots);
 int IsAlreadyExist(char *constraint, struct Node *rootNode, struct Node *currentNode);
 int secondaryStruct(char *sequence, int length, struct Node *currentNode, 
 		struct Node *rootNode, int MaxHotspots, int energyModel);
@@ -76,8 +76,8 @@ void ClearHotspots(int MaxHotspots) /*housekeeping*/
 {
 	int i;
 
-	if (DEBUGH)
-		printf("In total, %d hotspots found. \n", hotspots->numHotspots);
+	//if (DEBUGH)
+	//	printf("In total, %d hotspots found. \n", hotspots->numHotspots);
 
 	for (i = 0; i<MaxHotspots; i++) {
 		free(hotspots->substruct[i].pairTable);
@@ -87,7 +87,6 @@ void ClearHotspots(int MaxHotspots) /*housekeeping*/
 }
 
 int FindHotspots(char* sequence, char* structure, int MaxHotspots)
-
 	/*char* structure points to the output of fold.c, 
 	  note: it's the current output of fold.c, not the cumulative global structure
 	  function returns the number of hotspots if it finds substructures with energy lower than THR, 
@@ -109,7 +108,7 @@ int FindHotspots(char* sequence, char* structure, int MaxHotspots)
 
 	int len = strlen(structure); 
 
-	if (TRACE == 1) printf("%s\n%s\n",sequence, structure);
+	//if (TRACE == 1) printf("%s\n%s\n",sequence, structure);
 
 	pair_table = make_pair_table(structure);
 	i = 1;
@@ -152,19 +151,17 @@ int FindHotspots(char* sequence, char* structure, int MaxHotspots)
 		}
 
 		/*we find a structure  with closing pairs i.j and p.q*/
-		if (TRACE == 1) printf("substructure %d-%d, %d-%d with energy %d  THR  %f\n", i,p,q, j, ee, THR);
+		//if (TRACE == 1) printf("substructure %d-%d, %d-%d with energy %d  THR  %f\n", i,p,q, j, ee, THR);
 
 		if(ee < THR) {
 			i = p + 1;
 			continue;
 		}
 
-
 		/*hotspots->substruct[nh].energy always store the energy of the substructure, 
 		  initialized with INF*/
 		/*hotspots->substruct[nh].length always store the length of the table, 
 		  note the size of the table always 2*length*/
-
 
 		if(p-i-1 < j-q-1) {
 			length =   j-q + 1;
@@ -178,12 +175,11 @@ int FindHotspots(char* sequence, char* structure, int MaxHotspots)
 		if (numHotspots < MaxHotspots) { 
 			flag = 0;
 			for (num = 0; num < numHotspots; num++) {
-
 				if (ee == hotspots->substruct[num].energy && length == hotspots->substruct[num].length&& 
 						startbase == hotspots->substruct[num].pairTable[0]&&
 						pair_table[startbase] == hotspots->substruct[num].pairTable[length]) {
 					flag = 1; 
-					if (TRACE == 1) printf("This hotspot already exists\n");
+					//if (TRACE == 1) printf("This hotspot already exists\n");
 					break; 
 				}
 			}
@@ -193,7 +189,6 @@ int FindHotspots(char* sequence, char* structure, int MaxHotspots)
 				for ( mm = 0; mm < length; mm++){
 					hotspots->substruct[numHotspots].pairTable[mm] = startbase + mm;
 					hotspots->substruct[numHotspots].pairTable[mm+length] = pair_table[startbase + mm];
-
 				}
 				numHotspots++;
 			}
@@ -206,19 +201,15 @@ int FindHotspots(char* sequence, char* structure, int MaxHotspots)
 			}
 			if (ee < min_en) {  //replace
 				nh = replace;
-				if (TRACE == 1) printf("hotspot list full, replace a hotspot with the newly found better one\n");
+				//if (TRACE == 1) printf("hotspot list full, replace a hotspot with the newly found better one\n");
 				for ( mm = 0; mm < length; mm++){
 					hotspots->substruct[nh].pairTable[mm] = startbase + mm;
 					hotspots->substruct[nh].pairTable[mm+length] = pair_table[startbase + mm];
-
 				}
-
 			}
 		}
 		i = p+1;
 	}  /*end of the first while loop => finsh search one nested structure*/
-
-
 	hotspots->numHotspots = numHotspots;
 	free(pair_table);
 	return(numHotspots);
@@ -238,7 +229,7 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 
 	tempConstraint[length] = 0;
 
-	if (TRACE == 1) printf("numHotspots %d\n", hotspots->numHotspots);
+	//if (TRACE == 1) printf("numHotspots %d\n", hotspots->numHotspots);
 	for (i=0; i<hotspots->numHotspots; i++) {
 		exist[i] = 1;
 		overlap = 0;
@@ -257,17 +248,16 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 			if (hotspots->substruct[i].pairTable[j] > 0) 
 				tempConstraint[hotspots->substruct[i].pairTable[j]-1] = 'x';
 			if (hotspots->substruct[i].pairTable[j+hotspotLength] > 0) 
-				tempConstraint[hotspots->substruct[i].pairTable[j+hotspotLength]-1]='x';
-
+				tempConstraint[hotspots->substruct[i].pairTable[j+hotspotLength]-1] = 'x';
 		}
 		if (overlap == 0 && IsAlreadyExist(tempConstraint, rootNode, currentNode)==0) {
-			if (TRACE == 1) printf("New constraint: %s\n",tempConstraint);
+			//if (TRACE == 1) printf("New constraint: %s\n",tempConstraint);
 			numChild++;
 			exist[i] = 0;
 		}
 		else {
 			exist[i] = 1;
-			if (TRACE == 1) printf("constraint: %s \n overlapped [%d] or already exist!\n", tempConstraint, overlap);
+			//if (TRACE == 1) printf("constraint: %s \n overlapped [%d] or already exist!\n", tempConstraint, overlap);
 		}
 
 	}
@@ -309,7 +299,6 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 
 int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct Node *rootNode, int MaxHotspots, int energyModel)
 {
-
 	//	printf("MaxHotspots = %d, sequence = %s\n", MaxHotspots, sequence);
 	//	if (DEBUG)
 	//		printf("secondaryStruct: %s\n", sequence);
@@ -318,19 +307,18 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	int start_piece, end_piece, length_piece;
 	short *temp_Pairs;
 	float min_en, energy;
-	char outPSFile[100];
-	char * temp_string, *temp_constraint, *temp_piece, *temp_constraint_piece;
+	char *temp_string, *temp_constraint, *temp_piece, *temp_constraint_piece;
 
 	count++;  
-	sprintf(outPSFile, "%s%d", "rna",count);
-	if (TRACE == 1) printf("\n\n\n--------------%s-------------------\n", outPSFile);
+	//char outPSFile[100];
+	//sprintf(outPSFile, "%s%d", "rna",count);
+	//if (TRACE == 1) printf("\n\n\n--------------%s-------------------\n", outPSFile);
 
 	if (count >= 10000) {
 		return 0;
 	}			
 	temp_string = (char*)malloc(sizeof(char)*(length+1));
 	temp_constraint = (char*)malloc(sizeof(char)*(length+1));
-
 
 	strncpy(temp_constraint,currentNode->constraint,length);
 	temp_constraint[length] = 0;
@@ -361,10 +349,8 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 			}
 			free(temp_piece);
 			free(temp_constraint_piece);
-
 		}
 	}
-
 	//	if (DEBUG)
 	//		printf("secondaryStruct2: %s\n", sequence);
 
@@ -377,20 +363,18 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	for(i=0;i<length;i++)
 	{
 		if(currentNode->fixedPairs[i]==0)
-			currentNode->secStructure[i]=temp_Pairs[i+1];
+			currentNode->secStructure[i] = temp_Pairs[i+1];
 		else
-			currentNode->secStructure[i]=currentNode->fixedPairs[i];
+			currentNode->secStructure[i] = currentNode->fixedPairs[i];
 	}
 	free(temp_Pairs);
 
-
-
 	//-----call score() to calculate the score of current 2nd struct and choose next step
-	if(TRACE==1) {
-		printf("\n---------------------%s------------------\n", outPSFile);
-		printRnaStruct(currentNode->secStructure,length);
-		printf("\n");
-	}
+	//if(TRACE==1) {
+	//	printf("\n---------------------%s------------------\n", outPSFile);
+	//	printRnaStruct(currentNode->secStructure,length);
+	//	printf("\n");
+	//}
 
 	//        printf("Before call to score, sequence = %s, secStructure[0] = %d \n", sequence, currentNode->secStructure[0]);
 
@@ -402,41 +386,37 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	//	if (DEBUG)
 	//		printf("secondaryStruct3b: %s\n", sequence);
 
-	if (TRACE == 1) {
-		printf("current score is %f--\n", currentNode->score);
-		printf("\n Current 2nd Structure is: \n");
-		printRnaStruct(currentNode->secStructure,length);
-	}
+	//if (TRACE == 1) {
+	//	printf("current score is %f--\n", currentNode->score);
+	//	printf("\n Current 2nd Structure is: \n");
+	//	printRnaStruct(currentNode->secStructure,length);
+	//}
 
 	int fl = (currentNode->score>rootNode->score*T_RATIO  || (rootNode->score - currentNode->score) < 4000)
 		&& IsAlreadyExist(NULL, rootNode, currentNode)==0 ; 
 	if(fl) {
 		InsertRna(currentNode);
-	}
-	else {
-		if (TRACE == 1) {
-			if ( currentNode->score<rootNode->score*T_RATIO ) {
-				printf("Score too low, bad branch!\n");
-			}
-			else
-				printf("Structure already exists!\n");
-		}
+	} else {
+	//	if (TRACE == 1) {
+	//		if ( currentNode->score<rootNode->score*T_RATIO ) {
+	//			printf("Score too low, bad branch!\n");
+	//		} else {
+	//			printf("Structure already exists!\n");
+	//		}
+	//	}
 	}//---need future coding
 	if(currentNode->score < rootNode->score*T_RATIO && (rootNode->score - currentNode->score) > 5000) {
 		// hotspots are no longer good. Stop searching along this branch.
 		free(temp_string); free(temp_constraint);
 		return currentNode->score;
-	}
-	else {
-
-		if (TRACE == 1) printf("current_constraints \n");
-		for(i=0;i<length;i++)
-		{
+	} else {
+		//if (TRACE == 1) printf("current_constraints \n");
+		for(i=0;i<length;i++) {
 			temp_string[i]=currentNode->constraint[i];
 			if (TRACE == 1) printf("%c",temp_string[i]);
 		}
 		temp_string[length] = 0;
-		if (TRACE == 1) printf("\n");
+		//if (TRACE == 1) printf("\n");
 
 		//	if (DEBUG)
 		//		printf("secondaryStruct4a: %s\n", sequence);
@@ -473,8 +453,7 @@ int IsAlreadyExist(char *constraint, struct Node *rootNode, struct Node *current
 		if(rootNode == currentNode) return(0);
 		if (strcmp(constraint, rootNode->constraint)==0)  {
 			return(1);
-		}
-		else { 
+		} else { 
 			for(i = 0; i < rootNode->numChild; i++) {
 				if (IsAlreadyExist(constraint, rootNode->children[i],currentNode) == 1) return(1);
 			}
@@ -526,7 +505,6 @@ void InsertRna(struct Node* currentNode)
 		return;
 	}
 	if (currentNode->score <= listOfNodes[numRnaStruct-1]->score) {
-
 		listOfNodes[numRnaStruct] = currentNode;
 		numRnaStruct++;
 		return;
@@ -540,9 +518,7 @@ void InsertRna(struct Node* currentNode)
 			numRnaStruct++;
 			return;
 		}
-		if (listOfNodes[i]->score >= currentNode->score && listOfNodes[i+1]->score <= currentNode->score) 
-
-		{
+		if (listOfNodes[i]->score >= currentNode->score && listOfNodes[i+1]->score <= currentNode->score) {
 			for (j = numRnaStruct-1; j > i; j--) {
 				listOfNodes[j+1] = listOfNodes[j];
 			}
@@ -552,16 +528,11 @@ void InsertRna(struct Node* currentNode)
 		}
 		if (currentNode->score >= listOfNodes[i]->score ){ 
 			i -= (seg/4 > 1)?(seg/4):1;
-		}
-		else {
-
+		} else {
 			i  += (seg/4 > 1)?(seg/4):1;
 		}
-
 		seg = seg/2?seg/2:1;
-
 	}
-
 	return;
 }
 

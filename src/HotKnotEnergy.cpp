@@ -51,16 +51,6 @@ struct Node* listOfNodes5[50];  // for Cao&Chen (c)
 int count;//number of nodes
 int numRnaStruct;  //total number of different Rna structures
 
-extern void PlotRna(char* seqName, char *sequence, short *structure, char *filename, float score);
-
-
-#define PRIVATE static
-
-//static char  scale1[] = "....,....1....,....2....,....3....,....4";
-//static char  scale2[] = "....,....5....,....6....,....7....,....8";
-
-//PRIVATE void usage(void);
-
 double hotknots_DP_name(char *seq, char *structure, char* fileName)
 // fileName: input - does not include path, just the name of the file without extension (sequence name)
 // sequence: input
