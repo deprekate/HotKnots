@@ -58,8 +58,8 @@ double hotknots_DP_name(char *seq, char *structure, char* fileName)
 // By Mirela: THE NAME iS NOT USED ANY MORE, I wrote a function called bpseq2dp in utils.c
 //            TO CLEAN UP THE MESS IN THIS FILE.
 {
-    if (DEBUG)
-        printf("Input parameter seq = %s, strlen = %d\n", seq, (int) strlen(seq));
+    //if (DEBUG)
+    //    printf("Input parameter seq = %s, strlen = %d\n", seq, (int) strlen(seq));
 
     int length = strlen(seq);
     char* sequence = new char[length+1];
@@ -67,8 +67,8 @@ double hotknots_DP_name(char *seq, char *structure, char* fileName)
         sequence[i] = toupper(seq[i]);
     sequence[length] = '\0';
 
-    if (DEBUG)
-        printf("\nInput to hotknots_energy: len=%d, seq = %s, fileName = %s\n", length, sequence, fileName);
+    //if (DEBUG)
+    //    printf("\nInput to hotknots_energy: len=%d, seq = %s, fileName = %s\n", length, sequence, fileName);
 
     char *cstructure=NULL;  // constraint structure
 
@@ -223,11 +223,10 @@ double hotknots_DP_name(char *seq, char *structure, char* fileName)
 
     min_en=endFlag;
 
-    if (DEBUGH)
-    {
-    printf("In total, %d nodes created. \n", count);  // 'count' is set in function: secondaryStruct()
-    printf(" total number of Rna structures: %d \n", numRnaStruct);
-    }
+    //if (DEBUGH){
+    //printf("In total, %d nodes created. \n", count);  // 'count' is set in function: secondaryStruct()
+    //printf(" total number of Rna structures: %d \n", numRnaStruct);
+    //}
 
     //sprintf(ctFile2, "%s%s%s%s", outpath, outpath2, fileName, "_DP.ct");
     // Mirela: don't write the ct file

@@ -89,7 +89,7 @@ static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
 	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "s|s", kwlist, &sequence, &model)){
 		return NULL;
 	}
-	return Py_BuildValue("s", best( sequence , "CC"));	
+	return Py_BuildValue("s", best( sequence , (char *) "CC"));	
 }
 
 // Method definition object for this extension, these argumens mean:

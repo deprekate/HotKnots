@@ -37,8 +37,9 @@ contigs = read_fasta(sys.argv[1])
 
 for header,sequence in contigs.items():
 	sequence = sequence.upper()
-	for i in range(0, len(sequence)-50, 3):
-		#print(sequence[i:i+50])
+	for i in range(0, len(sequence)-53, 3):
+		#print(sequence[i:i+55])
 		#print(rev_comp(sequence[i:i+50]))
-		print(sequence[i:i+50])
-		print(hk.fold( sequence[i:i+50] ))
+		#print(sequence[i:i+50], flush=True)
+		hk.fold( sequence[i:i+55] )
+		#print(hk.fold( sequence[i:i+50] ))

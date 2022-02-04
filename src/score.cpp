@@ -93,7 +93,6 @@ char ccc(int i){
 			printf("ERROR: score.cpp::ccc - wrong int representation of RNA letter: %d\n", i);
 			exit(1);
 	};
-
 };
 
 

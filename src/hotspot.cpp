@@ -392,8 +392,7 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	//	printRnaStruct(currentNode->secStructure,length);
 	//}
 
-	int fl = (currentNode->score>rootNode->score*T_RATIO  || (rootNode->score - currentNode->score) < 4000)
-		&& IsAlreadyExist(NULL, rootNode, currentNode)==0 ; 
+	int fl = (currentNode->score>rootNode->score*T_RATIO  || (rootNode->score - currentNode->score) < 4000) && IsAlreadyExist(NULL, rootNode, currentNode)==0 ; 
 	if(fl) {
 		InsertRna(currentNode);
 	} else {
@@ -413,7 +412,7 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 		//if (TRACE == 1) printf("current_constraints \n");
 		for(i=0;i<length;i++) {
 			temp_string[i]=currentNode->constraint[i];
-			if (TRACE == 1) printf("%c",temp_string[i]);
+			//if (TRACE == 1) printf("%c",temp_string[i]);
 		}
 		temp_string[length] = 0;
 		//if (TRACE == 1) printf("\n");
