@@ -2566,8 +2566,7 @@ int traverse_features_and_do_work (char *calling_function, PARAMTYPE *array, cha
                 }
     #endif              
               
-    if (!simple_internal_energy)          
-    {
+    if (!simple_internal_energy)          {
 
         #if (MODEL == SIMPLE)
         // do the few int 11 params: only those enclosed by CG and CG (any order), + 2 more params

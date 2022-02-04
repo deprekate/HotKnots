@@ -30,7 +30,6 @@
 class s_energy_matrix
 {
     public:
-
         friend class s_stacked_pair;
         friend class s_internal_loop;
         friend class s_multi_loop;
@@ -67,7 +66,11 @@ class s_energy_matrix
         // return the node at (i,j)
 
         // May 15, 2007. Added "if (i>=j) return INF;"  below. It was miscalculating the backtracked structure. 
-        PARAMTYPE get_energy (int i, int j) { if (i>=j) return INF; int ij = index[i]+j-i; return nodes[ij].energy; }
+        PARAMTYPE get_energy (int i, int j) {
+												if (i>=j) return INF;
+												int ij = index[i]+j-i; 
+												return nodes[ij].energy;
+											}
         // return the value at V(i,j)
         
         char get_type (int i, int j) { int ij = index[i]+j-i; return nodes[ij].type; }

@@ -2,8 +2,11 @@
 //#include <limits.h>
 #include <Python.h>
 
+#include "hotspot.h"
+#include "utils.h"
+
 extern int initiate(char *currentModel, char *paramsFile);
-extern char * best( char *sequence, char *currentModel);
+extern struct Node* best( char *sequence, char *currentModel);
 
 typedef struct {
 	PyObject_HEAD
@@ -89,7 +92,9 @@ static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
 	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "s|s", kwlist, &sequence, &model)){
 		return NULL;
 	}
-	return Py_BuildValue("s", best( sequence , (char *) "CC"));	
+	struct Node* bestNode = best( sequence , (char *) "CC");	
+	bpseq2dp( (int) strlen(sequence), bestNode->secStructure, sequence);
+	return Py_BuildValue("[sf]", sequence, bestNode->score /1000.0);
 }
 
 // Method definition object for this extension, these argumens mean:
