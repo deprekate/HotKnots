@@ -4,7 +4,10 @@ import gzip
 import faulthandler; faulthandler.enable()
 
 import HotKnots as hk
-hk.initialize()
+
+model = "CC"
+params = "params/parameters_CC09.txt"
+hk.initialize(model, params)
 
 def read_fasta(filepath, base_trans=str.maketrans('','')):
     contigs_dict = dict()
@@ -37,9 +40,9 @@ contigs = read_fasta(sys.argv[1])
 
 for header,sequence in contigs.items():
 	sequence = sequence.upper()
-	for i in range(0, len(sequence)-53, 3):
-		#print(sequence[i:i+55])
+	for i in range(0, len(sequence)-33, 3):
+		print(sequence[i:i+35])
 		#print(rev_comp(sequence[i:i+50]))
 		#print(sequence[i:i+50], flush=True)
-		hk.fold( sequence[i:i+55] )
+		#print(i+1, hk.fold( sequence[i:i+35], model )[1] )
 		#print(hk.fold( sequence[i:i+50] ))

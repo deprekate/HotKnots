@@ -80,9 +80,8 @@ static PyObject* initialize(PyObject *self, PyObject *args, PyObject *kwargs){
 	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "|ss", kwlist, &model, &params)){
 		return NULL;
 	}
-	initiate("CC", "params/parameters_DP09.txt");	
+	initiate(model , params);	
 	Py_RETURN_NONE;
-	return Py_BuildValue("[sf]", "string", -100.0);
 }
 
 static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
@@ -92,9 +91,9 @@ static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
 	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "s|s", kwlist, &sequence, &model)){
 		return NULL;
 	}
-	struct Node* bestNode = best( sequence , (char *) "CC");	
+	struct Node* bestNode = best( sequence , model);	
 	bpseq2dp( (int) strlen(sequence), bestNode->secStructure, sequence);
-	return Py_BuildValue("[sf]", sequence, bestNode->score /1000.0);
+	return Py_BuildValue("[sf]", sequence, -bestNode->score /1000.0);
 }
 
 // Method definition object for this extension, these argumens mean:
