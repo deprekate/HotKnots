@@ -22,12 +22,12 @@ pip install HotKnots --user
 
 To use on the command line:
 ```
-echo UUUGCCCUGAAACUGGCGCGUGAGAUGGGGCGACCCGACUGGCGUGCCAU | python3 hotknots.py -p params/parameters_DP09.txt
+echo AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC | python3 hotknots.py -p params/parameters_DP09.txt
 ```
 and the output should be the sequence, followed by the structure and mfe of the best folding
 ```
-UUUGCCCUGAAACUGGCGCGUGAGAUGGGGCGACCCGACUGGCGUGCCAU
-.((((((((....[[[[[[[[....))))))))........]]]]]]]]. -14.336
+AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC
+...((((((([[[[[.)))))))......]]]]]... -9.883
 ```
 
 
@@ -39,5 +39,5 @@ model = "CC"
 params = "params/parameters_CC09.txt"
 hk.initialize(model, params)
 
-print(hk.fold("UUUGCCCUGAAACUGGCGCGUGAGAUGGGGCGACCCGACUGGCGUGCCAU", model))
+print(hk.fold("AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC", model))
 ```
