@@ -11,18 +11,20 @@ also the only that actually did pseudoknots.
 I got it mostly working, but have not gottten around to making the parameter files as 
 internal variables.  Having extenal data files with python PIP pacakges is a hassle
 due to operating environments being virtual and not having actual file system paths.
+Currently the params folder has to be in the same folder that you run HotKnots
 
 To install:
 ```
 https://github.com/deprekate/HotKnots.git
-pip install HotKnots --user
+pip install HotKnots/ --user
 ```
 
 
 
 To use on the command line:
 ```
-echo AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC | python3 hotknots.py -p params/parameters_DP09.txt
+cd HotKnots
+echo AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC | hotknots.py -p params/parameters_DP09.txt -1 params/multirnafold.conf -2 params/pkenergy.conf
 ```
 and the output should be the sequence, followed by the structure and mfe of the best folding
 ```

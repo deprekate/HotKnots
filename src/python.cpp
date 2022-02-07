@@ -5,7 +5,7 @@
 #include "hotspot.h"
 #include "utils.h"
 
-extern int initiate(char *currentModel, char *paramsFile);
+extern int initiate(char *currentModel, char *paramsFile, char *cfile, char *cfilepk);
 extern struct Node* best( char *sequence, char *currentModel);
 
 typedef struct {
@@ -76,11 +76,13 @@ static PyObject * get_windows(PyObject *self, PyObject *args){
 static PyObject* initialize(PyObject *self, PyObject *args, PyObject *kwargs){
 	char *model;
 	char *params;
-	static char *kwlist[] = { (char *) "model", (char *) "params", NULL};
-	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "|ss", kwlist, &model, &params)){
+	char *cfile;
+	char *cfilepk;
+	static char *kwlist[] = { (char *) "model", (char *) "params", (char *) "cfile", (char *) "cfilepk",  NULL};
+	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "ssss", kwlist, &model, &params, &cfile, &cfilepk)){
 		return NULL;
 	}
-	initiate(model , params);	
+	initiate(model , params, cfile, cfilepk);	
 	Py_RETURN_NONE;
 }
 

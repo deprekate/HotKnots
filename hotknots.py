@@ -27,11 +27,13 @@ if __name__ == '__main__':
 	parser.add_argument('-o', '--outfile', action="store", default=sys.stdout, type=argparse.FileType('w'), help='where to write output [stdout]')
 	parser.add_argument('-m', '--model', type=str, default='DP', choices=['DP', 'CC', 'RE'], help='The model to use [DP]')
 	parser.add_argument('-p', '--params', required=True, type=is_valid_file, help="this is the path to the parameter file")
+	parser.add_argument('-1', '--config_file', required=True, type=is_valid_file, help="this is the path to the config file")
+	parser.add_argument('-2', '--config_filepk', required=True, type=is_valid_file, help="this is the path to the configPK file")
 	args = parser.parse_args()
 
 
 # initialize everything first
-hk.initialize( args.model, args.params )
+hk.initialize( args.model, args.params , args.config_file , args.config_filepk )
 
 # then run each sequence through
 for line in args.infile:
