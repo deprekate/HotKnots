@@ -31,6 +31,7 @@ def read_fasta(filepath, base_trans=str.maketrans('','')):
 
 def rev_comp(seq):
     seq_dict = {'a':'t','t':'a','g':'c','c':'g',
+				'A':'T','T':'A','G':'C','C':'G',
                 'n':'n',
                 'r':'y','y':'r','s':'s','w':'w','k':'m','m':'k',
                 'b':'v','v':'b','d':'h','h':'d'}
@@ -39,10 +40,13 @@ def rev_comp(seq):
 contigs = read_fasta(sys.argv[1])
 
 for header,sequence in contigs.items():
-	sequence = sequence.upper()
-	for i in range(0, len(sequence)-33, 3):
-		print(sequence[i:i+35])
+	sequence = sequence.upper().replace('M','A').replace('S','A').replace('R','A')
+	for i in range(0, len(sequence)-73, 3):
+		#print(sequence[i:i+35])
 		#print(rev_comp(sequence[i:i+50]))
 		#print(sequence[i:i+50], flush=True)
-		#print(i+1, hk.fold( sequence[i:i+35], model )[1] )
+		print(i+1, 
+				hk.fold( sequence[i:i+75], model )[1],
+				hk.fold( rev_comp(sequence[i:i+35]), model )[1],
+				sep = '\t')
 		#print(hk.fold( sequence[i:i+50] ))

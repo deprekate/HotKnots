@@ -899,7 +899,7 @@ void init_data (char *config_file, int what, double temperature)
         printf ("Temperature must be between 0 and 100 degrees Celsius\n");
         exit(1);
     }
-	printf("cf: %s %f\n", config_file, temperature);
+	//printf("cf: %s %f\n", config_file, temperature);
 	//temperature = 23;
     read_configuration_file(config_file);
     strcpy(std_dir_par, "params/");
