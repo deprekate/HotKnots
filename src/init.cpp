@@ -905,7 +905,6 @@ void init_data (char *config_file, int what, double temperature)
 			break;
 		}
 	}
-	printf("path: %s\n", dir);
 	//printf("cf: %s %f\n", config_file, temperature);
 	//temperature = 23;
 	read_configuration_file(config_file);
