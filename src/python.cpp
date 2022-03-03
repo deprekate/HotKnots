@@ -99,7 +99,7 @@ static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
 }
 
 // Method definition object for this extension, these argumens mean:
-static PyMethodDef HotKnots_methods[] = { 
+static PyMethodDef hotknots_methods[] = { 
 	{"get_windows",         get_windows,            METH_VARARGS,                 "Empty for now, can be used to yield a python iterator."},  
 	{"initialize",        (PyCFunction) initialize, METH_VARARGS | METH_KEYWORDS, "Calculates the minimum free energy of the sequence."},  
 	{"fold",              (PyCFunction) fold,       METH_VARARGS | METH_KEYWORDS,                  "do it"},  
@@ -107,21 +107,21 @@ static PyMethodDef HotKnots_methods[] = {
 };
 
 // Module definition
-static struct PyModuleDef HotKnots_definition = { 
+static struct PyModuleDef hotknots_definition = { 
 	PyModuleDef_HEAD_INIT,
 	"HotKnots",
 	"A Python module that does RNA folding.",
 	-1, 
-	HotKnots_methods
+	hotknots_methods
 };
 
 // Module initialization
 // Python calls this function when importing your extension. It is important
 // that this function is named PyInit_[[your_module_name]] exactly, and matches
 // the name keyword argument in setup.py's setup() call.
-PyMODINIT_FUNC PyInit_HotKnots(void) {
+PyMODINIT_FUNC PyInit_hotknots(void) {
 	//Py_Initialize();
-	return PyModule_Create(&HotKnots_definition);
+	return PyModule_Create(&hotknots_definition);
 }
 
 

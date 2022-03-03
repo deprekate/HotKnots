@@ -1,9 +1,9 @@
 default:
-	python3 setup.py install --user
+	pip install ../hotknots/ --user
 
 clean:
 	rm -fr build
 	rm -fr dist
-	rm -fr HotKnots.egg-info
-	pip uninstall HotKnots -y
+	rm -fr hotknots.egg-info
+	pip uninstall hotknots -y
 

@@ -12,7 +12,7 @@ from distutils import sysconfig
 
 sources = "temp.cpp Bands.cpp Input.cpp Loop.cpp LoopList.cpp Stack.cpp common.cpp commonPK.cpp goodStem.cpp hotspot.cpp init.cpp initPK.cpp params.cpp paramsPK.cpp python.cpp s_energy_matrix.cpp s_hairpin_loop.cpp s_internal_loop.cpp s_min_folding.cpp s_multi_loop.cpp s_multi_loop_sub.cpp s_partition_function.cpp s_specific_functions.cpp s_stacked_pair.cpp s_sub_folding.cpp sc.cpp score.cpp timer.cpp utils.cpp"
 
-module = Extension('HotKnots',
+module = Extension('hotknots.hotknots',
 			language='c++',
 			extra_compile_args=['-g'],
 			extra_link_args=['-lm'],
@@ -36,7 +36,7 @@ def get_version():
 
 def main():
 	setup (
-		name = 'HotKnots',
+		name = 'hotknots',
 		version = get_version(),
 		author = "Katelyn McNair, Jihong Ren, Baharak Rastegari, Cristina Pop, Mirela Andronescu ",
 		author_email = "deprekate@gmail.com",
@@ -52,8 +52,10 @@ def main():
 		],
 		python_requires='>3.5.2',
 		packages=find_packages(),
+		package_data = {'': ['*.dat','*.dh','*.conf','*.dg','*.txt'],},
 		#install_requires=[''],
 		ext_modules = [module],
+		#include_package_data = True,
 	)
 
 

@@ -4,9 +4,11 @@ import sys
 import fileinput
 import argparse
 from argparse import RawTextHelpFormatter
+from signal import signal, SIGPIPE, SIG_DFL
+signal(SIGPIPE,SIG_DFL) 
 
-
-import HotKnots as hk
+sys.path.pop(0)
+from hotknots import hotknots as hk
 
 
 def test():
@@ -26,18 +28,19 @@ if __name__ == '__main__':
 	#parser.add_argument('infile', type=is_valid_file, help='input file')
 	parser.add_argument('-o', '--outfile', action="store", default=sys.stdout, type=argparse.FileType('w'), help='where to write output [stdout]')
 	parser.add_argument('-m', '--model', type=str, default='DP', choices=['DP', 'CC', 'RE'], help='The model to use [DP]')
-	parser.add_argument('-p', '--params', required=True, type=is_valid_file, help="this is the path to the parameter file")
-	parser.add_argument('-1', '--config_file', required=True, type=is_valid_file, help="this is the path to the config file")
-	parser.add_argument('-2', '--config_filepk', required=True, type=is_valid_file, help="this is the path to the configPK file")
+	#parser.add_argument('-p', '--params', required=True, type=is_valid_file, help="this is the path to the parameter file")
+	#parser.add_argument('-1', '--config_file', required=True, type=is_valid_file, help="this is the path to the config file")
+	#parser.add_argument('-2', '--config_filepk', required=True, type=is_valid_file, help="this is the path to the configPK file")
 	args = parser.parse_args()
 
 
 # initialize everything first
-hk.initialize( args.model, args.params , args.config_file , args.config_filepk )
+params = os.path.dirname(hk.__file__)
+hk.initialize( args.model, os.path.join(params,"parameters_DP09.txt") , os.path.join(params,"multirnafold.conf"), os.path.join(params,"pkenergy.conf") )
 
 # then run each sequence through
 for line in args.infile:
 	print(line.rstrip())
-	seq,mfe = hk.fold( line.rstrip() , args.model )
+	seq,mfe = hk.fold( line.rstrip().upper() , args.model )
 	print(seq, mfe)
 
