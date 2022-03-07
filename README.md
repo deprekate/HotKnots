@@ -23,8 +23,7 @@ pip install HotKnots/ --user
 
 To use on the command line:
 ```
-cd HotKnots
-echo AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC | hotknots.py -p params/parameters_DP09.txt -1 params/multirnafold.conf -2 params/pkenergy.conf
+echo AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC | hotknots.py
 ```
 and the output should be the sequence, followed by the structure and mfe of the best folding
 ```
@@ -33,13 +32,14 @@ AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC
 ```
 
 
-To import and use in other python code:
+To import and use in other python code, you need to import the package, and then find out where
+it is installed, so it can find the various parameter files.  This is also when you can specify
+which model and paramters to use:
 ```
 import HotKnots as hk
+# initialize everything first
+params = os.path.dirname(hk.__file__)
+hk.initialize( "DP", os.path.join(params,"parameters_DP09.txt") , os.path.join(params,"multirnafold.conf"), os.path.join(params,"pkenergy.conf") )
 
-model = "CC"
-params = "params/parameters_CC09.txt"
-hk.initialize(model, params)
-
-print(hk.fold("AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC", model))
+print(hk.fold("AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC", "DP"))
 ```
