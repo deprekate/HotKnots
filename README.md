@@ -15,7 +15,7 @@ Currently the params folder has to be in the same folder that you run HotKnots
 
 To install:
 ```
-https://github.com/deprekate/HotKnots.git
+git clone https://github.com/deprekate/HotKnots.git
 pip install HotKnots/ --user
 ```
 
