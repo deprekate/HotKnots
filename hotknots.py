@@ -7,6 +7,7 @@ from argparse import RawTextHelpFormatter
 from signal import signal, SIGPIPE, SIG_DFL
 signal(SIGPIPE,SIG_DFL) 
 import fileinput
+from termcolor import colored
 
 sys.path.pop(0)
 from hotknots import hotknots as hk
@@ -43,5 +44,5 @@ for line in fileinput.input():
 # then run each sequence through
 	print(line.rstrip())
 	seq,mfe = hk.fold( line.rstrip().upper() , args.model )
-	print(seq, mfe)
+	print(seq, colored(mfe, 'green') )
 
