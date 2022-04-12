@@ -37,9 +37,6 @@ struct Node* listOfNodes[50];   // for Rivas&Eddy
 /*--------------------------------------------------------------------------*/
 
 int initiate(char *currentModel, char *paramsFile, char *config_file, char *config_filePK){
-	//    char config_file[200] = "params/pairfold.conf";  // CHANGED to lines below
-	//char config_file[200] = "./params/multirnafold.conf";
-	//char config_filePK[200] = "./params/pkenergy.conf";
 
 	int dna_or_rna = RNA;
 	double temperature = 37;
@@ -50,16 +47,15 @@ int initiate(char *currentModel, char *paramsFile, char *config_file, char *conf
 	temp[1] = '/';
 	temp[2] = '\0';
 
-	//   init_data (config_file, dna_or_rna, temperature);  // CHANGED to lines below
 	init_data(config_file, dna_or_rna, temperature);
 	init_dataPK(temp, config_filePK, dna_or_rna, temperature);
-	// added for easy command line usage
+	
 	if (strcmp(currentModel,"DP") == 0){
 		fill_data_structures_with_new_parameters_PK_DP(paramsFile);
 	} else if (strcmp(currentModel,"CC") == 0){
 		fill_data_structures_with_new_parameters_PK_CC2006b(paramsFile); 
 	}else {
-		fill_data_structures_with_new_parameters(  (char *) "./params/turner_parameters_fm363_constrdangles.txt");
+		fill_data_structures_with_new_parameters(  (char *) "turner_parameters_fm363_constrdangles.txt");
 	}
 	return 1;
 }
@@ -93,7 +89,6 @@ struct Node* best( char *sequence, char *currentModel){
 			structure[l] = '.';
 		}
 	}
-	/////////////////////////// RIVAS and EDDY ENERGY MODEL /////////////////////////
 	//-----initialization of rootNode
 	rootNode=(struct Node *)malloc(sizeof(struct Node));
 	rootNode->secStructure=(short *)malloc((length)*sizeof(short));
@@ -125,7 +120,9 @@ struct Node* best( char *sequence, char *currentModel){
 	}
 	ClearHotspots(MaxHotspots);
 	min_en=endFlag;
+	free(string);
 	free(structure);
+	free(rootNode);
 	return listOfNodes[0];
 }
 

@@ -1,4 +1,4 @@
-include *.md LICENSE VERSION
+include *.md LICENSE
 include test/*
 include params/*
 recursive-include include *.h
