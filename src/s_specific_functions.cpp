@@ -48,88 +48,65 @@ PARAMTYPE s_dangling_energy (int *sequence, char *structure, int i1, int i2, int
 	d_bot = 0;
 
 
-	d_top = MIN (0, dangle_top[sequence[i2]]
-			[sequence[i1]]
-			[sequence[i2+1]]);
-	d_bot = MIN (0, dangle_bot[sequence[i4]]
-			[sequence[i3]]
-			[sequence[i3-1]]);
-	if (structure[i2] == '>' && structure[i3] == '(')   // pseudoknot, ignore dangling end dangling on it
-	{
+	d_top = MIN (0, dangle_top[sequence[i2]][sequence[i1]][sequence[i2+1]]);
+	d_bot = MIN (0, dangle_bot[sequence[i4]][sequence[i3]][sequence[i3-1]]);
+	if (structure[i2] == '>' && structure[i3] == '('){   // pseudoknot, ignore dangling end dangling on it
 		if (i3 <= i2+2)     // >.( or >(   ignore completely
 			energy = 0;
 		else                // >...(
 			energy = d_bot;
-	}    
-	else if (structure[i2] == ')' && structure[i3] == '<')   // pseudoknot, ignore dangling end dangling on it
-	{
+	} else if (structure[i2] == ')' && structure[i3] == '<') {   // pseudoknot, ignore dangling end dangling on it
 		if (i3 <= i2+2)     // ).< or )<   ignore completely
 			energy = 0;
 		else                // )...<
 			energy = d_top;
-	}
-	else if (structure[i2] == '>' && structure[i3] == '<')  // case >..<  ignore completely
-	{
+	} else if (structure[i2] == '>' && structure[i3] == '<') {  // case >..<  ignore completely
 		energy = 0;
-	}                          
-	else if (i2+1 == i3-1)     // see which is smaller
-	{
+	} else if (i2+1 == i3-1) {    // see which is smaller
 		if (simple_dangling_ends)
 			energy = d_top;
 		else
 			energy = d_top < d_bot ? d_top : d_bot;
-	}
-	else if (i2+1 < i3-1)
-	{
+	} else if (i2+1 < i3-1) {
 		energy = d_top + d_bot;
-	}
-	else // if there is no free base between the two branches, return 0
+	} else { // if there is no free base between the two branches, return 0
 		energy = 0;
+	}
 	return energy;
 }
 
 
-PARAMTYPE s_dangling_energy_left (int *sequence, char *structure, int i1, int i2, int i3, int i4)
+PARAMTYPE s_dangling_energy_left (int *sequence, char *structure, int i1, int i2, int i3, int i4){
 	//      (....(    )   )
 	//      i1   i3  i4  i2
 	// PRE:  (i1, i2) and (i3, i4) are pairs, i1 and i3 are neighbours, i3 < i2
 	// POST: return dangling energy between i1 and i3
 	// Feb 28, 2008. We might have a situation like this:  (....<    >   ). In that case, only add the 3' dangling end.
 	// If it's (.<    > ), don't add any
-{
 	PARAMTYPE energy;
 	PARAMTYPE d_top, d_bot;
 	d_top = 0;
 	d_bot = 0;            
 
-	d_top = MIN (0, dangle_top[sequence[i1]]
-			[sequence[i2]]
-			[sequence[i1+1]]);
+	d_top = MIN(0, dangle_top[sequence[i1]][sequence[i2]][sequence[i1+1]]);
 
-	d_bot = MIN (0, dangle_bot[sequence[i4]]
-			[sequence[i3]]
-			[sequence[i3-1]]);
+	d_bot = MIN(0, dangle_bot[sequence[i4]][sequence[i3]][sequence[i3-1]]);
 
-	if (structure[i3] == '<')   // pseudoknot inside, ignore dangling end dangling on it
-	{
+	if (structure[i3] == '<'){   // pseudoknot inside, ignore dangling end dangling on it
 		if (i3 <= i1+2)     // (< or (.<, ignore completely
 			energy = 0;
 		else                // (....<
 			energy = d_top;
-	}    
-	else if (i1+1 == i3-1)     // see which is smaller
-	{
+	} else if (i1+1 == i3-1) {     // see which is smaller
 		if (simple_dangling_ends)
 			energy = d_top;
 		else    
 			energy = d_top < d_bot ? d_top : d_bot;
-	}
-	else if (i1+1 < i3-1)
-	{
+	} else if (i1+1 < i3-1) {
 		energy = d_top + d_bot;
-	}
-	else // if there is no free base between the two branches, return 0
+	} else { // if there is no free base between the two branches, return 0
 		energy = 0;
+	}
 	return energy;
 }
 

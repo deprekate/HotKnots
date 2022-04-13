@@ -42,13 +42,18 @@ void read_configuration_filePK (char *filename){
 	char buffer[256], token1[50], token2[5], token3[50];
 	FILE *file;
 	int i;
+	memset(buffer, 0, sizeof(buffer));
+	memset(token1, 0, sizeof(token1));
+	memset(token2, 0, sizeof(token2));
+	memset(token3, 0, sizeof(token3));
+
 	if ((file = fopen (filename,"r")) == NULL){
 		giveupPK( (char *) "1aCannot open file", filename);
 	}
 	fgets(buffer, sizeof(buffer), file);
 	while (!feof(file)){
 		if (buffer[0] == '#' || buffer[0] == '[' || buffer[0] == '\n'){
-			fgets (buffer, sizeof(buffer), file);
+			fgets(buffer, sizeof(buffer), file);
 			continue;
 		}
 		sscanf(buffer, "%s%s%s", token1, token2, token3);
@@ -58,7 +63,7 @@ void read_configuration_filePK (char *filename){
 				break;
 			}    
 		}
-		fgets (buffer, sizeof(buffer), file);
+		fgets(buffer, sizeof(buffer), file);
 	}
 	fclose(file);
 }

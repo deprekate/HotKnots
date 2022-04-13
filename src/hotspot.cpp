@@ -217,9 +217,8 @@ int FindHotspots(char* sequence, char* structure, int MaxHotspots)
 }
 
 
-void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *rootNode)
+void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *rootNode){
 	//create childNodes for currentNode according to hotspots
-{
 	short i,j,k,hotspotLength,numChild=0,temp1, temp2;
 	char tempConstraint[length+1];
 	extern struct Hotspots *hotspots;
@@ -252,8 +251,7 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 		if (overlap == 0 && IsAlreadyExist(tempConstraint, rootNode, currentNode)==0) {
 			numChild++;
 			exist[i] = 0;
-		}
-		else {
+		}else {
 			exist[i] = 1;
 		}
 
@@ -266,10 +264,12 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 		if(exist[i] == 0) {   //new constraints, create child node
 			currentNode->children[k] = (struct Node*)malloc(sizeof(struct Node));
 			currentNode->children[k]->constraint = (char*)malloc(sizeof(char)*(length+1));
+			//memset(currentNode->children[k]->constraint, 0, sizeof(currentNode->children[k]->constraint));
 			currentNode->children[k]->fixedPairs = (short*)malloc(sizeof(short)*length);
 			currentNode->children[k]->length = length;
 			currentNode->children[k]->numChild = 0;
 			currentNode->children[k]->secStructure = (short *)malloc(sizeof(short)*length);
+			//memset(currentNode->children[k]->secStructure, 0, sizeof(currentNode->children[k]->secStructure));
 			currentNode->children[k]->children = NULL;
 			strncpy(currentNode->children[k]->constraint, currentNode->constraint,length);
 			currentNode->children[k]->constraint[length] = 0;

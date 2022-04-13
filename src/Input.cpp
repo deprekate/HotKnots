@@ -88,8 +88,7 @@ ReadInput: Takes as input the file names which contain RNA primary structure (fs
 RNA secondary structure (fbseq) and construct the input-structures according to these files!
 **************************************************************************************/
 ReadInput::ReadInput(char * fbpseq){
-
-//INITIALIZING
+	//INITIALIZING
 	for (int i = 0; i < MaxN; i++){
 		Sequence[i] = -1;
 		CSequence[i] = ' ';
@@ -99,7 +98,7 @@ ReadInput::ReadInput(char * fbpseq){
 		loops[i].pair = 0;
 		looplists[i] = NULL;
 		cannot_add_dangling[i] = 0;
-//		must_add_dangling[i] = 0;  // Cristina: June 11 added
+		//must_add_dangling[i] = 0;  // Cristina: June 11 added
 	}
 
 	CSequence[0] = ' ';
@@ -112,16 +111,13 @@ ReadInput::ReadInput(char * fbpseq){
 	int i=0;	
 	while (!feof(fileBpseq)){
 		fscanf(fileBpseq, "%d %c %d\n", &m, &c[i], &n);
-		
 		AddPair(m, n, c[i]);
 		i++;
 	}
-        Size = i;
-	if (DEBUG)
-		printf("[ReadInput] Size is %d\n", Size);
+    Size = i;
 	fclose(fileBpseq);
 
-//REMOVING UNPAIRED BASES
+	//REMOVING UNPAIRED BASES
 	int Last = 0;
 	for (int m = 1; m <= Size; m++)
 		if (Sequence[m] > 0){
@@ -149,7 +145,7 @@ ReadInput::ReadInput(char * fseq, char * fbpseq){
 		loops[i].pair = 0;
 		looplists[i] = NULL;
 		cannot_add_dangling[i] = 0;
-//		must_add_dangling[i] = 0;   // Cristina: June 11 added
+		//must_add_dangling[i] = 0;   // Cristina: June 11 added
 	};
 
 	CSequence[0] = ' ';
@@ -173,12 +169,10 @@ ReadInput::ReadInput(char * fseq, char * fbpseq){
 		AddPair(m, n, c[i]);
 		i++;
 	};
-	if (DEBUG)
-		printf("[ReadInput] Size is %d\n", Size);
 	fclose(fileSeq);
 	fclose(fileBpseq);
 
-//REMOVING UNPAIRED BASES
+	//REMOVING UNPAIRED BASES
 	int Last = 0;
 	for (int m = 1; m <= Size; m++)
 		if (Sequence[m] > 0){  // if base in sequence is paired...
@@ -187,10 +181,6 @@ ReadInput::ReadInput(char * fseq, char * fbpseq){
 			Next[Last] = m;  // set the next base pair
 			Last = m;
 	};
-
-
-
-
 };
 
 /****************************************************************************************
@@ -200,7 +190,6 @@ these information!
 *****************************************************************************************/
 
 ReadInput::ReadInput(int size, char* baseSequence, short* pairRefSequence){
-  
 	for (int i = 0; i < MaxN; i++){
 		Sequence[i] = -1;
 		CSequence[i] = ' ';
@@ -210,7 +199,7 @@ ReadInput::ReadInput(int size, char* baseSequence, short* pairRefSequence){
 		Prev[i] = 0;
 		type[i] = 0;
 		cannot_add_dangling[i] = 0;
-//		must_add_dangling[i] = 0;   // Cristina: June 11 added
+		//must_add_dangling[i] = 0;   // Cristina: June 11 added
 	};
 
 
@@ -226,12 +215,9 @@ ReadInput::ReadInput(int size, char* baseSequence, short* pairRefSequence){
 		isChar = 1;
 
 	for (int i = 1; i <= size; i++){
-		if (isChar == 1)
+		if (isChar == 1){
 			c = toupper(baseSequence[i-1]);
-		else
-		{
-//			printf("%d", c);
-	
+		}else{
 			switch ((int)baseSequence[i]){
 				case A:
 					c = 'A';
@@ -248,36 +234,30 @@ ReadInput::ReadInput(int size, char* baseSequence, short* pairRefSequence){
 				default:            // Added just one default case here.
 					printf("ERROR: Input.cpp::ReadInput - wrong RNA letter (%c) at index %d\n", (int)baseSequence[i], i);
 					exit(1);
-//				case U:
-//				default:
-//					c = 'U';
-//					break;
+				//case U:
+				//default:
+				//	c = 'U';
+				//	break;
 			};
 		}
 
-//		printf("Adding Pair %d %d\n", i, (int)pairRefSequence[i]);
-
+		//printf("Adding Pair %d %d\n", i, (int)pairRefSequence[i]);
 		AddPair(i, (int)pairRefSequence[i], c);
 	};
 	Size = size;
 
-
-
 	int Last = 0;
-	for (int m = 1; m <= Size; m++)
+	for (int m = 1; m <= Size; m++){
 		if (Sequence[m] > 0){
 			loops[m].pair = BasePair(m);
 			Prev[m] = Last;
 			Next[Last] = m;
 			Last = m;
-	};
-
+		}
+	}
 
 	for (int i = 0; i <= Size; i++)
 		ClosedRegions[i] = NULL;
-
-
-
 };
 
 
@@ -285,7 +265,7 @@ ReadInput::ReadInput(int size, char* baseSequence, short* pairRefSequence){
 RemoveUnpaired: Removes unpaired bases from the the secondary structure.
 ******************************************************************************/
 
- void ReadInput::RemoveUnpaired(){
+void ReadInput::RemoveUnpaired(){
 	int Last = 0;
 	for (int m = 1; m <= Size; m++)
 		if (Sequence[m] > 0){

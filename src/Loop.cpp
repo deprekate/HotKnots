@@ -393,7 +393,7 @@ void Loop::addLoop(int begin, int end){
 
 	L1->LoopFindBands();
 	L1->PseudoNestedCheck();
-	delete L1->DotParanthStructure;
+	delete [] L1->DotParanthStructure;
 }
 
 /*********************************************************************************
@@ -4746,53 +4746,28 @@ double	Loop::nestedPseudoEnergyCC2006b(double** P_matrix, double *c, double &f, 
 	}
 	pkfree_structure[numbases] = '\0';
 	// if there is a PK child, need to add dangles here
-	if (ignore_dangles == 0)
-	{
+	if (ignore_dangles == 0){
 		pk_str_features * f = Input->loops;
 		int * sequence = Input->type;
 		int i_pt = begin;
 
-		for (int j = begin; j < end; j++)
-		{
+		for (int j = begin; j < end; j++){
 			if (Input->ClosedRegions[j] != NUL && Input->ClosedRegions[j]->type == multi && Input->ClosedRegions[j]->hasPKBranches() == 1)
 			{
 				// add dangling energies for multi-loop
 				dang += dangling_energy_left (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair);
-				if (DEBUG)
-					printf("MULTI: dang left = %d\n", dangling_energy_left (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair));	// Cristina: July 17, 2007
 				if (c != NUL)    count_LEdangling_energy_left (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[0], f[f[i_pt].bri[0]].pair, c);
 
 				for (int l=0; l < f[i_pt].num_branches - 1; l++){
 					dang += dangling_energy (sequence, pkfree_structure, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair);
-					if (DEBUG)
-						printf("MULTI: dang %d = %d: %d %d %d %d, %d %d %d %d\n", l, dangling_energy (sequence, pkfree_structure, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair),
-								f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair,
-								sequence[f[i_pt].bri[l]], sequence[f[f[i_pt].bri[l]].pair], sequence[f[i_pt].bri[l+1]], sequence[f[f[i_pt].bri[l+1]].pair]);	// Cristina: July 17, 2007
 					if (c != NUL)    count_LEdangling_energy (sequence, pkfree_structure, -1, f[i_pt].bri[l], f[f[i_pt].bri[l]].pair, f[i_pt].bri[l+1], f[f[i_pt].bri[l+1]].pair, c);
 				}
-				/*
-				   printf("\nNon-Zero Simfold Counter Values:\n");
-				   for (int i = 0; i < get_num_params(); i++)
-				   if (c[i] != 0.0)
-				   printf("c[%d]=%f  ", i, c[i]);
-				   printf("\n");
-				   */
-				dang += dangling_energy_right (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair);
-				if (DEBUG)
-					printf("MULTI: dang right = %d\n", dangling_energy_right (sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair));	// Cristina: July 17, 2007
+				dang += dangling_energy_right(sequence, pkfree_structure, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair);
 				if (c != NUL)    count_LEdangling_energy_right (sequence, pkfree_structure, -1, i_pt, f[i_pt].pair, f[i_pt].bri[f[i_pt].num_branches-1], f[f[i_pt].bri[f[i_pt].num_branches-1]].pair, c);
-				/*
-				   printf("\nNon-Zero Simfold Counter Values:\n");
-				   for (int i = 0; i < get_num_params(); i++)
-				   if (c[i] != 0.0)
-				   printf("c[%d]=%f  ", i, c[i]);
-				   printf("\n");
-				   */
 
 			}
 			// add "no-dangling" restriction                                    
-			for (int l=0; l < f[i_pt].num_branches; l++)
-			{
+			for (int l=0; l < f[i_pt].num_branches; l++){
 				Input->cannot_add_dangling [f[i_pt].bri[l] -1] = 1;
 				Input->cannot_add_dangling [f[f[i_pt].bri[l]].pair + 1] = 1;
 			}
@@ -4831,8 +4806,7 @@ double	Loop::multiEnergyCC2006a(){
 	//		misc_energy += misc.multi_free_base_penalty;
 
 	// for all the branches in this multiloop...
-	for (h=0; h < f[i].num_branches-1; h++)
-	{
+	for (h=0; h < f[i].num_branches-1; h++){
 		// ...count the number of unpaired bases from the end of one branch to the beginning of the next branch
 		for (l = f[f[i].bri[h]].pair + 1; l < f[i].bri[h+1]; l++)
 			misc_energy += pkmodelDP.c;
@@ -4844,25 +4818,15 @@ double	Loop::multiEnergyCC2006a(){
 		misc_energy += pkmodelDP.c;
 	//		misc_energy += misc.multi_free_base_penalty;
 
-	if (DEBUG)
-		printf("[misc_energy]1 (unpaired bases) is %f kcal/mol\n", misc_energy);
-
 	// add penalty for initiating a multiloop
 	misc_energy += pkmodelDP.a;
 	//	misc_energy += misc.multi_offset;
-
-	if (DEBUG)
-		printf("[misc_energy]2 (+ initiation penalty) is %f kcal/mol\n", misc_energy);
-	//		printf("[%%%%%%%%%%%%%%%%%%%%%%%%5]misc.u.tidfjfwrw = %d\n", misc.multi_offset);
 
 	// DONECHECK: the +1 in number of branches is for the closing base pair
 	// add the penalty for each base pair in the multiloop (the +1 in number of branches is for the closing base pair i,f[i].pair)
 	misc_energy += pkmodelDP.b * (f[i].num_branches + 1);
 	//	misc_energy += pkmodelDP.b * (f[i].pseudo_num_branches + 1);  // this is if pseudoloops count as 2 branches instead of 1
 	//	misc_energy += misc.multi_helix_penalty * (f[i].pseudo_num_branches + 1);
-
-	if (DEBUG)
-		printf("[misc_energy]3 (+ number of branches = %d) is %f kcal/mol\n", f[i].num_branches + 1, misc_energy);
 
 	misc_energy *= 100;  // multiply by 100 since the remaining energies in this function are in 10cal/mol
 
@@ -4896,26 +4860,13 @@ double	Loop::multiEnergyCC2006a(){
 	//	printf("MULTI: dang right = %d\n", dangling_energy_right_res (sequence, i, f[i].pair, f[i].bri[f[i].num_branches-1], f[f[i].bri[f[i].num_branches-1]].pair, Input->cannot_add_dangling[f[i].pair-1], Input->cannot_add_dangling[f[f[i].bri[f[i].num_branches-1]].pair+1]));	// Cristina: July 17, 2007
 
 	// add "no-dangling" restriction                                    
-	for (l=0; l < f[i].num_branches; l++)
-	{
+	for (l=0; l < f[i].num_branches; l++){
 		Input->cannot_add_dangling [f[i].bri[l] -1] = 1;
 		Input->cannot_add_dangling [f[f[i].bri[l]].pair + 1] = 1;
 	}
 	Input->cannot_add_dangling [i] = 1;  // restrict start of multiloop from having an AU penalty added
 
-	if (DEBUG)
-	{
-		printf ("%d - multi m\t- add energy %f 10cal/mol\n", i, misc_energy);
-		printf ("%d - multi d\t- add energy %6d 10cal/mol\n", i, dang);
-		printf ("%d - multi AU\t- add energy %6d 10cal/mol\n", i, AUpen);
-	}
-
-	if (DEBUG)            
-		printf ("%d multi \t- add energy %f 10cal/mol\n", i, misc_energy + dang + AUpen);
-
 	return misc_energy + dang + AUpen;
-
-
 }
 
 
@@ -4937,8 +4888,7 @@ float	Loop::pseudoEnergyCC2006b(){
 	//       since we just want to use the old simfold function before < meant
 	//       something special
 	char structure_all[numbases+1];
-	for (int i = 0; i < numbases; i++)
-	{
+	for (int i = 0; i < numbases; i++){
 		if (Input->Sequence[begin + i] <= 0)
 			structure_all[i] = '.';
 		else if (Input->Sequence[begin + i] > (begin+i))
@@ -4965,20 +4915,14 @@ float	Loop::pseudoEnergyCC2006b(){
 
 	// check if it's an H-type pseudoloop
 	// for [a,a']
-	for (k = i; k < bandpattern->pattern[i].OtherBorder; k++)
-	{
-		if (Input->BasePair(k) != validBasepair)
-		{
+	for (k = i; k < bandpattern->pattern[i].OtherBorder; k++){
+		if (Input->BasePair(k) != validBasepair){
 			if (Input->BasePair(k) <= 0) {
 				internalLoop = 1;
-			}
-			else if (Input->BasePair(k) < bandpattern->pattern[i].OtherBorder) // if base pair is less than a' above
-			{
+			}else if (Input->BasePair(k) < bandpattern->pattern[i].OtherBorder){ // if base pair is less than a' above
 				multi = 1;
 				break;  // break since not handled by Cao & Chen
-			}
-			else
-			{
+			}else{
 				internalLoop = 1;  // don't break in case there is a multiloop left
 			}
 		}
@@ -4986,20 +4930,14 @@ float	Loop::pseudoEnergyCC2006b(){
 	}
 	// for [c,c']
 	validBasepair = Input->BasePair(bandpattern->pattern[i].next);  // first valid base pair in second band is "d" above i.e. BasePair(c)
-	for (k = bandpattern->pattern[i].next; k < bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder; k++)
-	{
-		if (Input->BasePair(k) != validBasepair)
-		{
+	for (k = bandpattern->pattern[i].next; k < bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder; k++){
+		if (Input->BasePair(k) != validBasepair){
 			if (Input->BasePair(k) <= 0) {
 				internalLoop = 1;
-			}
-			else if (Input->BasePair(k) < bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) // if base pair is less than c' above
-			{
+			}else if (Input->BasePair(k) < bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder){ // if base pair is less than c' above
 				multi = 1;
 				break;  // break since not handled by Cao & Chen
-			}
-			else
-			{
+			}else{
 				internalLoop = 1;  // don't break in case there is a multiloop left
 			}
 		}
@@ -5012,20 +4950,14 @@ float	Loop::pseudoEnergyCC2006b(){
 	int border_d = bandpattern->pattern[border_dp].OtherBorder;
 
 	validBasepair = Input->BasePair(border_bp);  // first valid base pair in second band is "ap" above i.e. BasePair(bp)
-	for (k = border_bp; k < border_b; k++)
-	{
-		if (Input->BasePair(k) != validBasepair)
-		{
+	for (k = border_bp; k < border_b; k++){
+		if (Input->BasePair(k) != validBasepair){
 			if (Input->BasePair(k) <= 0) {
 				internalLoop = 1;
-			}
-			else if (Input->BasePair(k) > border_bp) // if base pair is less than c' above
-			{
+			}else if (Input->BasePair(k) > border_bp){ // if base pair is less than c' above
 				multi = 1;
 				break;  // break since not handled by Cao & Chen
-			}
-			else
-			{
+			}else{
 				internalLoop = 1;  // don't break in case there is a multiloop left
 			}
 		}
@@ -5033,20 +4965,14 @@ float	Loop::pseudoEnergyCC2006b(){
 	}
 	// for [d',d]  // added: August 11 - to check if there are nested children on the other side of the band
 	validBasepair = Input->BasePair(border_dp);  // first valid base pair in second band is "c" above i.e. BasePair(d)
-	for (k = border_dp; k < border_d; k++)
-	{
-		if (Input->BasePair(k) != validBasepair)
-		{
+	for (k = border_dp; k < border_d; k++){
+		if (Input->BasePair(k) != validBasepair){
 			if (Input->BasePair(k) <= 0) {
 				internalLoop = 1;
-			}
-			else if (Input->BasePair(k) > border_dp) // if base pair is less than c' above
-			{
+			} else if (Input->BasePair(k) > border_dp) { // if base pair is less than c' above
 				multi = 1;
 				break;  // break since not handled by Cao & Chen
-			}
-			else
-			{
+			}else{
 				internalLoop = 1;  // don't break in case there is a multiloop left
 			}
 		}
@@ -5058,44 +4984,28 @@ float	Loop::pseudoEnergyCC2006b(){
 	int loop1 = 0;  // size of L1 (first loop from 5' end)
 	int loop2 = 0;  // size of L2
 
-	if (valid == 1 && multi == 0 && internalLoop == 0)  // H-type pseudoknot: Use Cao&Chen model directly
-	{
-		stem1 = bandpattern->pattern[i].OtherBorder - i + 1;  // i.e. a'-a+1
-		stem2 = bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder - bandpattern->pattern[i].next + 1;  // i.e. c'-c+1
-		loop1 = bandpattern->pattern[i].next - bandpattern->pattern[i].OtherBorder - 1; // i.e. c-a'+1
-		loop2 = Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - Input->BasePair(i) - 1; // i.e. d'-b+1 
+	if (valid == 1 && multi == 0 && internalLoop == 0){  // H-type pseudoknot: Use Cao&Chen model directly
+		// i.e. a'-a+1
+		stem1 = bandpattern->pattern[i].OtherBorder - i + 1;
+		// i.e. c'-c+1
+		stem2 = bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder - bandpattern->pattern[i].next + 1;
+		// i.e. c-a'+1
+		loop1 = bandpattern->pattern[i].next - bandpattern->pattern[i].OtherBorder - 1;
+		// i.e. d'-b+1 
+		loop2 = Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - Input->BasePair(i) - 1;
 
-		if (DEBUG2)
-			printf("[PseudoEnergy CC2006 b] stem1a - stem1b = %d - %d, stem2a - stem2b = %d - %d, loop1a - loop1b = %d - %d, loop2a - loop2b = %d - %d\n",
-					bandpattern->pattern[i].OtherBorder, i, bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder,
-					bandpattern->pattern[i].next, bandpattern->pattern[i].next, bandpattern->pattern[i].OtherBorder,
-					Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder), Input->BasePair(i));
-	}
-	else if (valid == 1 && multi == 0 && internalLoop == 1)  // internal loop inside stem: User Cao&Chen model with stem length = number of basepairs
-	{
+	}else if (valid == 1 && multi == 0 && internalLoop == 1){  // internal loop inside stem: User Cao&Chen model with stem length = number of basepairs
 		stem1 = bandpattern->pattern[i].OtherBorder - i + 1 - UnpairedBases(Input, i, bandpattern->pattern[i].OtherBorder);  // i.e. a'-a+1
 		stem2 = bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder - bandpattern->pattern[i].next + 1 - UnpairedBases(Input, bandpattern->pattern[i].next, bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder);  // i.e. c'-c+1
 		loop1 = bandpattern->pattern[i].next - bandpattern->pattern[i].OtherBorder - 1; // i.e. c-a'+1
 		loop2 = Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - Input->BasePair(i) - 1; // i.e. d'-b+1 
 
-		if (DEBUG2)
-			printf("[PseudoEnergy CC2006 b] stem1a - stem1b - unpaired = %d - %d - %d, stem2a - stem2b - unpaired = %d - %d - %d, loop1a - loop1b = %d - %d, loop2a - loop2b = %d - %d\n",
-					bandpattern->pattern[i].OtherBorder, i, bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, UnpairedBases(Input, i, bandpattern->pattern[i].OtherBorder),
-					bandpattern->pattern[i].next, bandpattern->pattern[i].next, bandpattern->pattern[i].OtherBorder, UnpairedBases(Input, bandpattern->pattern[i].next, bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder),
-					Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder), Input->BasePair(i));
-	}
-	else // Multiloop or chain exists: Use Dirks&Pierce instead
-	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: contains multi loop in the stems or more than 2 bands\n");
+	}else{ // Multiloop or chain exists: Use Dirks&Pierce instead
 		return pseudoEnergyDP();
 	}
 
 	// added: August 11 - conditions on loop1 and loop2
-	if (stem1 > 12 || stem2 > 12 || stem1 <= 1 || stem2 <= 1 || loop1 == 0 || loop2 == 0)  // not handled by Cao & Chen tables
-	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: stems sizes are not handled.\n");
+	if (stem1 > 12 || stem2 > 12 || stem1 <= 1 || stem2 <= 1 || loop1 == 0 || loop2 == 0){  // not handled by Cao & Chen tables
 		return pseudoEnergyDP();
 	}
 
@@ -5108,48 +5018,39 @@ float	Loop::pseudoEnergyCC2006b(){
 
 
 	// Not in the CC tables, but possible pseudoknot conformations:
-	if (loop1 <= 12 && cc2006_s2_l1[stem2-2][loop1-1] >= INF)
-	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: entropy values are INF in CC tables: stem1=%d,loop2=%d,stem2=%d,loop1=%d\n",stem1,loop2,stem2,loop1);
+	if (loop1 <= 12 && cc2006_s2_l1[stem2-2][loop1-1] >= INF){
 		return pseudoEnergyDP();  // not possible using CC, but may occur in real life
 	}
 
-	if (loop2 <= 12 && cc2006_s1_l2[stem1-2][loop2-1] >= INF)
-	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: entropy values are INF in CC tables: stem1=%d,loop2=%d,stem2=%d,loop1=%d\n",stem1,loop2,stem2,loop1);
+	if (loop2 <= 12 && cc2006_s1_l2[stem1-2][loop2-1] >= INF){
 		return pseudoEnergyDP();  // not possible using CC, but may occur in real life
 	}
 
 
-	if (loop1 > 12)
-	{
+	if (loop1 > 12){
 		ln_omega_coil_L1 = 2.14 * loop1 + 0.10;
-		ln_omega_L1 = cc2006_s2_formula[1][stem2-2] * log(loop1 - cc2006_s2_formula[0][stem2-2] + 1) + cc2006_s2_formula[2][stem2-2] * (loop1 - cc2006_s2_formula[0][stem2-2] + 1) + cc2006_s2_formula[3][stem2-2];  // a * ln(loop1 - l_min + 1) + b * (loop1 - l_min + 1) + c;
-		TdeltaS_L1 = -KB * (ln_omega_coil_L1 - ln_omega_L1) * pkmodelCC2006.temp * 100;  // all other energies are in 10cal/mol
-		//		printf("ln_omega_coil_L1 = %f, ln_omega_L1 = %f, cc2006_s2_formula[1][stem2-2] = %f, log = %f", ln_omega_coil_L1, ln_omega_L1, cc2006_s2_formula[1][stem2-2], log(loop1 - cc2006_s2_formula[0][stem2-2] + 1));
-	}
-	else
-	{
+		// a * ln(loop1 - l_min + 1) + b * (loop1 - l_min + 1) + c;
+		ln_omega_L1 = cc2006_s2_formula[1][stem2-2] * log(loop1 - cc2006_s2_formula[0][stem2-2] + 1) + cc2006_s2_formula[2][stem2-2] * (loop1 - cc2006_s2_formula[0][stem2-2] + 1) + cc2006_s2_formula[3][stem2-2];
+		// all other energies are in 10cal/mol
+		TdeltaS_L1 = -KB * (ln_omega_coil_L1 - ln_omega_L1) * pkmodelCC2006.temp * 100; 
+	}else{
 		TdeltaS_L1 = -cc2006_s2_l1[stem2-2][loop1-1];
 
-		// Cristina: added this since cases can occur where a pseudoknot of dimensions not included in the CC table do occur in real life
+		// Cristina: added this since cases can occur where a pseudoknot of dimensions not
+		// included in the CC table do occur in real life
 		if (cc2006_s2_l1[stem2-2][loop1-1] >= INF)
 			return pseudoEnergyDP();  // not possible using CC, but may occur in real life
 	}
 
-	if (loop2 > 12)
-	{
+	if (loop2 > 12){
 		ln_omega_coil_L2 = 2.14 * loop2 + 0.10;
 		ln_omega_L2 = cc2006_s1_formula[1][stem1-2] * log(loop2 - cc2006_s1_formula[0][stem1-2] + 1) + cc2006_s1_formula[2][stem1-2] * (loop2 - cc2006_s1_formula[0][stem1-2] + 1) + cc2006_s1_formula[3][stem1-2];  // a * ln(loop1 - l_min + 1) + b * (loop1 - l_min + 1) + c;
 		TdeltaS_L2 = -KB * (ln_omega_coil_L2 - ln_omega_L2) * pkmodelCC2006.temp * 100;  // all other energies are in 10cal/mol
-	}
-	else
-	{
+	}else{
 		TdeltaS_L2 = -cc2006_s1_l2[stem1-2][loop2-1];
 
-		// Cristina: added this since cases can occur where a pseudoknot of dimensions not included in the CC table do occur in real life
+		// Cristina: added this since cases can occur where a pseudoknot of dimensions not 
+		// included in the CC table do occur in real life
 		if (cc2006_s2_l1[stem2-2][loop1-1] >= INF)
 			return pseudoEnergyDP();  // not possible using CC, but may occur in real life
 	}
@@ -5173,36 +5074,21 @@ float	Loop::pseudoEnergyCC2006b(){
 		L1 = L1->Next;
 	};
 
-	// Unnecessary:
-	// Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
-	/*
-	   while (L2 != NUL){
-	   float en = Input->looplists[L2->Num]->multiPseudoEnergyCC2006();
-	   if (DEBUG)
-	   printf("[MLoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
-	   Energy += en;
-	   if (DEBUG)
-	   printf("[Resulted Energy} : %.2f 10cal/mol\n", Energy);
-	   L2 = L2->Next;
-	   };
-
-	   if (DEBUG)
-	   printf("[PseudoEnergy] energy of [%d, %d] is %f 10cal/mol\n", begin, end, Energy);
-	   */
-
 	// Add coaxial stacking term...
 	int CoaxialStacking = 0;
 	int stack_dangle = 0;
 	int dangle0 = -1;
-	if (Input->cannot_add_dangling[bandpattern->pattern[i].OtherBorder + 1] != 1)  // use dangle only if allowed (i.e. not involved in coaxial stacking elsewhere)
-		dangle0 = (Input->BasePair(bandpattern->pattern[i].OtherBorder + 1) > 0) ? -1 : bandpattern->pattern[i].OtherBorder + 1;  // -1 if already paired
+	// use dangle only if allowed (i.e. not involved in coaxial stacking elsewhere)
+	if (Input->cannot_add_dangling[bandpattern->pattern[i].OtherBorder + 1] != 1)
+		// -1 if already paired
+		dangle0 = (Input->BasePair(bandpattern->pattern[i].OtherBorder + 1) > 0) ? -1 : bandpattern->pattern[i].OtherBorder + 1;
 	int dangle1 = -1;
-	if (Input->cannot_add_dangling[Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - 1] != 1)  // use dangle only if allowed (i.e. not involved in coaxial stacking elsewhere)
-		dangle1 = (Input->BasePair(Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - 1) > 0) ? -1 : Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - 1;  // -1 if already paired
-
+	// use dangle only if allowed (i.e. not involved in coaxial stacking elsewhere)
+	if (Input->cannot_add_dangling[Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - 1] != 1) 
+		// -1 if already paired
+		dangle1 = (Input->BasePair(Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - 1) > 0) ? -1 : Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - 1; 
 	//... as long as c'+1=b'
-	if ( (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder + 1) == Input->BasePair(bandpattern->pattern[i].OtherBorder) )
-	{
+	if ( (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder + 1) == Input->BasePair(bandpattern->pattern[i].OtherBorder) ){
 		// coaxial stacking energy of (c', bp(c'), b', bp(b')=a')
 		CoaxialStacking = LEcoax_stack_energy_flush_b (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, 
 				Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder),
@@ -5212,18 +5098,15 @@ float	Loop::pseudoEnergyCC2006b(){
 				Input->BasePair(bandpattern->pattern[i].OtherBorder+2),
 				sequence, no_pk_dangling_ends);
 
-		if (CoaxialStacking != 0)  // coaxial stacking favourable over dangling ends
-		{
+		if (CoaxialStacking != 0){  // coaxial stacking favourable over dangling ends
 			// make sure dangling ends are not included elsewhere (since include coaxial stacking)
 			if (dangle0 != -1)  // only change array if the dangling end was free originally
 				Input->cannot_add_dangling[dangle0] = 1;
 			if (dangle1 != -1)  // only change array if the dangling end was free originally
 				Input->cannot_add_dangling[dangle1] = 1;
 		}
-	}
 	//... or as long as c'+2 = b' (mismatch coaxial stacking)
-	else if ( (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder + 2) == Input->BasePair(bandpattern->pattern[i].OtherBorder) )
-	{
+	} else if ( (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder + 2) == Input->BasePair(bandpattern->pattern[i].OtherBorder) ){
 		// coaxial stacking energy of (c', bp(c'), b', bp(b')=a', dangle_a'=a'+1, dangle_bp(c')=bp(c')-1)
 		CoaxialStacking = LEcoax_stack_energy_mismatch (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, 
 				Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder),
@@ -5245,9 +5128,7 @@ float	Loop::pseudoEnergyCC2006b(){
 					Input->cannot_add_dangling[dangle1] = 1;
 				//if (stack_dangle != 0 || stack_dangle != 1)
 				printf("ERROR: stack_dangle = %d not set properly for mismatch pseudoloop; must be 0 or 1\n", stack_dangle); 
-			}
-			else
-			{
+			}else{
 				Input->cannot_add_dangling[dangle0] = 1;
 				Input->cannot_add_dangling[dangle1] = 1;
 			}
@@ -5276,11 +5157,9 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 	int num_params_pkfree = get_num_params();
 	int num_params = get_num_params_PK_CC2006b();
 	int num_params_DP_and_pkfree = get_num_params_PK_DP();
-	if (reset_c == 1 && c != NUL)
-	{
+	if (reset_c == 1 && c != NUL){
 		f = 0;         
-		for (int i=0; i < num_params; i++)
-		{
+		for (int i=0; i < num_params; i++){
 			c[i] = 0;
 			for (int j=i; j < num_params; j++) 
 				P_matrix[i][j] = 0;
@@ -5296,8 +5175,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 	//       since we just want to use the old simfold function before < meant
 	//       something special
 	char structure_all[numbases+1];
-	for (int i = 0; i < numbases; i++)
-	{
+	for (int i = 0; i < numbases; i++){
 		if (Input->Sequence[begin + i] <= 0)
 			structure_all[i] = '.';
 		else if (Input->Sequence[begin + i] > (begin+i))
@@ -5325,20 +5203,14 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 
 	// check if it's an H-type pseudoloop
 	// for [a,a']
-	for (k = i; k < bandpattern->pattern[i].OtherBorder; k++)
-	{
-		if (Input->BasePair(k) != validBasepair)
-		{
+	for (k = i; k < bandpattern->pattern[i].OtherBorder; k++){
+		if (Input->BasePair(k) != validBasepair){
 			if (Input->BasePair(k) <= 0) {
 				internalLoop = 1;
-			}
-			else if (Input->BasePair(k) < bandpattern->pattern[i].OtherBorder) // if base pair is less than a' above
-			{
+			} else if (Input->BasePair(k) < bandpattern->pattern[i].OtherBorder){ // if base pair is less than a' above
 				multi = 1;
 				break;  // break since not handled by Cao & Chen
-			}
-			else
-			{
+			} else {
 				internalLoop = 1;  // don't break in case there is a multiloop left
 			}
 		}
@@ -5346,20 +5218,14 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 	}
 	// for [c,c']
 	validBasepair = Input->BasePair(bandpattern->pattern[i].next);  // first valid base pair in second band is "d" above i.e. BasePair(c)
-	for (k = bandpattern->pattern[i].next; k < bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder; k++)
-	{
-		if (Input->BasePair(k) != validBasepair)
-		{
+	for (k = bandpattern->pattern[i].next; k < bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder; k++){
+		if (Input->BasePair(k) != validBasepair){
 			if (Input->BasePair(k) <= 0) {
 				internalLoop = 1;
-			}
-			else if (Input->BasePair(k) < bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) // if base pair is less than c' above
-			{
+			} else if (Input->BasePair(k) < bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder){ // if base pair is less than c' above
 				multi = 1;
 				break;  // break since not handled by Cao & Chen
-			}
-			else
-			{
+			} else {
 				internalLoop = 1;  // don't break in case there is a multiloop left
 			}
 		}
@@ -5372,20 +5238,14 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 	int border_d = bandpattern->pattern[border_dp].OtherBorder;
 
 	validBasepair = Input->BasePair(border_bp);  // first valid base pair in second band is "ap" above i.e. BasePair(bp)
-	for (k = border_bp; k < border_b; k++)
-	{
-		if (Input->BasePair(k) != validBasepair)
-		{
+	for (k = border_bp; k < border_b; k++){
+		if (Input->BasePair(k) != validBasepair){
 			if (Input->BasePair(k) <= 0) {
 				internalLoop = 1;
-			}
-			else if (Input->BasePair(k) > border_bp) // if base pair is less than c' above
-			{
+			} else if (Input->BasePair(k) > border_bp) { // if base pair is less than c' above
 				multi = 1;
 				break;  // break since not handled by Cao & Chen
-			}
-			else
-			{
+			} else {
 				internalLoop = 1;  // don't break in case there is a multiloop left
 			}
 		}
@@ -5393,10 +5253,8 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 	}
 	// for [d',d]  // added: August 11 - to check if there are nested children on the other side of the band
 	validBasepair = Input->BasePair(border_dp);  // first valid base pair in second band is "c" above i.e. BasePair(d)
-	for (k = border_dp; k < border_d; k++)
-	{
-		if (Input->BasePair(k) != validBasepair)
-		{
+	for (k = border_dp; k < border_d; k++){
+		if (Input->BasePair(k) != validBasepair){
 			if (Input->BasePair(k) <= 0) {
 				internalLoop = 1;
 			}
@@ -5425,11 +5283,6 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		loop1 = bandpattern->pattern[i].next - bandpattern->pattern[i].OtherBorder - 1; // i.e. c-a'+1
 		loop2 = Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - Input->BasePair(i) - 1; // i.e. d'-b+1 
 
-		if (DEBUG2)
-			printf("[PseudoEnergy CC2006 b] stem1a - stem1b = %d - %d, stem2a - stem2b = %d - %d, loop1a - loop1b = %d - %d, loop2a - loop2b = %d - %d\n",
-					bandpattern->pattern[i].OtherBorder, i, bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder,
-					bandpattern->pattern[i].next, bandpattern->pattern[i].next, bandpattern->pattern[i].OtherBorder,
-					Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder), Input->BasePair(i));
 	}
 	else if (valid == 1 && multi == 0 && internalLoop == 1)  // internal loop inside stem: User Cao&Chen model with stem length = number of basepairs
 	{
@@ -5438,24 +5291,15 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		loop1 = bandpattern->pattern[i].next - bandpattern->pattern[i].OtherBorder - 1; // i.e. c-a'+1
 		loop2 = Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - Input->BasePair(i) - 1; // i.e. d'-b+1 
 
-		if (DEBUG2)
-			printf("[PseudoEnergy CC2006 b] stem1a - stem1b - unpaired = %d - %d - %d, stem2a - stem2b - unpaired = %d - %d - %d, loop1a - loop1b = %d - %d, loop2a - loop2b = %d - %d\n",
-					bandpattern->pattern[i].OtherBorder, i, bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, UnpairedBases(Input, i, bandpattern->pattern[i].OtherBorder),
-					bandpattern->pattern[i].next, bandpattern->pattern[i].next, bandpattern->pattern[i].OtherBorder, UnpairedBases(Input, bandpattern->pattern[i].next, bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder),
-					Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder), Input->BasePair(i));
 	}
 	else // Multiloop or chain exists: Use Dirks&Pierce instead
 	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: contains multi loop in the stems or more than 2 bands\n");
 		return pseudoEnergyDP(P_matrix, c, f, reset_c, ignore_dangles);
 	}
 
 	// added: August 11 - conditions on loop1 and loop2
 	if (stem1 > 12 || stem2 > 12 || stem1 <= 1 || stem2 <= 1 || loop1 == 0 || loop2 == 0)  // not handled by Cao & Chen tables
 	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: stems sizes are not handled.\n");
 		return pseudoEnergyDP(P_matrix, c, f, reset_c, ignore_dangles);
 	}
 
@@ -5472,15 +5316,11 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 	// Not in the CC tables, but possible pseudoknot conformations:
 	if (loop1 <= 12 && cc2006_s2_l1[stem2-2][loop1-1] >= INF)
 	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: entropy values are INF in CC tables: stem1=%d,loop2=%d,stem2=%d,loop1=%d\n",stem1,loop2,stem2,loop1);
 		return pseudoEnergyDP(P_matrix, c, f, reset_c, ignore_dangles);  // not possible using CC, but may occur in real life
 	}
 
 	if (loop2 <= 12 && cc2006_s1_l2[stem1-2][loop2-1] >= INF)
 	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: entropy values are INF in CC tables: stem1=%d,loop2=%d,stem2=%d,loop1=%d\n",stem1,loop2,stem2,loop1);
 		return pseudoEnergyDP(P_matrix, c, f, reset_c, ignore_dangles);  // not possible using CC, but may occur in real life
 	}
 
@@ -5509,8 +5349,6 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 
 		if (cc2006_s2_l1[stem2-2][loop1-1] >= INF)
 		{
-			if (DEBUG)
-				printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: entropy values are INF in CC tables.\n");
 			return pseudoEnergyDP(P_matrix, c, f, reset_c, ignore_dangles);  // not possible using CC, but may occur in real life
 		}
 		// TODO
@@ -5543,8 +5381,6 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 
 		if (cc2006_s1_l2[stem1-2][loop2-1] >= INF)
 		{
-			if (DEBUG)
-				printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: entropy values are INF in CC tables.\n");
 			return pseudoEnergyDP(P_matrix, c, f, reset_c, ignore_dangles);  // not possible using CC, but may occur in real life
 		}
 
@@ -5563,11 +5399,6 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 	// update counts:
 	f += pkmodelCC2006.deltaG_assemble/100.0;
 
-	if (DEBUG2)
-		printf("[PseudoEnergy CC2006 b] without energy of loops spanning bands (10cal/mol): %f, deltaG_assemble: %f, deltaS_L1: %f, deltaS_L2 = %f, stem1size: %d, stem2size: %d, loop1size: %d, loop2size: %d\n",
-				Energy, pkmodelCC2006.deltaG_assemble, TdeltaS_L1/(273.15+37), TdeltaS_L2/(273.15+37),
-				stem1, stem2, loop1, loop2);
-
 	// Energy so far is in 10cal/mol. Change to kcal/mol, which matches the rest of this function
 	Energy = Energy / 100.0;
 
@@ -5578,12 +5409,10 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 	/*
 	   while (L1 != NUL){
 	   float en = Input->looplists[L1->Num]->interiorPseudoEnergyCC2006a();  // same function for Cao&Chen a and b
-	   if (DEBUG)
-	   printf("[ILoops CC2006 with DP]: (%d, %d) Energy: %.2f 10cal/mol\n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
 	   Energy += en;
 	   L1 = L1->Next;
 	   };
-	   */
+	 */
 
 	T_IntList * L1 = ILoops;
 	int a, ap, bp, b;
@@ -5682,8 +5511,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		dangle1 = (Input->BasePair(Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - 1) > 0) ? -1 : Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - 1;  // -1 if already paired
 
 	//... as long as c'+1=b'
-	if ( (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder + 1) == Input->BasePair(bandpattern->pattern[i].OtherBorder) )
-	{
+	if ( (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder + 1) == Input->BasePair(bandpattern->pattern[i].OtherBorder) ){
 		// coaxial stacking energy of (c', bp(c'), b', bp(b')=a')
 		CoaxialStacking = LEcoax_stack_energy_flush_b (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, 
 				Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder),
@@ -5714,10 +5542,8 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 				Input->BasePair(bandpattern->pattern[i].OtherBorder+2),
 				sequence, c, ignore_dangles);
 
-	}
 	//... or as long as c'+2 = b' (mismatch coaxial stacking)
-	else if ( (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder + 2) == Input->BasePair(bandpattern->pattern[i].OtherBorder) )
-	{
+	} else if ( (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder + 2) == Input->BasePair(bandpattern->pattern[i].OtherBorder) ) {
 		// coaxial stacking energy of (c', bp(c'), b', bp(b')=a', dangle_a'=a'+1, dangle_bp(c')=bp(c')-1)
 		CoaxialStacking = LEcoax_stack_energy_mismatch (bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, 
 				Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder),
