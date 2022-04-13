@@ -35,6 +35,17 @@ int numRnaStruct;  //total number of different Rna structures
 struct Node* listOfNodes[50];   // for Rivas&Eddy
 
 /*--------------------------------------------------------------------------*/
+void Free(struct Node* currNode){
+	int i;
+
+	for(i = currNode->numChild; i > 0 ; i--){
+		Free(currNode->children[i-1]);
+	}
+	free(currNode->constraint);
+	free(currNode->fixedPairs);
+	free(currNode->secStructure);
+	free(currNode);
+}
 
 int initiate(char *currentModel, char *paramsFile, char *config_file, char *config_filePK){
 
@@ -57,10 +68,11 @@ int initiate(char *currentModel, char *paramsFile, char *config_file, char *conf
 	}else {
 		fill_data_structures_with_new_parameters(  (char *) "turner_parameters_fm363_constrdangles.txt");
 	}
+	free(temp);
 	return 1;
 }
 
-struct Node* best( char *sequence, char *currentModel){
+struct Fold* best( char *sequence, char *currentModel){
 	char *string=NULL;
 	char *structure=NULL;
 
@@ -70,6 +82,7 @@ struct Node* best( char *sequence, char *currentModel){
 	// *** Add new energy model code here
 
 	struct Node *rootNode;
+	struct Fold *bestFold;
 	// *** Add new energy model code here
 
 	int MaxHotspots = 200;
@@ -120,9 +133,25 @@ struct Node* best( char *sequence, char *currentModel){
 	}
 	ClearHotspots(MaxHotspots);
 	min_en=endFlag;
+
+	bestFold=(struct Fold *)malloc(sizeof(struct Fold));
+	bestFold->structure = (char *) malloc((length+1)*sizeof(char));
+	bestFold->score = -listOfNodes[0]->score / 1000.0;
+	bpseq2dp( (int) strlen(sequence), listOfNodes[0]->secStructure, bestFold->structure);
 	free(string);
 	free(structure);
-	free(rootNode);
-	return listOfNodes[0];
+	Free(rootNode);
+	//free(rootNode->secStructure);
+	//free(rootNode->fixedPairs);
+	//free(rootNode->constraint);
+	//free(rootNode);
+	return bestFold;
 }
+
+
+
+
+
+
+
 

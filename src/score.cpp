@@ -134,6 +134,8 @@ long Score::score(int len, char* s, short* p, int TRACE, int energyModel){
 	float  f = tree->EnergyViaSimfold(energyModel) + tree->EnergyDanglingViaSimfold(energyModel);
 	//        float  f = tree->Energy(energyModel) + tree->EnergyDangling();
 
+	delete tree->DotParanthStructure;
+	delete [] st->PrevInStack;
 	delete input;
 	delete st;
 	delete ban;

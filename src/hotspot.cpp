@@ -59,7 +59,7 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 int FindHotspots(char* sequence, char* structure, int MaxHotspots);
 int IsAlreadyExist(char *constraint, struct Node *rootNode, struct Node *currentNode);
 int secondaryStruct(char *sequence, int length, struct Node *currentNode, 
-		struct Node *rootNode, int MaxHotspots, int energyModel);
+struct Node *rootNode, int MaxHotspots, int energyModel);
 
 void InitHotspots(int MaxHotspots, int length)      /*initialization, used before FindHotspots*/
 {
@@ -229,7 +229,6 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 
 	tempConstraint[length] = 0;
 
-	//if (TRACE == 1) printf("numHotspots %d\n", hotspots->numHotspots);
 	for (i=0; i<hotspots->numHotspots; i++) {
 		exist[i] = 1;
 		overlap = 0;
@@ -251,13 +250,11 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 				tempConstraint[hotspots->substruct[i].pairTable[j+hotspotLength]-1] = 'x';
 		}
 		if (overlap == 0 && IsAlreadyExist(tempConstraint, rootNode, currentNode)==0) {
-			//if (TRACE == 1) printf("New constraint: %s\n",tempConstraint);
 			numChild++;
 			exist[i] = 0;
 		}
 		else {
 			exist[i] = 1;
-			//if (TRACE == 1) printf("constraint: %s \n overlapped [%d] or already exist!\n", tempConstraint, overlap);
 		}
 
 	}
@@ -294,15 +291,10 @@ void ChildNodeConstraint(int length, struct Node *currentNode, struct Node *root
 		}
 	}
 	if (currentNode->numChild != k) exit(1);
-	if (TRACE == 1) printf("%d %d child nodes have been created\n", numChild,k);
 }
 
 int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct Node *rootNode, int MaxHotspots, int energyModel)
 {
-	//	printf("MaxHotspots = %d, sequence = %s\n", MaxHotspots, sequence);
-	//	if (DEBUG)
-	//		printf("secondaryStruct: %s\n", sequence);
-
 	int i,j;
 	int start_piece, end_piece, length_piece;
 	short *temp_Pairs;
@@ -310,9 +302,6 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	char *temp_string, *temp_constraint, *temp_piece, *temp_constraint_piece;
 
 	count++;  
-	//char outPSFile[100];
-	//sprintf(outPSFile, "%s%d", "rna",count);
-	//if (TRACE == 1) printf("\n\n\n--------------%s-------------------\n", outPSFile);
 
 	if (count >= 10000) {
 		return 0;
@@ -351,17 +340,12 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 			free(temp_constraint_piece);
 		}
 	}
-	//	if (DEBUG)
-	//		printf("secondaryStruct2: %s\n", sequence);
-
-	//--now temp_constraint stores the 2nd structure 
 
 	//-----transform 2nd struct. to number format
 	temp_Pairs = make_pair_table(temp_constraint);
 
 	//-----combine new structure(temp_Pairs) with the fix ones from parent.  
-	for(i=0;i<length;i++)
-	{
+	for(i=0;i<length;i++){
 		if(currentNode->fixedPairs[i]==0)
 			currentNode->secStructure[i] = temp_Pairs[i+1];
 		else
@@ -370,60 +354,26 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	free(temp_Pairs);
 
 	//-----call score() to calculate the score of current 2nd struct and choose next step
-	//if(TRACE==1) {
-	//	printf("\n---------------------%s------------------\n", outPSFile);
-	//	printRnaStruct(currentNode->secStructure,length);
-	//	printf("\n");
-	//}
-
-	//        printf("Before call to score, sequence = %s, secStructure[0] = %d \n", sequence, currentNode->secStructure[0]);
-
-	//	if (DEBUG)
-	//		printf("secondaryStruct3a: %s\n", sequence);
 
 	currentNode->score = score(length,sequence,currentNode->secStructure,TRACE,energyModel);
 
-	//	if (DEBUG)
-	//		printf("secondaryStruct3b: %s\n", sequence);
-
-	//if (TRACE == 1) {
-	//	printf("current score is %f--\n", currentNode->score);
-	//	printf("\n Current 2nd Structure is: \n");
-	//	printRnaStruct(currentNode->secStructure,length);
-	//}
 
 	int fl = (currentNode->score>rootNode->score*T_RATIO  || (rootNode->score - currentNode->score) < 4000) && IsAlreadyExist(NULL, rootNode, currentNode)==0 ; 
 	if(fl) {
 		InsertRna(currentNode);
 	} else {
-	//	if (TRACE == 1) {
-	//		if ( currentNode->score<rootNode->score*T_RATIO ) {
-	//			printf("Score too low, bad branch!\n");
-	//		} else {
-	//			printf("Structure already exists!\n");
-	//		}
-	//	}
 	}//---need future coding
 	if(currentNode->score < rootNode->score*T_RATIO && (rootNode->score - currentNode->score) > 5000) {
 		// hotspots are no longer good. Stop searching along this branch.
 		free(temp_string); free(temp_constraint);
 		return currentNode->score;
 	} else {
-		//if (TRACE == 1) printf("current_constraints \n");
 		for(i=0;i<length;i++) {
 			temp_string[i]=currentNode->constraint[i];
-			//if (TRACE == 1) printf("%c",temp_string[i]);
 		}
 		temp_string[length] = 0;
-		//if (TRACE == 1) printf("\n");
-
-		//	if (DEBUG)
-		//		printf("secondaryStruct4a: %s\n", sequence);
 
 		min_en = simfold(sequence,temp_string);
-
-		//	if (DEBUG)
-		//		printf("secondaryStruct4b: %s\n", sequence);
 
 		FindHotspots(sequence,temp_string,MaxHotspots);
 
@@ -444,9 +394,10 @@ int secondaryStruct(char *sequence, int length, struct Node *currentNode, struct
 	return(min_en);
 }
 
-int IsAlreadyExist(char *constraint, struct Node *rootNode, struct Node *currentNode)
-{
-	int i, notsame=0;
+int IsAlreadyExist(char *constraint, struct Node *rootNode, struct Node *currentNode){
+	int i, notsame;
+	
+	notsame = 0;
 
 	if (constraint != NULL) {
 		if(rootNode == currentNode) return(0);
@@ -479,10 +430,9 @@ int IsAlreadyExist(char *constraint, struct Node *rootNode, struct Node *current
 
 
 
-void InsertRna(struct Node* currentNode)
+void InsertRna(struct Node* currentNode){
 	//insert the node into the array according to its score.
 	// by divide-and-conquer
-{
 	int i,j, seg;
 
 	if (numRnaStruct == MaxSubOpt) {
@@ -534,4 +484,8 @@ void InsertRna(struct Node* currentNode)
 	}
 	return;
 }
+
+
+
+
 

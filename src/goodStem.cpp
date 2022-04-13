@@ -72,8 +72,6 @@ return 0;
 
 void GenerateStemList(int length, char* sequence, char* constraint)
 {
-	//	if (DEBUG)
-	//		printf("generateStemList: %s\n", sequence);
 
 	char* rvSeq;
 	int **V, **G, **F, **E, **R;
@@ -186,16 +184,27 @@ void GenerateStemList(int length, char* sequence, char* constraint)
 			if (F[i][j] >= V[i][j]) V[i][j] = F[i][j];
 			if (E[i][j] >= V[i][j]) V[i][j] = E[i][j];
 			if (R[i][j] >= V[i][j]) V[i][j] = R[i][j];
-			if (TRACE)
-			{
-				//printf ("i=%d, j=%d, V=%d, G=%d, F=%d, E=%d, R=%d, bPen=%d, intPen=%d\n", i, j, V[i][j], G[i][j], F[i][j], E[i][j], R[i][j], bPenalty, intPenalty);
-			}
-
 		}
 	}
 
 	traceback(length, sequence, V, G, F, E, R, flag);
 
+
+	for (i = 0; i < length; i++) {
+		free(V[i]);
+		free(G[i]);
+		free(F[i]);
+		free(E[i]);
+		free(R[i]);
+		free(flag[i]);
+	}
+	free(rvSeq);
+	free(V);
+	free(G);
+	free(F);
+	free(E);
+	free(R);
+	free(flag);
 }
 
 void traceback(int length, char* seq, int** V, int** G, int** F, int**E, int**R, int** flag)
@@ -227,9 +236,6 @@ void traceback(int length, char* seq, int** V, int** G, int** F, int**E, int**R,
 			num++;
 		}
 	}
-
-	if (DEBUGH)
-		printf("number of hotspots: %d \n", hotspots->numHotspots);
 }
 
 void trace(int length, char* seq, int si, int sj,  int** V, int** G, int** F, int**E, int**R, int** flag, short record)
@@ -302,10 +308,8 @@ void trace(int length, char* seq, int si, int sj,  int** V, int** G, int** F, in
 		startbase = (k-i >= j-l)?i:l;
 		if (hl > 2 && V[si][sj] >= THR)   //at least two base pairs
 		{ 
-			if (TRACE) printf("%d-%d;%d-%d\n", i, k,l,j);
 			hotspots->substruct[hotspots->numHotspots].energy = V[si][sj];
 			hotspots->substruct[hotspots->numHotspots].length = hl;
-			if (TRACE) printf("hotspot energy: %d\n", V[si][sj]);
 			for ( mm = 0; mm < hl; mm++){
 				hotspots->substruct[hotspots->numHotspots].pairTable[mm] = startbase + mm;
 				hotspots->substruct[hotspots->numHotspots].pairTable[mm+hl] = temp[startbase + mm];
@@ -315,7 +319,6 @@ void trace(int length, char* seq, int si, int sj,  int** V, int** G, int** F, in
 			hotspots->numHotspots++;
 		} 
 	}
-
 }
 
 
@@ -340,8 +343,7 @@ void revComp(int length, char* seq, char* rcSeq)
 	for (i = 0; i <= length; i++){rcSeq[i] = '\0';}
 
 	for (i = 0; i < length; i++) {
-		switch (seq[i])
-		{
+		switch (seq[i]){
 			case 'A':  
 				c = 'U';
 				break;
@@ -376,12 +378,8 @@ void revComp(int length, char* seq, char* rcSeq)
 				printf("Wrong RNA letters: seq[%d] = %c\n", i, seq[i]);
 				exit(1);
 		}
-		//	if (DEBUG)
-		//		printf("revComp: seq[%d] = %c, ", i, seq[i]);
 		rcSeq[length-1-i] = c;
 	}
-
-
 }
 
 

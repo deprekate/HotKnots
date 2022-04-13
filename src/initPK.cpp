@@ -35,32 +35,26 @@ email                : andrones@cs.ubc.ca
 
 
 // from simfold/init.cpp
-void read_configuration_filePK (char *filename)
+void read_configuration_filePK (char *filename){
 	// PRE:  None
 	// POST: read the configuration file, which must be in the standard format
 	//      - see the documentation
-{
 	char buffer[256], token1[50], token2[5], token3[50];
 	FILE *file;
 	int i;
-	if ((file = fopen (filename,"r")) == NULL)
-	{
-		giveupPK ( (char *) "1aCannot open file", filename);
+	if ((file = fopen (filename,"r")) == NULL){
+		giveupPK( (char *) "1aCannot open file", filename);
 	}
-	fgets (buffer, sizeof(buffer), file);
-	while (!feof(file))
-	{
-		if (buffer[0] == '#' || buffer[0] == '[' || buffer[0] == '\n')
-		{
+	fgets(buffer, sizeof(buffer), file);
+	while (!feof(file)){
+		if (buffer[0] == '#' || buffer[0] == '[' || buffer[0] == '\n'){
 			fgets (buffer, sizeof(buffer), file);
 			continue;
 		}
-		sscanf (buffer, "%s%s%s", token1, token2, token3);
-		for (i=0; i<nb_params; i++)
-		{
-			if (strcmp(token1, par_namePK[i]) == 0)
-			{
-				strcpy (par_valuePK[i], token3);
+		sscanf(buffer, "%s%s%s", token1, token2, token3);
+		for (i=0; i<nb_params; i++){
+			if (strcmp(token1, par_namePK[i]) == 0){
+				strcpy(par_valuePK[i], token3);
 				break;
 			}    
 		}
@@ -70,14 +64,12 @@ void read_configuration_filePK (char *filename)
 }
 
 
-void read_pkmodelDP_file (char* filename, pkmodelinfoDP &pkmodelDP)
+void read_pkmodelDP_file (char* filename, pkmodelinfoDP &pkmodelDP){
 	// initialize the pseudoknotted energy model parameters (Dirks & Pierce)
-{
 	char buffer[256];
 	FILE *file;
 	char  v1[10];
-	if ((file = fopen (filename,"r")) == NULL)
-	{
+	if ((file = fopen (filename,"r")) == NULL){
 		giveupPK ( (char *) "Cannot open file", filename);
 	}
 

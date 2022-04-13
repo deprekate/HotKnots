@@ -6,7 +6,7 @@
 #include "utils.h"
 
 extern int initiate(char *currentModel, char *paramsFile, char *cfile, char *cfilepk);
-extern struct Node* best( char *sequence, char *currentModel);
+extern struct Fold* best( char *sequence, char *currentModel);
 
 typedef struct {
 	PyObject_HEAD
@@ -89,13 +89,17 @@ static PyObject* initialize(PyObject *self, PyObject *args, PyObject *kwargs){
 static PyObject* fold(PyObject *self, PyObject *args, PyObject *kwargs){
 	char *sequence;
 	char *model;
+	PyObject *retval;
 	static char *kwlist[] = { (char *) "sequence", (char *) "model", NULL};
 	if(!PyArg_ParseTupleAndKeywords(args, kwargs, "s|s", kwlist, &sequence, &model)){
 		return NULL;
 	}
-	struct Node* bestNode = best( sequence , model);	
-	bpseq2dp( (int) strlen(sequence), bestNode->secStructure, sequence);
-	return Py_BuildValue("[sf]", sequence, -bestNode->score /1000.0);
+	//struct Node* bestNode = best( sequence , model);	
+	//bpseq2dp( (int) strlen(sequence), bestNode->secStructure, outputStructure);
+	struct Fold* bestFold = best( sequence , model);	
+	retval = Py_BuildValue("[sf]", bestFold->structure, bestFold->score);
+	free(bestFold);
+	return retval;
 }
 
 // Method definition object for this extension, these argumens mean:

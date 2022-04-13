@@ -148,32 +148,23 @@ PARAMTYPE s_dangling_energy_right (int *sequence, char *structure, int i1, int i
 
 	d_bot = 0;
 
-	d_top = MIN (0, dangle_top[sequence[i4]]
-			[sequence[i3]]
-			[sequence[i4+1]]);
-	d_bot = MIN (0, dangle_bot[sequence[i1]]
-			[sequence[i2]]
-			[sequence[i2-1]]);
-	if (structure[i4] == '>')   // pseudoknot inside, ignore dangling end dangling on it
-	{
+	d_top = MIN(0, dangle_top[sequence[i4]][sequence[i3]][sequence[i4+1]]);
+	d_bot = MIN(0, dangle_bot[sequence[i1]][sequence[i2]][sequence[i2-1]]);
+	if (structure[i4] == '>'){   // pseudoknot inside, ignore dangling end dangling on it
 		if (i2 <= i4+2)     // >.) or >)   ignore completely
 			energy = 0;
 		else                // >...)
 			energy = d_bot;
-	}                              
-	else if (i4+1 == i2-1)     // see which is smaller
-	{
+	}else if (i4+1 == i2-1){     // see which is smaller
 		if (simple_dangling_ends)
 			energy = d_top;
 		else    
 			energy = d_top < d_bot ? d_top : d_bot;
-	}
-	else if (i4+1 < i2-1)
-	{
+	}else if (i4+1 < i2-1){
 		energy = d_top + d_bot;
-	}
-	else // if there is no free base between the two branches, return 0
+	}else{ // if there is no free base between the two branches, return 0
 		energy = 0;
+	}
 	return energy;
 }
 

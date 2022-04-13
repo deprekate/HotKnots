@@ -552,25 +552,18 @@ float	LoopList::multiPseudoEnergyDP(double *c, double &fr, int reset_c, int igno
 
 			NumUnpairedInMulti++;
 		}
-		if (DEBUG2)
-			printf(" (2) count unpaired from %d to %d --> sum(NumUnpairedInMulti) = %d\n", Input->ClosedRegions[Input->loops[base1].bri[h]]->end + 1, Input->loops[base1].bri[h+1], NumUnpairedInMulti);
 		h++;
 		currentNumBranches++;
 		
 //		printf("Input->loops[base1].bri[h+1] = %d", Input->loops[base1].bri[h+1]);
 	}
 
-	if ( base2 <= Input->loops[base1].bri[0])
-	{  // if there are no branches between base1 and the pseudoknotted base pair...
+	if ( base2 <= Input->loops[base1].bri[0]){
+	   // if there are no branches between base1 and the pseudoknotted base pair...
 		// do nothing; these bases were already counted above
-		if (DEBUG2)
-			printf(" (3a) counted these bases in (1a)\n");
-	}
-	else
-	{
+	}else{
 		// count the number of unpaired bases between end of last branch considered in loop above and beginning of pseudoknotted branch (base2)
-		for (l = Input->ClosedRegions[Input->loops[base1].bri[h]]->end + 1; l < base2; l++)
-		{
+		for (l = Input->ClosedRegions[Input->loops[base1].bri[h]]->end + 1; l < base2; l++){
 			misc_energy += pkmodelDP.c_p;
 
 			g_count_c_p++;
@@ -578,14 +571,11 @@ float	LoopList::multiPseudoEnergyDP(double *c, double &fr, int reset_c, int igno
 
 			NumUnpairedInMulti++;
 		}
-		if (DEBUG2)
-			printf(" (3b) count unpaired from %d to %d --> sum(NumUnpairedInMulti) = %d\n", Input->ClosedRegions[Input->loops[base1].bri[h]]->end + 1, base2, NumUnpairedInMulti);
 	}
 
-	if (currentNumBranches >= Input->loops[base1].num_branches)
-	{  // if no branches in the right-side of the band
-		for (l = Input->BasePair(base2) + 1; l < Input->BasePair(base1); l++)
-		{
+	if (currentNumBranches >= Input->loops[base1].num_branches){
+	  // if no branches in the right-side of the band
+		for (l = Input->BasePair(base2) + 1; l < Input->BasePair(base1); l++){
 			misc_energy += pkmodelDP.c_p;
 
 			g_count_c_p++;
@@ -593,14 +583,9 @@ float	LoopList::multiPseudoEnergyDP(double *c, double &fr, int reset_c, int igno
 
 			NumUnpairedInMulti++;
 		}
-		if (DEBUG2)
-			printf(" (4a) count unpaired from %d to %d --> sum(NumUnpairedInMulti) = %d\n", Input->BasePair(base2) + 1, Input->BasePair(base1), NumUnpairedInMulti);
-	}
-	else
-	{
+	}else{
 		// count the number of unpaired bases between end of pseudoknotted branch (bp(base2)) and beginning of next branch
-		for (l = Input->BasePair(base2) + 1; l < Input->loops[base1].bri[currentNumBranches]; l++)
-		{
+		for (l = Input->BasePair(base2) + 1; l < Input->loops[base1].bri[currentNumBranches]; l++){
 			misc_energy += pkmodelDP.c_p;
 
 			g_count_c_p++;
@@ -608,15 +593,10 @@ float	LoopList::multiPseudoEnergyDP(double *c, double &fr, int reset_c, int igno
 
 			NumUnpairedInMulti++;
 		}
-		if (DEBUG2)
-			printf(" (4b) count unpaired from %d to %d --> sum(NumUnpairedInMulti) = %d\n", Input->BasePair(base2) + 1, Input->loops[base1].bri[currentNumBranches], NumUnpairedInMulti);
 	}
 	
-//	printf("numbranches = %d\n", currentNumBranches);
-
 	// count the number of unpaired bases between the end of the last branch looked at in loop above, and the beginning of the next branch, until the end of the pseudoloop
-	while (currentNumBranches + 1 < Input->loops[base1].num_branches)
-	{
+	while (currentNumBranches + 1 < Input->loops[base1].num_branches){
 		for (l = Input->ClosedRegions[Input->loops[base1].bri[currentNumBranches]]->end + 1; l < Input->loops[base1].bri[currentNumBranches+1]; l++)
 		{
 			misc_energy += pkmodelDP.c_p;
@@ -626,20 +606,14 @@ float	LoopList::multiPseudoEnergyDP(double *c, double &fr, int reset_c, int igno
 
 			NumUnpairedInMulti++;
 		}
-		if (DEBUG2)
-			printf(" (5) count unpaired from %d to %d --> sum(NumUnpairedInMulti) = %d\n", Input->ClosedRegions[Input->loops[base1].bri[currentNumBranches]]->end + 1, Input->loops[base1].bri[currentNumBranches+1], NumUnpairedInMulti);
 		currentNumBranches++;
 	}
 		
 
-	if (currentNumBranches >= Input->loops[base1].num_branches)
-	{  // if no branches in the right-side of the band
+	if (currentNumBranches >= Input->loops[base1].num_branches){
+	  // if no branches in the right-side of the band
 		// do nothing; these bases were already counted above
-		if (DEBUG2)
-			printf(" (6a) counted these bases in (4a)\n");
-	}
-	else
-	{
+	}else{
 		// count the number of unpaired bases from the end of the last branch to the end of the multiloop
 		for (l = Input->ClosedRegions[Input->loops[base1].bri[Input->loops[base1].num_branches - 1]]->end + 1; l < Input->BasePair(base1); l++)
 		{
@@ -650,99 +624,39 @@ float	LoopList::multiPseudoEnergyDP(double *c, double &fr, int reset_c, int igno
 
 			NumUnpairedInMulti++;
 		}
-		if (DEBUG2)
-			printf(" (6b) count unpaired from %d to %d --> sum(NumUnpairedInMulti) = %d\n", Input->ClosedRegions[Input->loops[base1].bri[Input->loops[base1].num_branches - 1]]->end + 1, Input->BasePair(base1), NumUnpairedInMulti);
 	}
 
-
-	if (DEBUG)
-	{
-		printf("[misc_energy] with unpaired bases is %f kcal/mol\n", misc_energy);
-		printf("NumUnpairedInMulti (multiloop that spans a band is %d\n", NumUnpairedInMulti);
-	}	
-		
 	misc_energy *= 100;  // multiply by 100 since the remaining values in this function are in 10*cal/mol
 
 	// add AU_penalties for multi-loop
 	AUpen += AU_penalty (sequence[i], sequence[f[i].pair]);
 	if (c != NULL)    count_AU_penalty (sequence[i], sequence[f[i].pair], c);
-	if (DEBUG)
-		printf("multiPseudoEnergyDP: %d - add AU %d \n", i, AU_penalty (sequence[i], sequence[f[i].pair]));
 
-	for (h=0; h < f[i].num_branches; h++)
-	{
+	for (h=0; h < f[i].num_branches; h++){
 		// AU penalty for pk-free children was already added in their energy calculation
-		if (Input->ClosedRegions[f[i].bri[h]]->type == pseudo)
-		{
-		AUpen += AU_penalty (sequence[f[i].bri[h]],sequence[f[f[i].bri[h]].pair]);
-		if (c != NULL)    count_AU_penalty (sequence[f[i].bri[h]], sequence[f[f[i].bri[h]].pair], c);
-		if (DEBUG)
-			printf("multiPseudoEnergyDP: %d - add AU %d \n", f[i].bri[h], AU_penalty (sequence[f[i].bri[h]],sequence[f[f[i].bri[h]].pair]));
+		if (Input->ClosedRegions[f[i].bri[h]]->type == pseudo){
+			AUpen += AU_penalty (sequence[f[i].bri[h]],sequence[f[f[i].bri[h]].pair]);
+			if (c != NULL)    count_AU_penalty (sequence[f[i].bri[h]], sequence[f[f[i].bri[h]].pair], c);
 		}
 	}
 
-	if (ignore_dangles == 0)
-	{
-/*
+	if (ignore_dangles == 0){
 		// add dangling energies for multi-loop
-		printf("\nNon-Zero Simfold Counter Values:\n");
-		for (int i = 0; i < num_params_pkfree; i++)
-			if (c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-*/
 		dang += dangling_energy_left (sequence, structure, i, f[i].pair, f[i].bri[0], f[f[i].bri[0]].pair);
-		if (DEBUG)
-			printf("multiPseudoEnergyDP: %d - add dang %d \n", i, dangling_energy_left (sequence, structure, i, f[i].pair, f[i].bri[0], f[f[i].bri[0]].pair));
 		if (c != NULL)    count_LEdangling_energy_left (sequence, structure, -1, i, f[i].pair, f[i].bri[0], f[f[i].bri[0]].pair, c);
-/*
-		printf("\nNon-Zero Simfold Counter Values:\n");
-		for (int i = 0; i < num_params_pkfree; i++)
-			if (c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-*/		
 
-		for (l=0; l < f[i].num_branches - 1; l++)
-		{
-/*
-			printf("\nNon-Zero Simfold Counter Values:\n");
-			for (int i = 0; i < num_params_pkfree; i++)
-				if (c[i] != 0.0)
-					printf("c[%d]=%f  ", i, c[i]);
-*/
+		for (l=0; l < f[i].num_branches - 1; l++){
 			dang += dangling_energy (sequence, structure, f[i].bri[l], f[f[i].bri[l]].pair, f[i].bri[l+1], f[f[i].bri[l+1]].pair);
-			if (DEBUG)
-				printf("multiPseudoEnergyDP: %d - add dang %d \n", f[i].bri[l], dangling_energy (sequence, structure, f[i].bri[l], f[f[i].bri[l]].pair, f[i].bri[l+1], f[f[i].bri[l+1]].pair));
 			if (c != NULL)    count_LEdangling_energy (sequence, structure, -1, f[i].bri[l], f[f[i].bri[l]].pair, f[i].bri[l+1], f[f[i].bri[l+1]].pair, c);
 
-/*
-			printf("\nNon-Zero Simfold Counter Values:\n");
-			for (int i = 0; i < num_params_pkfree; i++)
-				if (c[i] != 0.0)
-					printf("c[%d]=%f  ", i, c[i]);
-*/
 		}
 		dang += dangling_energy_right (sequence, structure, i, f[i].pair, f[i].bri[f[i].num_branches-1], f[f[i].bri[f[i].num_branches-1]].pair);
-/*
-		printf("\nNon-Zero Simfold Counter Values:\n");
-		for (int i = 0; i < num_params_pkfree; i++)
-			if (c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-*/
-		if (DEBUG)
-			printf("multiPseudoEnergyDP: %d - add dang %d \n", i, dangling_energy_right (sequence, structure, i, f[i].pair, f[i].bri[f[i].num_branches-1], f[f[i].bri[f[i].num_branches-1]].pair));
 		if (c != NULL)    count_LEdangling_energy_right (sequence, structure, -1, i, f[i].pair, f[i].bri[f[i].num_branches-1], f[f[i].bri[f[i].num_branches-1]].pair, c);
 
-/*
-		printf("\nNon-Zero Simfold Counter Values:\n");
-		for (int i = 0; i < num_params_pkfree; i++)
-			if (c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-*/
 	}
 
 	// add "no-dangling" restriction
-	for (l=0; l < f[i].num_branches; l++)
-	{
+	for (l=0; l < f[i].num_branches; l++){
 		Input->cannot_add_dangling [f[i].bri[l] -1] = 1;
 		Input->cannot_add_dangling [f[f[i].bri[l]].pair + 1] = 1;
 	}

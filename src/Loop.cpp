@@ -143,10 +143,6 @@ FindInnerLoops: It figures out the interior-pseudoknotted and multi-pseudoknotte
 loops (span-band loops) nested in a pseudoknotted closed region.
  *********************************************************************************/
 void Loop::FindInnerLoops(int border1, int border2){		
-	//if (DEBUG)
-	//	printf("[FindInnerLoops] 1\n"); fflush(stdout); 
-	//if (DEBUG2)
-	//	printf("+++FindInnerLoops: i = %d\n", border1); 
 	int i=border1;
 	while (i <= border2){  // check all left band borders
 		int j = bandpattern->pattern[i].OtherBorder;
@@ -168,23 +164,17 @@ void Loop::FindInnerLoops(int border1, int border2){
 					if ( (x == Input->Next[y]) && (yp == Input->Next[xp])){  // Next = next paired base
 						// Internal loops that spans a band (interior-pseudoknotted loop) has been found and should be added to ILoops list
 						if  (ip > i){
-							//if (DEBUG)
-							//	printf("[FindInnerLoops] InteriorAdding(%d, %d)\n", y, x); fflush(stdout);
 							T_IntList * IntList = new T_IntList;
 							IntList->Num = y;
 							IntList->Next = NUL;
 							IntList->tuning_flag = 0;  // PARAMETER TUNING
 							Input->looplists[y] = new LoopList(Input, y, x);
-							//if (DEBUG)
-							//	printf("Adding %d to ILOOPS\n", y); fflush(stdout);
 							IntList->Next = ILoops;
 							ILoops = IntList;
 						};
 					}else{
 						// Multiloop that spans a band (multi-pseudoknotted loop) has been found and should be added to MLoops list
 						// Call the FindChildren function to finding out the tuples in this multi-pseudoknotted loop
-						//if (DEBUG)
-						//	printf("[FindInnerLoops]begin MultiAdding(%d, %d, %d, %d)\n", y, x, xp, yp); fflush(stdout);
 						//MultiLoops->Add(y, x);
 						T_IntList * IntList = new T_IntList;
 						IntList->Num = y;
@@ -194,10 +184,6 @@ void Loop::FindInnerLoops(int border1, int border2){
 						Input->looplists[y]->FindChildren();
 						IntList->Next = MLoops;
 						MLoops = IntList;
-						//if (DEBUG){
-						//	printf("Adding %d to MLOOPS\n", y); fflush(stdout);
-						//	printf("[FindInnerLoops] MultiAdding(%d, %d)\n", y, x); fflush(stdout);
-						//}
 					};
 				};
 				x = y;
@@ -206,8 +192,6 @@ void Loop::FindInnerLoops(int border1, int border2){
 		// set i to the next left border of all regions associated with a band 
 		// (i.e. i and ip are left borders of band [i,j] |_| [ip,jp]
 		i = bandpattern->pattern[i].next;
-		//if (DEBUG2)
-		//	printf("FindInnerLoops: pattern[i].next = %d\n", i); 
 	}
 }
 
@@ -377,8 +361,6 @@ void Loop::addLoop(int begin, int end){
 	for (int index = 0; index < Input->loops[begin].num_branches; index++){
 		int index2 = Input->loops[begin].num_branches - index - 1;
 		if (index < index2){
-			//if (DEBUG)
-			//	printf("[briChanging]num_br:%d  --  %d by %d\n", Input->loops[begin].num_branches, index, index2);
 			int x = Input->loops[begin].bri[index];
 			Input->loops[begin].bri[index] = Input->loops[begin].bri[index2];
 			Input->loops[begin].bri[index2] = x;
@@ -411,9 +393,7 @@ void Loop::addLoop(int begin, int end){
 
 	L1->LoopFindBands();
 	L1->PseudoNestedCheck();
-
-	//if (DEBUG)
-	//	printf("[Num_branches](begin:%d) usual: %d, pseudo_num_branches %d\n", begin, Input->loops[begin].num_branches, Input->loops[begin].pseudo_num_branches);
+	delete L1->DotParanthStructure;
 }
 
 /*********************************************************************************
@@ -626,52 +606,14 @@ float Loop::Energy(int model){
 // DP and CCb work
 
 float Loop::EnergyViaSimfold(int model){
-	/*
-	   int num_params = get_num_params_PK_DP();
-
-	   double* counter = new double[num_params];
-	   double** quadratic_matrix = new double*[num_params];
-	   if (quadratic_matrix == NUL)
-	   {
-	   printf ("ERROR! Space could not be allocated for quadratic_matrix_known, ABORT!\n");
-	   exit(1);
-	   }
-	   for (int i = 0; i < num_params; i++)
-	   {
-	   counter[i] = 0;
-	   quadratic_matrix[i] = new double[num_params];
-	   if (quadratic_matrix[i] == NUL)
-	   {
-	   printf ("ERROR! Space could not be allocated for quadratic_matrix_known[%d], ABORT!\n", i);
-	   exit(1);
-	   }
-	   for (int j = i; j < num_params; j++)
-	   quadratic_matrix[i][j] = 0;
-	   }
-	   */
-
 	double free_value = 0;
 	int reset_c = 0;
 	int ignore_dangles = no_pk_dangling_ends;
-	float retval = 0;
 
 	//	printf("reset_c = %d, ignore_dangles = %d  model & DP = %d %d\n", reset_c, ignore_dangles, model, DP);
 
 	if (model == DP){
-		//		printf("Calling getEnergyDP\n");
-		//		cout << "COUT: dangle_top[2][1][0] " << dangle_top[2][1][0] << endl;
-		//      retval = 1000*Energy(model, quadratic_matrix, counter, free_value, reset_c, ignore_dangles);  // returns energy in 1000 x kcal/mol = cal/mol
-		retval = 1000*Energy(model, NUL, NUL, free_value, reset_c, ignore_dangles);
-		//		printf("Done call to getEnergyDP\n");
-		//              cout << "COUT: dangle_top[2][1][0] " << dangle_top[2][1][0] << endl;
-
-		/*
-		   delete [] counter;
-		   for (int i = 0; i < num_params; i++)
-		   delete[] quadratic_matrix[i];
-		   delete [] quadratic_matrix;
-		   */
-		return retval;
+		return 1000*Energy(model, NUL, NUL, free_value, reset_c, ignore_dangles);
 	}
 	if (model == RE)
 		return -10*getEnergyRE();  // returns energy in 10 x 10*cal/mol = cal/mol
@@ -3804,16 +3746,8 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 				// look through ILoops again for the first loop that is above this multiloop but below the last one
 				L1 = ILoops;
 				// if ILoops is null, no need to do anything since no 
-				while (L1 != NUL)
-				{
-					if (DEBUG)
-						printf("Considering internal/stack loop that spans a band [%d,%d] U [%d,%d] ):\n",
-								Input->looplists[L1->Num]->base1, Input->looplists[L1->Num]->base2,
-								Input->BasePair(Input->looplists[L1->Num]->base2), Input->BasePair(Input->looplists[L1->Num]->base1));
-
-					if (Input->looplists[L1->Num]->base1 >= last_border
-							&& Input->looplists[L1->Num]->base1 <= current_border)
-					{
+				while (L1 != NUL){
+					if (Input->looplists[L1->Num]->base1 >= last_border && Input->looplists[L1->Num]->base1 <= current_border){
 						a = Input->looplists[L1->Num]->base1;
 						ap = Input->looplists[L1->Num]->base2;
 						bp = Input->BasePair(ap);
@@ -3822,8 +3756,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 						numbases = b-a+1;
 						structure = new char[numbases+1];
 						csequence = new char[numbases+1];
-						for (int i = 0; i < numbases; i++)
-						{
+						for (int i = 0; i < numbases; i++){
 							csequence[i] = Input->CSequence[a + i];
 						}
 						csequence[numbases] = '\0';
@@ -3833,96 +3766,28 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 
 						fillPseudoStructureNoMulti(csequence, structure, numbases, a,ap,bp,b);
 
-						// DEGUG PARAMETER TUNING
-						if (DEBUG)
-						{
-							printf("Parameter Tuning Input (a stack/internal loop that spans a band [%d,%d] U [%d,%d] ):\n", a,ap,bp,b);
-							for (int i = 0; i < numbases; i++)
-							{
-								printf("%c", csequence[i]);
-							}
-							printf("\n");
-							for (int i = 0; i < numbases; i++)
-							{
-								printf("%c", structure[i]);
-							}
-							printf("\n");
-						}
-
-						if (c != NUL)
-						{
+						if (c != NUL){
 							c_temp = new double[num_params];
 							f_temp = 0;
 							pkfree_retval = get_feature_counts_restricted(csequence, structure, c_temp, f_temp, 1, ignore_dangles, 1);
-						}
-						else
-						{
+						}else{
 							f_temp = 0;
 							pkfree_retval = get_feature_counts_restricted(csequence, structure, NUL, f_temp, 1, ignore_dangles, 1);
 						}
 
-						if (DEBUG)
-							printf("--> Energy from simfold get_feature_counts: %f\n", pkfree_retval);
-
-						// COMMENT OUT
-						if (DEBUG)
-						{
-							printf("Free Value: %f\n", f);
-							printf("PK Counter Values:\n");
-							for (int i = num_params_pkfree; i < num_params; i++)
-								if (c != NUL && c[i] != 0.0)
-									printf("c[%d]=%f  ", i, c[i]);
-
-							printf("\nNon-Zero Simfold Counter Values:\n");
-							for (int i = 0; i < num_params_pkfree; i++)
-								if (c != NUL && c[i] != 0.0)
-									printf("c[%d]=%f  ", i, c[i]);
-
-							printf("\nAll Non-Zero P_matrix Values:\n");
-							for (int i = 0; i < num_params; i++)
-							{
-								for (int j = i; j < num_params; j++)
-									if (P_matrix != NUL && P_matrix[i][j] != 0.0)
-										printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
-							}
-						}
-
-						// UPDATE COUNTS  -- this is not right, instead, we update P_matrix only
-						//     (since anything done used to find energy of this loop that spans
-						//      a band will need to be multiplied by stP)
-						//for (int i = 0; i < num_params; i++)
-						//	c[i] += c_temp[i];
-						//f += f_temp;
-
-						if (ap == a+1)  // stack spanning a band
-						{
+						if (ap == a+1){  // stack spanning a band
 							Energy += pkmodelDP.stP * pkfree_retval;
-							// UPDATE COUNTS HERE  -- note that to get only the counts for the stacked pair, you should probably not
-							//                        reuse the same counter (which has been keeping track of ALL the stacked pairs in
-							//						  the structure)
-							// update the P_matrix (the stP column)
-							if (c != NUL)
-							{
-								for (int i = 0; i < num_params_pkfree; i++)
-								{
-									// if c_temp[i] == 0, P_matrix remains unchanged, as needed
+							if (c != NUL){
+								for (int i = 0; i < num_params_pkfree; i++){
 									P_matrix[i][num_params_pkfree + structure_type_index_PK( (char *) "stp") - 1] += c_temp[i];
 								}
 								// update the single stP entry in counter
 								c[num_params_pkfree + structure_type_index_PK( (char *) "stp") - 1] += f_temp;
 							}
-						}
-						else  // internal loop spanning band
-						{
+						}else{  // internal loop spanning band
 							Energy += pkmodelDP.intP * pkfree_retval;
-							// UPDATE COUNTS HERE  -- note that to get only the counts for the stacked pair, you should probably not
-							//                        reuse the same counter (which has been keeping track of ALL the stacked pairs in
-							//						  the structure)
-							// update the P_matrix (the intP column)
-							if (c != NUL)
-							{
-								for (int i = 0; i < num_params_pkfree; i++)
-								{
+							if (c != NUL){
+								for (int i = 0; i < num_params_pkfree; i++){
 									// if c_temp[i] == 0, P_matrix remains unchanged, as needed
 									P_matrix[i][num_params_pkfree + structure_type_index_PK( (char *) "intp") - 1] += c_temp[i];
 								}
@@ -3932,26 +3797,17 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 						}
 						L1->tuning_flag = 1;  // set dirty bit flag
 						// clear structure and csequence for the next spanning loop (which possibly needs these to be different length)
-						delete structure;
-						delete csequence;
+						delete [] structure;
+						delete [] csequence;
 						if (c != NUL) { delete c_temp; }
 					}
 
-					// else: the internal/stack loop is not in the current band
-
 					L1 = L1->Next;  // go to next possible loop within this band that is above the current multiloop
-					// but below the last one (note: need to handle each loop separately because
-					// internal & stacks spanning bands are each assigned penalties that may differ)
 				}
 
 				// find energy/counts for the multiloop
 				float en = Input->looplists[L2->Num]->multiPseudoEnergyDP(c, f, reset_c, ignore_dangles);
-				if (DEBUG)
-					printf("[MLoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
 				Energy += en/100;  // since Energy is in kcal/mol
-				if (DEBUG)
-					printf("[Resulted Energy] : %.2f 10cal/mol\n", Energy);
-
 				// add AU penalty for the pseudoknotted child of the multiloop and set dangling restrictions
 				// this child is either the next ILoop member, or if it is a single pair then the only base
 				// pair that spans the band
@@ -3960,8 +3816,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 					L1 = L1->Next;
 				// now L1 points to the first L1 inside the multi,
 				// or is NUL (single base pair) (or is not null since there might be other ILoops members but not in this band)
-				if (L1 == NUL || bandpattern->pattern[Input->looplists[L1->Num]->base1].OtherBorder >= bandpattern->pattern[Input->looplists[L2->Num]->base1].OtherBorder)
-				{
+				if (L1 == NUL || bandpattern->pattern[Input->looplists[L1->Num]->base1].OtherBorder >= bandpattern->pattern[Input->looplists[L2->Num]->base1].OtherBorder){
 					int single_base = Input->looplists[L2->Num]->base1+1;
 					while (Input->BasePair(single_base) <= bandpattern->pattern[i_pt].next) // doesn't span band
 						single_base++;
@@ -3969,24 +3824,10 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 					AUpen += AU_penalty (sequence[single_base], sequence[feat[single_base].pair]);
 					if (c != NUL)    count_AU_penalty (sequence[single_base], sequence[feat[single_base].pair], c);
 
-					// add dangling restriction
-					//					Input->must_add_dangling[single_base-1] = 1;  // always add in EnergyDangling()
-					//					Input->must_add_dangling[feat[single_base].pair+1] = 1;  // always add
-
-					if (DEBUG)
-						printf("%d - added AU penalty %d\n", single_base, AU_penalty (sequence[single_base], sequence[feat[single_base].pair]));
-				}
-				else
-				{
+				}else{
 					AUpen += AU_penalty (sequence[Input->looplists[L1->Num]->base1], sequence[feat[Input->looplists[L1->Num]->base1].pair]);
 					if (c != NUL)    count_AU_penalty (sequence[Input->looplists[L1->Num]->base1], sequence[feat[Input->looplists[L1->Num]->base1].pair], c);
 
-					if (DEBUG)
-						printf("%d - added AU penalty %d\n", Input->looplists[L1->Num]->base1, AU_penalty (sequence[Input->looplists[L1->Num]->base1], sequence[feat[Input->looplists[L1->Num]->base1].pair]));
-
-					// add dangling restriction
-					//					Input->must_add_dangling[Input->looplists[L1->Num]->base1-1] = 1;  // always add
-					//					Input->must_add_dangling[feat[Input->looplists[L1->Num]->base1].pair+1] = 1;  // always add
 				}
 
 				last_border = current_border;  // this multiloop is done
@@ -4007,10 +3848,8 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 
 	// go back through ILoops and get energy of anything we missed
 	L1 = ILoops;
-	while (L1 != NUL)
-	{
-		if (L1->tuning_flag != 1)
-		{
+	while (L1 != NUL){
+		if (L1->tuning_flag != 1){
 			a = Input->looplists[L1->Num]->base1;
 			ap = Input->looplists[L1->Num]->base2;
 			bp = Input->BasePair(ap);
@@ -4019,8 +3858,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 			numbases = b-a+1;
 			structure = new char[numbases+1];
 			csequence = new char[numbases+1];
-			for (int i = 0; i < numbases; i++)
-			{
+			for (int i = 0; i < numbases; i++){
 				csequence[i] = Input->CSequence[a + i];
 			}
 			csequence[numbases] = '\0';
@@ -4029,96 +3867,38 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 			// get energy/counts for everything above current multiloop
 			fillPseudoStructureNoMulti(csequence, structure, numbases, a,ap,bp,b);
 
-			// DEGUG PARAMETER TUNING
-			if (DEBUG)
-			{
-				printf("Parameter Tuning Input (a stack/internal loop that spans a band [%d,%d] U [%d,%d] ):\n", a,ap,bp,b);
-				for (int i = 0; i < numbases; i++)
-				{
-					printf("%c", csequence[i]);
-				}
-				printf("\n");
-				for (int i = 0; i < numbases; i++)
-				{
-					printf("%c", structure[i]);
-				}
-				printf("\n");
-			}
-
-			if (c != NUL)
-			{
+			if (c != NUL){
 				c_temp = new double[num_params];
 				f_temp = 0;
 				pkfree_retval = get_feature_counts_restricted(csequence, structure, c_temp, f_temp, 1, ignore_dangles, 1);
-			}
-			else
-			{
+			}else{
 				f_temp = 0;
 				pkfree_retval = get_feature_counts_restricted(csequence, structure, NUL, f_temp, 1, ignore_dangles, 1);	
 			}
 
-			if (DEBUG)
-				printf("--> Energy from simfold get_feature_counts: %f\n", pkfree_retval);
 
-			// COMMENT OUT
-			if (DEBUG)
-			{
-				printf("Free Value: %f\n", f);
-				printf("PK Counter Values:\n");
-				for (int i = num_params_pkfree; i < num_params; i++)
-					if (c != NUL && c[i] != 0.0)
-						printf("c[%d]=%f  ", i, c[i]);
-
-				printf("\nNon-Zero Simfold Counter Values:\n");
-				for (int i = 0; i < num_params_pkfree; i++)
-					if (c != NUL && c[i] != 0.0)
-						printf("c[%d]=%f  ", i, c[i]);
-
-				printf("\nAll Non-Zero P_matrix Values:\n");
-				for (int i = 0; i < num_params; i++)
-				{
-					for (int j = i; j < num_params; j++)
-						if (P_matrix != NUL && P_matrix[i][j] != 0.0)
-							printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
-				}
-			}
-
-			// UPDATE COUNTS  -- this is not right, instead, we update P_matrix only
-			//     (since anything done used to find energy of this loop that spans
-			//      a band will need to be multiplied by stP)
-			//for (int i = 0; i < num_params; i++)
-			//	c[i] += c_temp[i];
-			//f += f_temp;
-
-			if (ap == a+1)  // stack spanning a band
-			{
+			if (ap == a+1){  // stack spanning a band
 				Energy += pkmodelDP.stP * pkfree_retval;
 				// UPDATE COUNTS HERE  -- note that to get only the counts for the stacked pair, you should probably not
 				//                        reuse the same counter (which has been keeping track of ALL the stacked pairs in
 				//						  the structure)
 				// update the P_matrix (the stP column)
-				if (c != NUL)
-				{
-					for (int i = 0; i < num_params_pkfree; i++)
-					{
+				if (c != NUL){
+					for (int i = 0; i < num_params_pkfree; i++){
 						// if c_temp[i] == 0, P_matrix remains unchanged, as needed
 						P_matrix[i][num_params_pkfree + structure_type_index_PK( (char *) "stp") - 1] += c_temp[i];
 					}
 					// update the single stP entry in counter
 					c[num_params_pkfree + structure_type_index_PK( (char *) "stp") - 1] += f_temp;
 				}
-			}
-			else  // internal loop spanning band
-			{
+			}else{  // internal loop spanning band
 				Energy += pkmodelDP.intP * pkfree_retval;
 				// UPDATE COUNTS HERE  -- note that to get only the counts for the stacked pair, you should probably not
 				//                        reuse the same counter (which has been keeping track of ALL the stacked pairs in
 				//						  the structure)
 				// update the P_matrix (the intP column)
-				if (c != NUL)
-				{
-					for (int i = 0; i < num_params_pkfree; i++)
-					{
+				if (c != NUL){
+					for (int i = 0; i < num_params_pkfree; i++){
 						// if c_temp[i] == 0, P_matrix remains unchanged, as needed
 						P_matrix[i][num_params_pkfree + structure_type_index_PK( (char *) "intp") - 1] += c_temp[i];
 					}
@@ -4128,8 +3908,8 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 			}
 			L1->tuning_flag = 1;  // set dirty bit flag
 			// clear structure and csequence for the next spanning loop (which possibly needs these to be different length)
-			delete structure;
-			delete csequence;
+			delete [] structure;
+			delete [] csequence;
 			if (c != NUL)  { delete c_temp; }
 		}
 		L1 = L1->Next;
@@ -4140,35 +3920,13 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 	k_pt = 0;
 
 	// add the appropriate AU penalties
-	for (k_pt = 0; k_pt < NumberOfBands*2; k_pt++)  // look at all the bands, as listed above
-	{
-		if (Input->BasePair(i_pt) > i_pt)  // if it is the [a,ap] portion of the band
-		{
+	for (k_pt = 0; k_pt < NumberOfBands*2; k_pt++){  // look at all the bands, as listed above
+		if (Input->BasePair(i_pt) > i_pt){  // if it is the [a,ap] portion of the band
 			// if the outermost loop spanning the band is not a multiloop, add AU
 			// the cdt is unnecessary, based on old hotknots code (energydangling function) and simfold energy of a multiloop
-			// i.e. always add this
-			//			if (!startsMultiSpanningBand(i_pt))
-			//			{
 
 			AUpen += AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair]);
 			if (c != NUL)    count_AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair], c);
-
-			if (DEBUG)
-				printf("%d - added AU penalty %d\n", i_pt, AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair]));
-			//			}
-
-			// not necessary
-			// add AU penalty for the innermost base pair in the band, except if its just a stack ingle pair
-			/*
-			   if (bandpattern->pattern[i_pt].OtherBorder > i_pt)
-			   {
-			   AUpen += AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair]);
-			   if (c != NUL)    count_AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair], c);
-
-			   if (DEBUG)
-			   printf("%d - added AU penalty %d\n", bandpattern->pattern[i_pt].OtherBorder, AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair]));
-			   }
-			   */
 		}
 
 		i_pt = bandpattern->pattern[i_pt].next;  // next band
@@ -4193,10 +3951,7 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 
 	NumberOfUnpairedInPseudo = 0;  // necessary if there is more than one energy model being used
 
-	for (k = 0; k < numRegions; k++)  // look at all regions between bands, as listed above
-	{
-		if (DEBUG2)
-			printf("[pseudoEnergyDP]: c - a' = %d - %d\n", bandpattern->pattern[i].next, bandpattern->pattern[i].OtherBorder + 1);  
+	for (k = 0; k < numRegions; k++){  // look at all regions between bands, as listed above
 		NumberOfUnpairedInPseudo += bandpattern->pattern[i].next - (bandpattern->pattern[i].OtherBorder + 1);
 		i = bandpattern->pattern[i].next;
 	}
@@ -4222,77 +3977,17 @@ float	Loop::pseudoEnergyDP(double** P_matrix, double *c, double &f, int reset_c,
 		g_count_Psm++;
 		if (c != NUL)    c[num_params_pkfree + structure_type_index_PK( (char *) "psm") - 1] += 1;
 
-	}
-	else if (nested == unBand) {  // Parent->type == pseudo
+	}else if (nested == unBand) {  // Parent->type == pseudo
 		initPenalty = pkmodelDP.Psp;  // for pseudoloop inside another pseudoloop (not in a band)
 		g_count_Psp++;
 		if (c != NUL)    c[num_params_pkfree + structure_type_index_PK( (char *) "psp") - 1] += 1;
-	}
-	else {
+	}else {
 		initPenalty = pkmodelDP.Ps;  // for exterior pseudoloop
 		g_count_Ps++;
 		if (c != NUL)    c[num_params_pkfree + structure_type_index_PK( (char *) "ps") - 1] += 1;
 	}
 
 	Energy += initPenalty;  // penalty for initiating a pseudoknot
-
-	// THE LINE BELOW IS NOT NECESSARY SINCE WE ARE WORKING IN kcal/mol NOW
-	//	Energy *= 100;  // energy in 100*kcal/mol = 10 cal/mol
-
-
-	/*  // THE STUFF BELOW IS HANDLED ABOVE BY THE CALL TO SIMFOLD
-
-		T_IntList * L1 = ILoops;
-		T_IntList * L2 = MLoops;
-
-	// Calculating the free energy of internal loops that span a band (interior-pseudoknotted loops)
-
-	while (L1 != NUL){
-	float en = Input->looplists[L1->Num]->interiorPseudoEnergyDP();
-	if (DEBUG)
-	printf("[ILoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
-	Energy += en;
-	L1 = L1->Next;
-	};
-
-	// Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
-
-	while (L2 != NUL){
-	float en = Input->looplists[L2->Num]->multiPseudoEnergyDP();
-	if (DEBUG)
-	printf("[MLoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
-	Energy += en;
-	if (DEBUG)
-	printf("[Resulted Energy} : %.2f 10cal/mol\n", Energy);
-	L2 = L2->Next;
-	};
-	*/
-
-	if (DEBUG)
-		printf("[PseudoEnergy] energy of [%d, %d] is %f kcal/mol\n", begin, end, Energy);
-
-	// COMMENT OUT
-	if (DEBUG)
-	{
-		printf("Free Value: %f\n", f);
-		printf("PK Counter Values:\n");
-		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NUL && c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-
-		printf("\nNon-Zero Simfold Counter Values:\n");
-		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NUL && c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-
-		printf("\nAll Non-Zero P_matrix Values:\n");
-		for (int i = 0; i < num_params; i++)
-		{
-			for (int j = i; j < num_params; j++)
-				if (P_matrix != NUL && P_matrix[i][j] != 0.0)
-					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
-		}
-	}
 
 	return Energy;
 
@@ -5907,14 +5602,12 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 
 	// NOTE: unlike in the similar loop for pseudoEnergyDP(), we want only NumberOfBands, since there
 	//       are only two anyway. We need NumberOfBands*2 if there were more than 2 bands.
-	for (k_pt = 0; k_pt < NumberOfBands; k_pt++)
-	{
+	for (k_pt = 0; k_pt < NumberOfBands; k_pt++){
 		if (k_pt >= 2)
 			printf("WARNING: Loop.cpp::pseudoEnergyCC2006b - k_pt is %d >= 2 which shouldn't happen for CC model!\n", k_pt);
 
 		// only find energy if the band has stacked pairs / internal loops - otherwise, no point
-		if (L1 != NUL)
-		{
+		if (L1 != NUL){
 			a = i_pt;
 			ap = bandpattern->pattern[i_pt].OtherBorder;
 			bp = Input->BasePair(ap);
@@ -5923,8 +5616,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 			numbases = b-a+1;
 			structure = new char[numbases+1];
 			csequence = new char[numbases+1];
-			for (int i = 0; i < numbases; i++)
-			{
+			for (int i = 0; i < numbases; i++){
 				csequence[i] = Input->CSequence[a + i];
 			}
 			csequence[numbases] = '\0';
@@ -5936,64 +5628,20 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 			// onto DP model instead (pseudoknots in band --> multiloop in band --> not handled by CC)
 			fillPseudoStructureNoMulti(csequence, structure, numbases, a,ap,bp,b);
 
-			// DEGUG PARAMETER TUNING
-			if (DEBUG)
-			{
-				printf("Parameter Tuning Input (band in an H-type pseudoknot [%d,%d] U [%d,%d] ):\n", a,ap,bp,b);
-				for (int i = 0; i < numbases; i++)
-				{
-					printf("%c", csequence[i]);
-				}
-				printf("\n");
-				for (int i = 0; i < numbases; i++)
-				{
-					printf("%c", structure[i]);
-				}
-				printf("\n");
-			}
-
-			if (c != NUL)
-			{
+			if (c != NUL){
 				pkfree_retval = get_feature_counts_restricted(csequence, structure, c, f, 0, ignore_dangles, 1);
-			}
-			else
-			{
+			}else{
 				pkfree_retval = get_feature_counts_restricted(csequence, structure, NUL, f, 0, ignore_dangles, 1);
 			}
 
-			if (DEBUG)
-				printf("--> Energy from simfold get_feature_counts: %f\n", pkfree_retval);
 
 			Energy += pkfree_retval;
 
 			// clear structure and csequence for the next spanning loop (which possibly needs these to be different length)
-			delete structure;
-			delete csequence;
+			delete [] structure;
+			delete [] csequence;
 		}
 		i_pt = bandpattern->pattern[i_pt].next;
-	}
-
-
-	if (DEBUG)
-	{
-		printf("Free Value: %f\n", f);
-		printf("PK Counter Values:\n");
-		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NUL && c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-
-		printf("\nNon-Zero Simfold Counter Values:\n");
-		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NUL && c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-
-		printf("\nAll Non-Zero P_matrix Values:\n");
-		for (int i = 0; i < num_params; i++)
-		{
-			for (int j = i; j < num_params; j++)
-				if (P_matrix != NUL && P_matrix[i][j] != 0.0)
-					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
-		}
 	}
 
 
@@ -6010,73 +5658,14 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 		{
 			// if the outermost loop spanning the band is not a multiloop, add AU
 			// the cdt is unnecessary, based on old hotknots code (energydangling function) and simfold energy of a multiloop
-			// i.e. always add this
-			//			if (!startsMultiSpanningBand(i_pt))
-			//			{
 
 			AUpen += AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair]);
 			if (c != NUL)    count_AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair], c);
-
-			if (DEBUG)
-				printf("%d - added AU penalty %d\n", i_pt, AU_penalty (sequence[i_pt], sequence[feat[i_pt].pair]));
-			//			}
-
-			// not necessary
-			// add AU penalty for the innermost base pair in the band, except if its just a stack ingle pair
-			/*
-			   if (bandpattern->pattern[i_pt].OtherBorder > i_pt)
-			   {
-			   AUpen += AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair]);
-			   if (c != NUL)    count_AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair], c);
-
-			   if (DEBUG)
-			   printf("%d - added AU penalty %d\n", bandpattern->pattern[i_pt].OtherBorder, AU_penalty (sequence[bandpattern->pattern[i_pt].OtherBorder], sequence[feat[bandpattern->pattern[i_pt].OtherBorder].pair]));
-			   }
-			   */
 		}
 
 		i_pt = bandpattern->pattern[i_pt].next;  // next band
 	}
 	Energy += float(AUpen)/100;  // since AUpen is in 10cal/mol, and everything else is in kcal/mol
-
-	if (DEBUG)
-	{
-		printf("Free Value: %f\n", f);
-		printf("PK Counter Values:\n");
-		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NUL && c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-
-		printf("\nNon-Zero Simfold Counter Values:\n");
-		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NUL && c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-
-		printf("\nAll Non-Zero P_matrix Values:\n");
-		for (int i = 0; i < num_params; i++)
-		{
-			for (int j = i; j < num_params; j++)
-				if (P_matrix != NUL && P_matrix[i][j] != 0.0)
-					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
-		}
-	}
-
-	// Unnecessary for CC model:
-	// Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
-	/*
-	   while (L2 != NUL){
-	   float en = Input->looplists[L2->Num]->multiPseudoEnergyCC2006();
-	   if (DEBUG)
-	   printf("[MLoops]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
-	   Energy += en;
-	   if (DEBUG)
-	   printf("[Resulted Energy} : %.2f 10cal/mol\n", Energy);
-	   L2 = L2->Next;
-	   };
-
-	   if (DEBUG)
-	   printf("[PseudoEnergy] energy of [%d, %d] is %f 10cal/mol\n", begin, end, Energy);
-	   */
 
 
 	// TODO - get rid of dangles added by simfold
@@ -6139,10 +5728,8 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 				Input->BasePair(bandpattern->pattern[i].OtherBorder+2),
 				stack_dangle, ignore_dangles);
 
-		if (CoaxialStacking != 0)  // coaxial stacking favourable over dangling ends
-		{
-			if (RES_STACK_DANGLE == 1)
-			{
+		if (CoaxialStacking != 0){  // coaxial stacking favourable over dangling ends
+			if (RES_STACK_DANGLE == 1){
 				// make sure the dangling end not involved in stacking (the opposite from stack_dangle) is not included elsewhere
 				if (stack_dangle == 0 && dangle0 != -1)  // only change array if the dangling end was free originally
 					Input->cannot_add_dangling[dangle0] = 1;
@@ -6150,9 +5737,7 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 					Input->cannot_add_dangling[dangle1] = 1;
 				//if (stack_dangle != 0 || stack_dangle != 1)
 				printf("ERROR: stack_dangle = %d not set properly for mismatch pseudoloop; must be 0 or 1\n", stack_dangle); 
-			}
-			else
-			{
+			}else{
 				Input->cannot_add_dangling[dangle0] = 1;
 				Input->cannot_add_dangling[dangle1] = 1;
 			}
@@ -6173,36 +5758,8 @@ float	Loop::pseudoEnergyCC2006b(double** P_matrix, double *c, double &f, int res
 
 	}
 
-	if (DEBUG2)
-		printf("[PseudoEnergy CC2006] coaxial stacking between %d(%d).%d(%d) %d(%d).%d(%d) = %d\n",
-				bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, sequence[bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder],
-				Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder), sequence[Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder)],
-				Input->BasePair(bandpattern->pattern[i].OtherBorder), sequence[Input->BasePair(bandpattern->pattern[i].OtherBorder)],
-				bandpattern->pattern[i].OtherBorder, sequence[bandpattern->pattern[i].OtherBorder], CoaxialStacking);
 
 	Energy += float(CoaxialStacking)/100.0;
-
-	if (DEBUG)
-	{
-		printf("Free Value: %f\n", f);
-		printf("PK Counter Values:\n");
-		for (int i = num_params_pkfree; i < num_params; i++)
-			if (c != NUL && c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-
-		printf("\nNon-Zero Simfold Counter Values:\n");
-		for (int i = 0; i < num_params_pkfree; i++)
-			if (c != NUL && c[i] != 0.0)
-				printf("c[%d]=%f  ", i, c[i]);
-
-		printf("\nAll Non-Zero P_matrix Values:\n");
-		for (int i = 0; i < num_params; i++)
-		{
-			for (int j = i; j < num_params; j++)
-				if (P_matrix != NUL && P_matrix[i][j] != 0.0)
-					printf("P[%d][%d]=%f  ", i, j, P_matrix[i][j]);
-		}
-	}
 
 	return Energy;
 
@@ -6302,23 +5859,14 @@ float	Loop::pseudoEnergyCC2006a(){
 		loop1 = bandpattern->pattern[i].next - bandpattern->pattern[i].OtherBorder - 1; // i.e. c-a'+1
 		loop2 = Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder) - Input->BasePair(i) - 1; // i.e. d'-b+1 
 
-		if (DEBUG2)
-			printf("[PseudoEnergy CC2006] stem1a - stem1b = %d - %d, stem2a - stem2b = %d - %d, loop1a - loop1b = %d - %d, loop2a - loop2b = %d - %d\n",
-					bandpattern->pattern[i].OtherBorder, i, bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder,
-					bandpattern->pattern[i].next, bandpattern->pattern[i].next, bandpattern->pattern[i].OtherBorder,
-					Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder), Input->BasePair(i));
 	}	
 	else // Multiloop or internal loop or chain exists: Use Dirks&Pierce instead
 	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: contains internal or multi loop in the stems, or more than 2 bands.\n");
 		return pseudoEnergyDP();
 	}
 
 	if (stem1 > 12 || stem2 > 12 || stem1 <= 1 || stem2 <= 1)  // not handled by Cao & Chen tables
 	{
-		if (DEBUG)
-			printf("Pseudoloop not handled by Cao&Chen model, using Dirks&Pierce: stems sizes are not handled.\n");
 		return pseudoEnergyDP();
 	}
 
@@ -6357,11 +5905,6 @@ float	Loop::pseudoEnergyCC2006a(){
 			- TdeltaS_L1	// energy of stem 2, loop 1
 			- TdeltaS_L2);  // energy of stem 1, loop 2
 
-	if (DEBUG2)
-		printf("[PseudoEnergy CC2006] without energy of loops spanning bands (10cal/mol): %f, deltaG_assemble: %f, deltaS_L1: %f, deltaS_L2 = %f, stem1size: %d, stem2size: %d, loop1size: %d, loop2size: %d\n",
-				Energy, pkmodelCC2006.deltaG_assemble, TdeltaS_L1/(273.15+37), TdeltaS_L2/(273.15+37),
-				stem1, stem2, loop1, loop2);
-
 	// Add energy values for stacked pairs in the stem below (similar to D&P process):
 
 	// CHECK: change the rest of this function to get the energy of the stacked pairs in the H-type pseudoloop
@@ -6374,28 +5917,9 @@ float	Loop::pseudoEnergyCC2006a(){
 
 	while (L1 != NUL){
 		float en = Input->looplists[L1->Num]->interiorPseudoEnergyCC2006a();  // same function for Cao&Chen a and b
-		if (DEBUG)
-			printf("[ILoops CC2006]: (%d, %d) Energy: %.2f 10cal/mol\n", L1->Num, Input->BasePair(L1->Num), en); fflush(stdout);
 		Energy += en;
 		L1 = L1->Next;
 	};
-
-	// Unnecessary:
-	// Calculating the free energy of multiloops that span a band (multi-pseudoknotted loops)
-	/*
-	   while (L2 != NUL){
-	   float en = Input->looplists[L2->Num]->multiPseudoEnergyCC2006();
-	   if (DEBUG)
-	   printf("[MLoops CC2006]: (%d, %d) Energy: %.2f 10cal/mol\n", L2->Num, Input->BasePair(L2->Num), en); fflush(stdout);
-	   Energy += en;
-	   if (DEBUG)
-	   printf("[Resulted Energy CC2006} : %.2f 10cal/mol\n", Energy);
-	   L2 = L2->Next;
-	   };
-	   */
-
-	if (DEBUG)
-		printf("[PseudoEnergy CC2006] energy of [%d, %d] is %f 10cal/mol\n", begin, end, Energy);
 
 
 	// Add coaxial stacking term whether of not pseudoknot contains a multi or internal loop...
@@ -6449,14 +5973,6 @@ float	Loop::pseudoEnergyCC2006a(){
 			}
 		}
 	}
-
-
-	if (DEBUG2)
-		printf("[PseudoEnergy CC2006] coaxial stacking between %d(%d).%d(%d) %d(%d).%d(%d) = %d\n",
-				bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder, sequence[bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder],
-				Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder), sequence[Input->BasePair(bandpattern->pattern[bandpattern->pattern[i].next].OtherBorder)],
-				Input->BasePair(bandpattern->pattern[i].OtherBorder), sequence[Input->BasePair(bandpattern->pattern[i].OtherBorder)],
-				bandpattern->pattern[i].OtherBorder, sequence[bandpattern->pattern[i].OtherBorder], CoaxialStacking);
 
 	Energy += CoaxialStacking;
 

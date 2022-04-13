@@ -23,6 +23,11 @@ struct Node {
     float score;
 };
 
+struct Fold {
+	char *structure;
+	float score;
+};
+
 extern void InitHotspots(int MaxHotspots, int length);
 extern int  FindHotspots(char* sequence, char* structure,int MaxHotspots);
 extern void ClearHotspots(int MaxHotspots);
