@@ -46,6 +46,5 @@ if __name__ == '__main__':
 		hk.initialize( args.model, os.path.join(params,"parameters_DP09.txt") , os.path.join(params,"multirnafold.conf"), os.path.join(params,"pkenergy.conf") )
 		seq,mfe = hk.fold( line.rstrip().upper() , args.model )
 		print(seq, colored(mfe, 'green') )
-		seq,mfe = hk.fold( line.rstrip().upper() , args.model )
-		print(seq, colored(mfe, 'green') )
+		print(line)
 
