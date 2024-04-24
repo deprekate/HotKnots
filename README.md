@@ -8,9 +8,8 @@ I tried several different algoritms/packages, and Hotknots was not only the fast
 also the only that actually did pseudoknots.
 
 I got it mostly working, but have not gottten around to making the parameter files as 
-internal variables.  Having extenal data files with python PIP pacakges is a hassle
+internal variables.  Having external data files within python PIP packages is a hassle
 due to operating environments being virtual and not having actual file system paths.
-Currently the params folder has to be in the same folder that you run HotKnots
 
 To install:
 ```
