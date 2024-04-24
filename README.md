@@ -1,7 +1,6 @@
 # HotKnots
 Fast, and best, DNA/RNA folding algorithm
 
-
 This was my attempt to get an RNA/DNA secondary structure program that included pseudoknot
 structures working as a Python C Extenstion.  
 
@@ -15,8 +14,12 @@ Currently the params folder has to be in the same folder that you run HotKnots
 
 To install:
 ```
+pip install hotknots
+```
+or
+```
 git clone https://github.com/deprekate/HotKnots.git
-pip install HotKnots/ --user
+pip install HotKnots/
 ```
 
 
@@ -33,13 +36,14 @@ AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC
 
 
 To import and use in other python code, you need to import the package, and then find out where
-it is installed, so it can find the various parameter files.  This is also when you can specify
-which model and paramters to use:
+it is installed, so that it can find the various parameter files.  This is also when you can specify
+which model and parameters to use:
 ```
-import HotKnots as hk
+import os
+from hotknots import hotknots as hk
 # initialize everything first
-params = os.path.dirname(hk.__file__)
-hk.initialize( "DP", os.path.join(params,"parameters_DP09.txt") , os.path.join(params,"multirnafold.conf"), os.path.join(params,"pkenergy.conf") )
+path = os.path.dirname(hk.__file__)
+hk.initialize("DP", os.path.join(path, "parameters_DP09.txt" ) , os.path.join(path,"multirnafold.conf"), os.path.join(path,"pkenergy.conf") )
 
 print(hk.fold("AACCCCUGCUGAAUAAAGCGGGGAAUAACUAUUCUAC", "DP"))
 ```
